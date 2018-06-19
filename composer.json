@@ -1,6 +1,6 @@
 {
   "name": "4slovo/expression",
-  "description": "money helper",
+  "description": "text formula converter to expression",
   "license": "MIT",
   "minimum-stability": "stable",
   "authors": [
