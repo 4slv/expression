@@ -16,6 +16,8 @@ class TypeName extends Enum
     const EXPRESSION = '_Expression';
     const VARIABLE = 'variable';
     const FUNCTION = 'function';
+    const IF_ELSE = 'if_else';
+    const BOOLEAN = 'boolean';
 
     /**
      * @return bool тип является цифровым

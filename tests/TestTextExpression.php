@@ -75,7 +75,206 @@ class TestTextExpression extends TestCase
             [
                 "$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))",
                 Money::create(4257045)
-            ]
+            ],
+
+            //equal, int
+            ['3 == 3', true],
+            ['1 == 3', false],
+            //equal, float
+            ['3.14 == 3.14', true],
+            ['3.14 == 2.14', false],
+            //equal, DateTime
+            ['2018.06.19 15:06:00 == 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 == 2018.06.19 15:06:01', false],
+            //equal, DateInterval
+            ['6 day == 6 day', true],
+            ['6 day == 5 day', false],
+            //equal, Money
+            ['300$ == 300$', true],
+            ['300$ == 301$', false],
+
+            //greater, int
+            ['3 > 2', true],
+            ['3 > 3', false],
+            ['3 > 4', false],
+            //greater, float
+            ['3.14 > 3.13', true],
+            ['3.14 > 3.14', false],
+            ['3.14 > 3.15', false],
+            //greater, DateTime
+            ['2018.06.19 15:06:00 > 2018.06.19 15:05:59', true],
+            ['2018.06.19 15:06:00 > 2018.06.19 15:06:00', false],
+            ['2018.06.19 15:06:00 > 2018.06.19 15:06:01', false],
+            //greater, DateInterval
+            ['6 day > 5 day', true],
+            ['6 day > 6 day', false],
+            ['6 day > 7 day', false],
+            //greater, Money
+            ['301$ > 300$', true],
+            ['300$ > 300$', false],
+            ['300$ > 301$', false],
+
+            //less, int
+            ['3 < 4', true],
+            ['3 < 3', false],
+            ['3 < 2', false],
+            //less, float
+            ['3.14 < 3.15', true],
+            ['3.14 < 3.14', false],
+            ['3.14 < 3.13', false],
+            //less, DateTime
+            ['2018.06.19 15:06:00 < 2018.06.19 15:06:01', true],
+            ['2018.06.19 15:06:00 < 2018.06.19 15:06:00', false],
+            ['2018.06.19 15:06:00 < 2018.06.19 15:05:59', false],
+            //less, DateInterval
+            ['6 day < 7 day', true],
+            ['6 day < 6 day', false],
+            ['6 day < 5 day', false],
+            //less, Money
+            ['300$ < 301$', true],
+            ['300$ < 300$', false],
+            ['301$ < 300$', false],
+
+            //greater or equals, int
+            ['3 >= 2', true],
+            ['3 >= 3', true],
+            ['3 >= 4', false],
+            //greater or equals, float
+            ['3.14 >= 3.13', true],
+            ['3.14 >= 3.14', true],
+            ['3.14 >= 3.15', false],
+            //greater or equals, DateTime
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:05:59', true],
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:06:01', false],
+            //greater or equals, DateInterval
+            ['6 day >= 5 day', true],
+            ['6 day >= 6 day', true],
+            ['6 day >= 7 day', false],
+            //greater or equals, Money
+            ['301$ >= 300$', true],
+            ['300$ >= 300$', true],
+            ['300$ >= 301$', false],
+
+            //less or equals, int
+            ['3 <= 4', true],
+            ['3 <= 3', true],
+            ['3 <= 2', false],
+            //less or equals, float
+            ['3.14 <= 3.15', true],
+            ['3.14 <= 3.14', true],
+            ['3.14 <= 3.13', false],
+            //less or equals, DateTime
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:06:01', true],
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:05:59', false],
+            //less or equals, DateInterval
+            ['6 day <= 7 day', true],
+            ['6 day <= 6 day', true],
+            ['6 day <= 5 day', false],
+            //less or equals, Money
+            ['300$ <= 301$', true],
+            ['300$ <= 300$', true],
+            ['301$ <= 300$', false],
+
+            //not
+            ['!', true],
+            ['!1', false],
+            ['!0', true],
+
+            //and
+            [' && ', false],
+            ['0 && 0', false],
+            ['0 && 1', false],
+            ['1 && 0', false],
+            ['1 && 1', true],
+
+            //or
+            [' || ', false],
+            ['0 || 0', false],
+            ['0 || 1', true],
+            ['1 || 0', true],
+            ['1 || 1', true],
+
+            //equal, int
+            ['{3 == 3}', 3],
+            ['{1 == 3}', 3],
+            //equal, float
+            ['{3.14 == 3.14}', 3.14],
+            ['{3.14 == 2.14}', 2.14],
+            //equal, DateTime
+            ['{2018.06.19 15:06:00 == 2018.06.19 15:06:00}', DateTime::createFromFormat('Y.m.d H:i:s', '2018.06.19 15:06:00')],
+            ['{2018.06.19 15:06:00 == 2018.06.19 15:06:01}', DateTime::createFromFormat('Y.m.d H:i:s', '2018.06.19 15:06:01')],
+            //equal, DateInterval
+            ['{6 day == 6 day}', DateInterval::createFromDateString('6 day')],
+            ['{6 day == 5 day}', DateInterval::createFromDateString('5 day')],
+            //equal, Money
+            ['{300$ == 300$}', Money::create(30000)],
+            ['{300$ == 301$}', Money::create(30100)],
+
+            //greater, int
+            ['{3 > 2}', 3],
+            ['{3 > 4}', 4],
+            //greater, float
+            ['{3.14 > 3.13}', 3.14],
+            ['{3.14 > 3.15}', 3.15],
+            //greater, DateTime
+            ['{2018.06.19 15:06:00 > 2018.06.19 15:05:59}', DateTime::createFromFormat('Y.m.d H:i:s','2018.06.19 15:06:00')],
+            ['{2018.06.19 15:06:00 > 2018.06.19 15:06:01}', DateTime::createFromFormat('Y.m.d H:i:s','2018.06.19 15:06:01')],
+            //greater, DateInterval
+            ['{6 day > 5 day}', DateInterval::createFromDateString('6 day')],
+            ['{6 day > 7 day}', DateInterval::createFromDateString('7 day')],
+            //greater, Money
+            ['{301$ > 300$}', Money::create(30100)],
+            ['{300$ > 301$}', Money::create(30100)],
+
+            //less, int
+            ['{3 < 4}', 3],
+            ['{3 < 2}', 2],
+            //less, float
+            ['{3.14 < 3.15}', 3.14],
+            ['{3.14 < 3.13}', 3.13],
+            //less, DateTime
+            ['{2018.06.19 15:06:00 < 2018.06.19 15:06:01}', DateTime::createFromFormat('Y.m.d H:i:s','2018.06.19 15:06:00')],
+            ['{2018.06.19 15:06:00 < 2018.06.19 15:05:59}', DateTime::createFromFormat('Y.m.d H:i:s','2018.06.19 15:05:59')],
+            //less, DateInterval
+            ['{6 day < 7 day}', DateInterval::createFromDateString('6 day')],
+            ['{6 day < 5 day}', DateInterval::createFromDateString('5 day')],
+            //less, Money
+            ['{300$ < 301$}', Money::create(30000)],
+            ['{301$ < 300$}', Money::create(30000)],
+
+            //greater or equals, int
+            ['{3 >= 2}', 3],
+            ['{3 >= 4}', 4],
+            //greater or equals, float
+            ['{3.14 >= 3.13}', 3.14],
+            ['{3.14 >= 3.15}', 3.15],
+            //greater or equals, DateTime
+            ['{2018.06.19 15:06:00 >= 2018.06.19 15:05:59}', DateTime::createFromFormat('Y.m.d H:i:s','2018.06.19 15:06:00')],
+            ['{2018.06.19 15:06:00 >= 2018.06.19 15:06:01}', DateTime::createFromFormat('Y.m.d H:i:s','2018.06.19 15:06:01')],
+            //greater or equals, DateInterval
+            ['{6 day >= 5 day}', DateInterval::createFromDateString('6 day')],
+            ['{6 day >= 7 day}', DateInterval::createFromDateString('7 day')],
+            //greater or equals, Money
+            ['{301$ >= 300$}', Money::create(30100)],
+            ['{300$ >= 301$}', Money::create(30100)],
+
+            //less or equals, int
+            ['{3 <= 4}', 3],
+            ['{3 <= 2}', 2],
+            //less or equals, float
+            ['{3.14 <= 3.15}', 3.14],
+            ['{3.14 <= 3.13}', 3.13],
+            //less or equals, DateTime
+            ['{2018.06.19 15:06:00 <= 2018.06.19 15:06:01}', DateTime::createFromFormat('Y.m.d H:i:s','2018.06.19 15:06:00')],
+            ['{2018.06.19 15:06:00 <= 2018.06.19 15:05:59}', DateTime::createFromFormat('Y.m.d H:i:s','2018.06.19 15:05:59')],
+            //less or equals, DateInterval
+            ['{6 day <= 7 day}', DateInterval::createFromDateString('6 day')],
+            ['{6 day <= 5 day}', DateInterval::createFromDateString('5 day')],
+            //less or equals, Money
+            ['{300$ <= 301$}', Money::create(30000)],
+            ['{301$ <= 300$}', Money::create(30000)],
         ];
     }
 
@@ -202,5 +401,119 @@ class TestTextExpression extends TestCase
         $newActualAnnuityPayment = $annuityPaymentExpression->calculate()->getValue()->getAmount();
 
         $this->assertEquals(3648896, $newActualAnnuityPayment);
+    }
+
+    public function testExpressionFunctionsWithoutParams()
+    {
+        $x = 100;
+
+        $funcWithoutParams = function (){
+            return 100;
+        };
+
+        $functionList = new FunctionList();
+        $functionList->append('func', new TypeName(TypeName::INT), $funcWithoutParams);
+
+        $formula = '$func[]';
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setExpressionText($formula);
+
+        $expression = $textExpression->toExpression();
+        $actualResult = $expression->calculate();
+
+        $this->assertEquals($x, $actualResult);
+    }
+
+    public function testElseIfOperationWithFunctions()
+    {
+        $x = 100;
+        $y = 400;
+
+        $sum = function($a, $b) use ($x, $y)
+        {
+            return $x + $y;
+        };
+
+        $sub = function($a, $b) use ($x, $y)
+        {
+            return $x - $y;
+        };
+
+        $functionList = new FunctionList();
+        $functionList
+            ->append('sum', new TypeName(TypeName::INT), $sum)
+            ->append('sub', new TypeName(TypeName::INT), $sub);
+
+        $variablesList = new VariableList();
+        $variablesList
+            ->append('x', TypeFactory::getInstance()->createInt()->setValue($x))
+            ->append('y', TypeFactory::getInstance()->createInt()->setValue($y));
+
+        //equal
+        $formula = '{$sum[$x, $y] == $sub[$x, $y]}';
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($formula);
+
+        $expression = $textExpression->toExpression();
+        $actualResult = $expression->calculate();
+
+        $this->assertEquals(-300, $actualResult);
+
+        //geater
+        $formula = '{$sum[$x, $y] > $sub[$x, $y]}';
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($formula);
+
+        $expression = $textExpression->toExpression();
+        $actualResult = $expression->calculate();
+
+        $this->assertEquals(500, $actualResult);
+
+        //less
+        $formula = '{$sum[$x, $y] < $sub[$x, $y]}';
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($formula);
+
+        $expression = $textExpression->toExpression();
+        $actualResult = $expression->calculate();
+
+        $this->assertEquals(-300, $actualResult);
+
+        //greater or equal
+        $formula = '{$sum[$x, $y] >= $sub[$x, $y]}';
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($formula);
+
+        $expression = $textExpression->toExpression();
+        $actualResult = $expression->calculate();
+
+        $this->assertEquals(500, $actualResult);
+
+        //less or equal
+        $formula = '{$sum[$x, $y] <= $sub[$x, $y]}';
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($formula);
+
+        $expression = $textExpression->toExpression();
+        $actualResult = $expression->calculate();
+
+        $this->assertEquals(-300, $actualResult);
     }
 }

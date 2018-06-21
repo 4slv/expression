@@ -72,10 +72,10 @@ class DateIntervalType extends Type
     }
 
     /**
-     * @param DateInterval $intervalFirst первый временной интервал
-     * @param DateInterval $intervalSecond второй временной интервал
-     * @return DateInterval результат сложения временных интервалов
-     */
+ * @param DateInterval $intervalFirst первый временной интервал
+ * @param DateInterval $intervalSecond второй временной интервал
+ * @return DateInterval результат вычитания временных интервалов
+ */
     public static function sub(DateInterval $intervalFirst, DateInterval $intervalSecond)
     {
         $intervalResult = new DateInterval('P0D');
@@ -87,5 +87,80 @@ class DateIntervalType extends Type
         }
 
         return $intervalResult;
+    }
+
+    /**
+     * @param DateInterval $intervalFirst первый временной интервал
+     * @param DateInterval $intervalSecond второй временной интервал
+     * @return bool результат сравнения: true - если интервалы равны
+     */
+    public static function equal(DateInterval $intervalFirst, DateInterval $intervalSecond) : bool
+    {
+        foreach (self::$intervalTypeList as $intervalType){
+            if($intervalFirst->$intervalType !== $intervalSecond->$intervalType)
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param DateInterval $intervalFirst первый временной интервал
+     * @param DateInterval $intervalSecond второй временной интервал
+     * @return bool результат сравнения: true - если первый интервал больше
+     */
+    public static function greater(DateInterval $intervalFirst, DateInterval $intervalSecond) : bool
+    {
+        foreach (self::$intervalTypeList as $intervalType){
+            if($intervalFirst->$intervalType > $intervalSecond->$intervalType)
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param DateInterval $intervalFirst первый временной интервал
+     * @param DateInterval $intervalSecond второй временной интервал
+     * @return bool результат сравнения: true - если первый интервал меньше
+     */
+    public static function less(DateInterval $intervalFirst, DateInterval $intervalSecond) : bool
+    {
+        foreach (self::$intervalTypeList as $intervalType){
+            if($intervalFirst->$intervalType < $intervalSecond->$intervalType)
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param DateInterval $intervalFirst первый временной интервал
+     * @param DateInterval $intervalSecond второй временной интервал
+     * @return bool результат сравнения: true - если первый интервал больше или равен второму
+     */
+    public static function greaterOrEqual(DateInterval $intervalFirst, DateInterval $intervalSecond) : bool
+    {
+        foreach (self::$intervalTypeList as $intervalType){
+            if($intervalFirst->$intervalType < $intervalSecond->$intervalType)
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param DateInterval $intervalFirst первый временной интервал
+     * @param DateInterval $intervalSecond второй временной интервал
+     * @return bool результат сравнения: true - если первый интервал меньше или равен второму
+     */
+    public static function lessOrEqual(DateInterval $intervalFirst, DateInterval $intervalSecond) : bool
+    {
+        foreach (self::$intervalTypeList as $intervalType){
+            if($intervalFirst->$intervalType > $intervalSecond->$intervalType)
+                return false;
+        }
+
+        return true;
     }
 }

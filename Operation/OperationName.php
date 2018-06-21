@@ -26,6 +26,24 @@ class OperationName extends Enum
 
     const FUNCTION = 'function';
 
+    const IF_ELSE = 'ifElse';
+
+    const EQUAL = 'equal';
+
+    const GREATER = 'greater';
+
+    const LESS = 'less';
+
+    const GREATER_OR_EQUALS = 'greaterOrEqual';
+    
+    const LESS_OR_EQUALS = 'lessOrEqual';
+
+    const NOT = 'not';
+
+    const AND = 'and';
+
+    const OR = 'or';
+
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)
      */
