@@ -144,6 +144,8 @@ class SimpleTextExpression extends TextExpression
                 return $this->getVariable($operand);
             case TypeName::FUNCTION:
                 return $this->getFunction($operand);
+            case TypeName::IF_ELSE:
+                return $this->getIfElse($operand);
             default:
                 return $this->getTypeFactory()->createFromString($operand);
         }
@@ -172,17 +174,36 @@ class SimpleTextExpression extends TextExpression
         if(preg_match('/^'. TypeRegExp::FUNCTION. '$/', $functionText, $match))
         {
             $functionName = $match[1];
-            $functionTextParametersString = $match[2];
-            $functionTextParameterList = explode(',', $functionTextParametersString);
             $functionParameterList = [];
-            foreach ($functionTextParameterList as $functionTextParameter)
-            {
-                $functionParameterList[] = $this
-                    ->createTextExpression(trim($functionTextParameter))
-                    ->toExpression();
+            if(isset($match[2])) {
+                $functionTextParametersString = $match[2];
+                $functionTextParameterList = explode(',', $functionTextParametersString);
+                foreach ($functionTextParameterList as $functionTextParameter) {
+                    $functionParameterList[] = $this
+                        ->createTextExpression(trim($functionTextParameter))
+                        ->toExpression();
+                }
             }
             $functionStructure = $this->getFunctionList()->get($functionName);
             return $this->getFunctionExpression($functionStructure, $functionParameterList);
+        }
+        return $this->getTypeFactory()->createNull();
+    }
+
+    /**
+     * @param string $ifElseOperationText текстовое представление логической операции
+     * @return Expression|\Slov\Expression\Type\NullType
+     * @throws ExpressionException
+     */
+    protected function getIfElse(string $ifElseOperationText)
+    {
+        if(preg_match('/^'. TypeRegExp::IF_ELSE. '$/', $ifElseOperationText, $match))
+        {
+            $textExpression = preg_replace("/(\{|\})/", "", $match[0]);
+            $expression = $this->createTextExpression($textExpression)
+                ->toExpression();
+
+            return $this->getIfElseExpression($expression);
         }
         return $this->getTypeFactory()->createNull();
     }
@@ -198,6 +219,32 @@ class SimpleTextExpression extends TextExpression
         return $this
             ->createExpression()
             ->setOperation($functionOperation)
+            ->setFirstOperand($this->getTypeFactory()->createNull())
+            ->setSecondOperand($this->getTypeFactory()->createNull());
+    }
+
+    /**
+     * @param Expression $ifElseExpression
+     * @return \Slov\Expression\Operation\IfElseOperation
+     */
+    protected function getIfElseOperation(Expression $ifElseExpression)
+    {
+        return $this
+            ->getOperationFactory()
+            ->createIfElseOperation()
+            ->setIfElseExpression($ifElseExpression);
+    }
+
+    /**
+     * @param Expression $ifElseExpression
+     * @return Expression
+     */
+    protected function getIfElseExpression(Expression $ifElseExpression)
+    {
+        $elseIfOperation = $this->getIfElseOperation($ifElseExpression);
+        return $this
+            ->createExpression()
+            ->setOperation($elseIfOperation)
             ->setFirstOperand($this->getTypeFactory()->createNull())
             ->setSecondOperand($this->getTypeFactory()->createNull());
     }

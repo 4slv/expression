@@ -244,6 +244,10 @@ class TextExpression
      */
     protected function getOperationSignList($expressionText)
     {
+        if(preg_match("/^\{.*\}$/", $expressionText)){
+            return [];
+        }
+
         preg_match_all($this->getOperationListRegexp(), $expressionText, $match);
         return $match[0];
     }

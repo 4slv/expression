@@ -62,4 +62,12 @@ class TypeNameFactory
     {
         return new TypeName(TypeName::DATE_INTERVAL);
     }
+
+    /**
+     * @return TypeName название типа: булев тип
+     */
+    public function createBoolean()
+    {
+        return new TypeName(TypeName::BOOLEAN);
+    }
 }

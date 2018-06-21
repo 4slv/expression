@@ -10,12 +10,12 @@ use DateInterval;
 interface TypeInterface
 {
     /**
-     * @return int|float|Money|DateTime|DateInterval|null
+     * @return int|float|Money|DateTime|DateInterval|null|boolean
      */
     public function getValue();
 
     /**
-     * @param int|float|Money|DateTime|DateInterval|null $value
+     * @param int|float|Money|DateTime|DateInterval|null|boolean $value
      * @return $this
      */
     public function setValue($value);

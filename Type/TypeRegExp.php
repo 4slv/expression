@@ -16,7 +16,8 @@ class TypeRegExp extends Enum
     const NULL = '';
     const MONEY = '(\d+)?\$(\d{2})?';
     const VARIABLE = '\$([a-zA-Z][\w\d]*)';
-    const FUNCTION = '\$([a-zA-Z][\w\d]*)\[([^\[\]]+)\]';
+    const FUNCTION = '\$([a-zA-Z][\w\d]*)\[([^\[\]]+)?\]';
+    const IF_ELSE = '(\{.*|.*\})';
 
     /**
      * @param string $typeStringValue строковое представление типа
