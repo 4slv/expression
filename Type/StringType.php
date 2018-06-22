@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: r.shustrov
- * Date: 2018-06-21
- * Time: 12:39 PM
- */
 
 namespace Slov\Expression\Type;
 
