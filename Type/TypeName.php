@@ -13,6 +13,7 @@ class TypeName extends Enum
     const FLOAT = 'float';
     const NULL = 'null';
     const MONEY = 'money';
+    const STRING = 'string';
     const EXPRESSION = '_Expression';
     const VARIABLE = 'variable';
     const FUNCTION = 'function';
@@ -70,5 +71,13 @@ class TypeName extends Enum
     public function isDateInterval()
     {
         return $this->getValue() === self::DATE_INTERVAL;
+    }
+
+    /**
+     * @return bool true - тип String
+     */
+    public function isString()
+    {
+        return $this->getValue() === self::STRING;
     }
 }

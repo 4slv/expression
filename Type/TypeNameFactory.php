@@ -62,4 +62,12 @@ class TypeNameFactory
     {
         return new TypeName(TypeName::DATE_INTERVAL);
     }
+
+    /**
+     * @return TypeName название типа: строка
+     */
+    public function createString()
+    {
+        return new TypeName(TypeName::STRING);
+    }
 }
