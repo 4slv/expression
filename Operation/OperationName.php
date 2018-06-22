@@ -24,7 +24,11 @@ class OperationName extends Enum
 
     const DAYS = 'days';
 
+    const FIRST_YEAR_DAY = 'firstYearDay';
+
     const FUNCTION = 'function';
+
+    const INT = 'int';
 
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)

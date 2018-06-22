@@ -24,4 +24,8 @@ class OperationSign extends Enum
     const DAYS_IN_YEAR = '{days in year}';
 
     const DAYS = '{days}';
+
+    const FIRST_YEAR_DAY = '{first year day}';
+
+    const INT = '{int}';
 }
