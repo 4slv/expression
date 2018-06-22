@@ -43,7 +43,8 @@ class StringType extends Type
      */
     public function stringToValue($string)
     {
-        return (string)$string;
+        preg_match('/'.TypeRegExp::STRING.'/', $string,$out);
+        return $out[1] ?? '';
     }
 
 }
