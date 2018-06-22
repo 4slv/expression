@@ -4,6 +4,7 @@ namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\Expression;
 use Slov\Expression\Operation\FunctionOperation;
+use Slov\Expression\Operation\IfElseOperation;
 use Slov\Expression\Operation\OperationName;
 use Slov\Expression\Operation\OperationSign;
 use Slov\Expression\Type\TypeName;
@@ -144,6 +145,8 @@ class SimpleTextExpression extends TextExpression
                 return $this->getVariable($operand);
             case TypeName::FUNCTION:
                 return $this->getFunction($operand);
+            case TypeName::IF_ELSE:
+                return $this->getIfElse($operand);
             default:
                 return $this->getTypeFactory()->createFromString($operand);
         }
@@ -172,17 +175,46 @@ class SimpleTextExpression extends TextExpression
         if(preg_match('/^'. TypeRegExp::FUNCTION. '$/', $functionText, $match))
         {
             $functionName = $match[1];
-            $functionTextParametersString = $match[2];
-            $functionTextParameterList = explode(',', $functionTextParametersString);
             $functionParameterList = [];
-            foreach ($functionTextParameterList as $functionTextParameter)
-            {
-                $functionParameterList[] = $this
-                    ->createTextExpression(trim($functionTextParameter))
-                    ->toExpression();
+            if(isset($match[2])) {
+                $functionTextParametersString = $match[2];
+                $functionTextParameterList = explode(',', $functionTextParametersString);
+                foreach ($functionTextParameterList as $functionTextParameter) {
+                    $functionParameterList[] = $this
+                        ->createTextExpression(trim($functionTextParameter))
+                        ->toExpression();
+                }
             }
             $functionStructure = $this->getFunctionList()->get($functionName);
             return $this->getFunctionExpression($functionStructure, $functionParameterList);
+        }
+        return $this->getTypeFactory()->createNull();
+    }
+
+    /**
+     * @param string $ifElseOperationText выражения в виде тернарного оператора
+     * @return Expression|\Slov\Expression\Type\NullType
+     * @throws ExpressionException
+     */
+    protected function getIfElse(string $ifElseOperationText)
+    {
+        if(preg_match('/^'. TypeRegExp::IF_ELSE. '$/', $ifElseOperationText, $match))
+        {
+            $textExpression = preg_replace("/(\{|\})/", "", $match[0]);
+            $parseExpression = explode('?', $textExpression);
+
+            $resultOperation = $this->createTextExpression(trim($parseExpression[0]))
+                ->toExpression()->calculate();
+
+            $returnExpressions = explode(':', $parseExpression[1]);
+
+            $returnExpressionList = array();
+            foreach ($returnExpressions as $returnExpression){
+                $returnExpressionList[] = $this->createTextExpression(trim($returnExpression))
+                    ->toExpression();
+            }
+
+            return $this->getIfElseExpression($resultOperation->getValue(), $returnExpressionList);
         }
         return $this->getTypeFactory()->createNull();
     }
@@ -214,6 +246,33 @@ class SimpleTextExpression extends TextExpression
             ->createFunctionOperation()
             ->setFunctionStructure($functionStructure)
             ->setFunctionParameterList($functionParameterList);
+    }
+
+    /**
+     * @param bool  $resultOperation
+     * @param array $returnExpressionList
+     * @return Expression
+     */
+    protected function getIfElseExpression(bool $resultOperation, array $returnExpressionList) : Expression
+    {
+        $elseIfOperation = $this->getIfElseOperation($resultOperation, $returnExpressionList);
+        return $this
+            ->createExpression()
+            ->setOperation($elseIfOperation)
+            ->setFirstOperand($returnExpressionList[0])
+            ->setSecondOperand($returnExpressionList[1]);
+    }
+
+    /**
+     * @param Expression[] $returnExpressionList
+     * @return IfElseOperation
+     */
+    protected function getIfElseOperation(bool $resultOperation, array $returnExpressionList) : IfElseOperation
+    {
+        return $this
+            ->getOperationFactory()
+            ->createIfElseOperation()
+            ->setResultOperation($resultOperation);
     }
 
     /**
