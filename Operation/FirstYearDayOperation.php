@@ -2,8 +2,7 @@
 
 namespace Slov\Expression\Operation;
 
-use DateInterval;
-use Slov\Expression\Type\DateIntervalType;
+use DateTime;
 
 /** Операция преобразования указанной даты в дату первого числа года */
 class FirstYearDayOperation extends Operation
@@ -30,8 +29,8 @@ class FirstYearDayOperation extends Operation
 
     /**
      * @param null $firstOperandValue значение первого операнда
-     * @param \DateTime $secondOperandValue значение второго операнда
-     * @return \DateTime
+     * @param DateTime $secondOperandValue значение второго операнда
+     * @return DateTime
      */
     protected function calculateValues($firstOperandValue, $secondOperandValue)
     {

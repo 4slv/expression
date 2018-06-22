@@ -2,12 +2,8 @@
 
 namespace Slov\Expression\Operation;
 
-use Slov\Expression\Type\DateIntervalType;
 use Slov\Expression\Type\IntType;
-use Slov\Expression\Type\Type;
 use Slov\Money\Money;
-use DateInterval;
-use DateTime;
 
 /** Операция преобразования числа с плавающей точкой к целому числу */
 class IntOperation extends Operation
