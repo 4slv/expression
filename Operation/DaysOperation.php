@@ -3,8 +3,8 @@
 namespace Slov\Expression\Operation;
 
 use DateInterval;
+use Slov\Expression\Type\DateIntervalType;
 
-/** Операция определения количества дней в интервале */
 class DaysOperation extends Operation
 {
     use SingleOperandOperation;
@@ -20,19 +20,32 @@ class DaysOperation extends Operation
             $this->getFirstOperandType()->isNull()
             &&
             $this->getSecondOperandType()->isDateInterval()
-        ){
+        ) {
             return $this->getTypeNameFactory()->createInt();
+        } elseif (
+            $this->getFirstOperandType()->isNull()
+            &&
+            $this->getSecondOperandType()->isInt()
+        ) {
+            return $this->getTypeNameFactory()->createDateInterval();
         }
         return null;
     }
 
     /**
      * @param null $firstOperandValue значение первого операнда
-     * @param DateInterval $secondOperandValue значение второго операнда
-     * @return int
+     * @param DateInterval|int $secondOperandValue значение второго операнда
+     * @return int|DateIntervalType
      */
     protected function calculateValues($firstOperandValue, $secondOperandValue)
     {
-        return $secondOperandValue->d;
+        if($secondOperandValue instanceof DateInterval)
+            /** Операция определения количества дней в интервале */
+            return $secondOperandValue->d;
+        else
+            /** Преобразование целого числа во временной интервал */
+            return DateInterval::createFromDateString($secondOperandValue . " day");
+
+        return null;
     }
 }

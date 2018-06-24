@@ -97,6 +97,14 @@ class OperationFactory
     }
 
     /**
+     * @return FirstYearDayOperation()
+     */
+    public function createFirstYearDayOperation()
+    {
+        return new FirstYearDayOperation();
+    }
+
+    /**
      * @return FunctionOperation
      */
     public function createFunctionOperation()
@@ -177,6 +185,15 @@ class OperationFactory
     }
 
     /**
+     * @return IntOperation()
+     */
+    public function createIntOperation()
+    {
+        return new IntOperation();
+    }
+
+
+    /**
      * @param OperationName $operationName
      * @return Operation
      */
@@ -201,6 +218,8 @@ class OperationFactory
                 return $this->createDaysInYearOperation();
             case OperationName::DAYS:
                 return $this->createDaysOperation();
+            case OperationName::FIRST_YEAR_DAY:
+                return $this->createFirstYearDayOperation();
             case OperationName::FUNCTION:
                 return $this->createFunctionOperation();
             case OperationName::IF_ELSE:
@@ -221,6 +240,8 @@ class OperationFactory
                 return $this->createAndOperation();
             case OperationName::OR:
                 return $this->createOrOperation();
+            case OperationName::INT:
+                return $this->createIntOperation();
         }
         return null;
     }

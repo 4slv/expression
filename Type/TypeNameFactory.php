@@ -64,6 +64,14 @@ class TypeNameFactory
     }
 
     /**
+     * @return TypeName название типа: строка
+     */
+    public function createString()
+    {
+        return new TypeName(TypeName::STRING);
+    }
+
+    /**
      * @return TypeName название типа: булев тип
      */
     public function createBoolean()

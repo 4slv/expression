@@ -7,10 +7,12 @@ use Slov\Expression\Operation\FunctionOperation;
 use Slov\Expression\Operation\IfElseOperation;
 use Slov\Expression\Operation\OperationName;
 use Slov\Expression\Operation\OperationSign;
+use Slov\Expression\Type\BooleanType;
 use Slov\Expression\Type\TypeName;
 use Slov\Expression\Type\Type;
 use Slov\Expression\ExpressionException;
 use Slov\Expression\Type\TypeRegExp;
+use Slov\Expression\Type\NullType;
 
 /** Выражение в текстовом представлении без скобок */
 class SimpleTextExpression extends TextExpression
@@ -192,34 +194,6 @@ class SimpleTextExpression extends TextExpression
     }
 
     /**
-     * @param string $ifElseOperationText выражения в виде тернарного оператора
-     * @return Expression|\Slov\Expression\Type\NullType
-     * @throws ExpressionException
-     */
-    protected function getIfElse(string $ifElseOperationText)
-    {
-        if(preg_match('/^'. TypeRegExp::IF_ELSE. '$/', $ifElseOperationText, $match))
-        {
-            $textExpression = preg_replace("/(\{|\})/", "", $match[0]);
-            $parseExpression = explode('?', $textExpression);
-
-            $resultOperation = $this->createTextExpression(trim($parseExpression[0]))
-                ->toExpression()->calculate();
-
-            $returnExpressions = explode(':', $parseExpression[1]);
-
-            $returnExpressionList = array();
-            foreach ($returnExpressions as $returnExpression){
-                $returnExpressionList[] = $this->createTextExpression(trim($returnExpression))
-                    ->toExpression();
-            }
-
-            return $this->getIfElseExpression($resultOperation->getValue(), $returnExpressionList);
-        }
-        return $this->getTypeFactory()->createNull();
-    }
-
-    /**
      * @param FunctionStructure $functionStructure
      * @param Expression[] $functionParameterList
      * @return Expression
@@ -249,30 +223,72 @@ class SimpleTextExpression extends TextExpression
     }
 
     /**
-     * @param bool  $resultOperation
-     * @param array $returnExpressionList
-     * @return Expression
+     * @param string $ifElseOperationText выражения в виде тернарного оператора
+     * @return Expression|NullType
+     * @throws ExpressionException
      */
-    protected function getIfElseExpression(bool $resultOperation, array $returnExpressionList) : Expression
+    protected function getIfElse(string $ifElseOperationText)
     {
-        $elseIfOperation = $this->getIfElseOperation($resultOperation, $returnExpressionList);
-        return $this
-            ->createExpression()
-            ->setOperation($elseIfOperation)
-            ->setFirstOperand($returnExpressionList[0])
-            ->setSecondOperand($returnExpressionList[1]);
+        if(preg_match('/^'. TypeRegExp::IF_ELSE. '$/', $ifElseOperationText, $match))
+        {
+            $condition = $this
+                ->createTextExpression(trim($match[1]))
+                ->toExpression();
+
+            $trueResult = $this
+                ->createTextExpression(trim($match[2]))
+                ->toExpression();
+
+            $falseResult = $this
+                ->createTextExpression(trim($match[3]))
+                ->toExpression();
+
+            $ifElseStucture = $this->createIfElseStructure($condition, $trueResult, $falseResult);
+
+            return $this->getIfElseExpression($ifElseStucture);
+        }
+        return $this->getTypeFactory()->createNull();
     }
 
     /**
-     * @param Expression[] $returnExpressionList
+     * @param Expression|BooleanType $condition логическое условие
+     * @param Expression|Type $trueResult результат в случае если условие истина
+     * @param Expression|Type $falseResult результат в случае если условие ложь
+     * @return IfElseStructure
+     */
+    protected function createIfElseStructure($condition, $trueResult, $falseResult): IfElseStructure
+    {
+        $ifElseStructure = new IfElseStructure();
+        return $ifElseStructure
+            ->setCondition($condition)
+            ->setTrueResult($trueResult)
+            ->setFalseResult($falseResult);
+    }
+
+    /**
+     * @param IfElseStructure $ifElseStructure
+     * @return Expression
+     */
+    protected function getIfElseExpression($ifElseStructure): Expression
+    {
+        $ifElseOperation = $this->getIfElseOperation($ifElseStructure);
+        return $this
+            ->createExpression()
+            ->setOperation($ifElseOperation)
+            ->setFirstOperand($this->getTypeFactory()->createNull())
+            ->setSecondOperand($this->getTypeFactory()->createNull());
+    }
+
+    /**
+     * @param IfElseStructure $ifElseStructure
      * @return IfElseOperation
      */
-    protected function getIfElseOperation(bool $resultOperation, array $returnExpressionList) : IfElseOperation
+    protected function getIfElseOperation($ifElseStructure) : IfElseOperation
     {
         return $this
             ->getOperationFactory()
             ->createIfElseOperation()
-            ->setResultOperation($resultOperation);
+            ->setIfElseStructure($ifElseStructure);
     }
 
     /**

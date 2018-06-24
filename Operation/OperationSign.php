@@ -25,6 +25,10 @@ class OperationSign extends Enum
 
     const DAYS = '{days}';
 
+    const FIRST_YEAR_DAY = '{first year day}';
+
+    const INT = '{int}';
+
     const EQUAL = '==';
 
     const GREATER_OR_EQUALS = '>=';

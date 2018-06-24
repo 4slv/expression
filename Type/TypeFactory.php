@@ -82,6 +82,14 @@ class TypeFactory {
     }
 
     /**
+     * @return StringType
+     */
+    public function createString()
+    {
+        return new StringType();
+    }
+
+    /**
      * @param TypeName $typeName название типа
      * @return Type
      */
@@ -101,6 +109,8 @@ class TypeFactory {
                 return $this->createDateTime();
             case TypeName::DATE_INTERVAL:
                 return $this->createDateInterval();
+            case TypeName::STRING:
+                return $this->createString();
             case TypeName::BOOLEAN:
                 return $this->createBoolean();
         }

@@ -24,7 +24,11 @@ class OperationName extends Enum
 
     const DAYS = 'days';
 
+    const FIRST_YEAR_DAY = 'firstYearDay';
+
     const FUNCTION = 'function';
+
+    const INT = 'int';
 
     const IF_ELSE = 'ifElse';
 
@@ -35,7 +39,7 @@ class OperationName extends Enum
     const LESS = 'less';
 
     const GREATER_OR_EQUALS = 'greaterOrEqual';
-    
+
     const LESS_OR_EQUALS = 'lessOrEqual';
 
     const NOT = 'not';

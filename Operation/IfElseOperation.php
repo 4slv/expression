@@ -2,31 +2,32 @@
 
 namespace Slov\Expression\Operation;
 
-
 use Slov\Expression\Expression;
+use Slov\Expression\TextExpression\IfElseStructure;
+use Slov\Expression\Calculation;
+use Slov\Expression\Type\Type;
 
 /** Операция условный оператор */
 class IfElseOperation extends Operation
 {
-    /** @var bool результат выполнения основного условия */
-    private $resultOperaion;
+    /** @var IfElseStructure структура условного оператора */
+    private $ifElseStructure;
 
     /**
-     * @return bool
+     * @return IfElseStructure
      */
-    public function getResultOperation(): bool
+    protected function getIfElseStructure(): IfElseStructure
     {
-        return $this->resultOperaion;
+        return $this->ifElseStructure;
     }
 
     /**
-     * @param bool $resultOperaion
-     * @return this
+     * @param IfElseStructure $ifElseStructure
+     * @return $this
      */
-    public function setResultOperation(bool $resultOperaion) : IfElseOperation
+    public function setIfElseStructure(IfElseStructure $ifElseStructure) : IfElseOperation
     {
-        $this->resultOperaion = $resultOperaion;
-
+        $this->ifElseStructure = $ifElseStructure;
         return $this;
     }
 
@@ -45,11 +46,14 @@ class IfElseOperation extends Operation
     protected function resolveReturnTypeName(){}
 
     /**
-     * @return \Slov\Expression\Calculation|Expression|\Slov\Expression\Type\Type
-     * @throws \Slov\Expression\CalculationException
+     * @return Calculation|Expression|Type
      */
     public function calculate()
     {
-        return $this->getResultOperation() === true ? $this->getFirstOperand() : $this->getSecondOperand();
+        $ifElseStructure = $this->getIfElseStructure();
+
+        return $ifElseStructure->getCondition()->calculate()->getValue()
+            ? $ifElseStructure->getTrueResult()->calculate()
+            : $ifElseStructure->getFalseResult()->calculate();
     }
 }
