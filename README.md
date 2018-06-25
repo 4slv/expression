@@ -336,3 +336,11 @@ DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 <= 2018.06.19 15
 При объявлении пользовательской функции в качестве параметров и возвращаемого значения необходимо использовать типы или выражения.
 Пример использования пользовательской функции можно найти в тесте: 
 **TestTextExpression::testExpressionFunctions**
+
+## Текстовые выражения
+В текстовых выражениях можно использовать имена для дальнейшего использования.  
+Пример:   
+`ratePerMonth: $yearPercent / $monthsInYear / $rateToPercentFactor`  
+`annuityPayment: $creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))`  
+Во второй формуле будет доступна переменная `$ratePerMonth`, являющаяся выражением
+сформированным в первой формуле.

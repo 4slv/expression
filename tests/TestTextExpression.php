@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Slov\Expression\ExpressionException;
 use Slov\Expression\TextExpression\FunctionList;
 use Slov\Expression\TextExpression\TextExpression;
+use Slov\Expression\TextExpression\TextExpressionList;
 use Slov\Expression\TextExpression\VariableList;
 use Slov\Expression\Type\FloatType;
 use Slov\Expression\Type\IntType;
@@ -366,5 +367,52 @@ class TestTextExpression extends TestCase
         $actualResult = $expression->calculate();
 
         $this->assertEquals($x, $actualResult);
+    }
+
+    /**
+     * @param float $yearPercent годовая ставка
+     * @param int $creditAmount сумма займа в копейках
+     * @param int $creditMonths число месяцев в кредите
+     * @param int $expectedAnnuityPayment ожидаемое значение ануитетного платежа
+     * @dataProvider expressionVariablesDataProvider
+     */
+    public function testExpressionList($yearPercent, $creditAmount, $creditMonths, $expectedAnnuityPayment)
+    {
+        $monthsInYear = '12';
+        $rateToPercentFactor = '100';
+
+        //rate per month
+        $variablesListRatePerMonth = new VariableList();
+        $variablesListRatePerMonth
+            ->append('yearPercent',         TypeFactory::getInstance()->createFloat()->setValue($yearPercent))
+            ->append('monthsInYear',        TypeFactory::getInstance()->createInt()->setValue($monthsInYear))
+            ->append('rateToPercentFactor', TypeFactory::getInstance()->createInt()->setValue($rateToPercentFactor));
+
+        $textExpressionRatePerMonth = new TextExpression();
+        $textExpressionRatePerMonth
+            ->setVariableList($variablesListRatePerMonth)
+            ->setExpressionText('ratePerMonth: $yearPercent / $monthsInYear / $rateToPercentFactor');
+
+        //annuity payment
+        $variablesListAnnuityPayment = new VariableList();
+        $variablesListAnnuityPayment
+            ->append('creditAmount', TypeFactory::getInstance()->createMoney()->setValue(Money::create($creditAmount)))
+            ->append('creditMonths', TypeFactory::getInstance()->createInt()->setValue($creditMonths));
+
+        $textExpressionAnnuityPayment = new TextExpression();
+        $textExpressionAnnuityPayment
+            ->setVariableList($variablesListAnnuityPayment)
+            ->setExpressionText('annuityPayment: $creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))');
+
+        //text expr list
+        $textExpressionList = new TextExpressionList();
+        $actualAnnuityExpression = $textExpressionList
+            ->append('ratePerMonth',    $textExpressionRatePerMonth)
+            ->append('annuityPayment',  $textExpressionAnnuityPayment)
+            ->get('annuityPayment');
+
+        $actualAnnuityPayment = $actualAnnuityExpression->toExpression()->calculate()->getValue()->getAmount();
+
+        $this->assertEquals($expectedAnnuityPayment, $actualAnnuityPayment);
     }
 }
