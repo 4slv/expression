@@ -2,13 +2,6 @@
 
 namespace Slov\Expression\TextExpression;
 
-use Slov\Expression\ExpressionException;
-use Slov\Expression\Operation\OperationSign;
-use Slov\Expression\Type\TypeName;
-use Slov\Expression\Type\TypeRegExp;
-use Slov\Expression\FactoryRepository;
-use Slov\Expression\Expression;
-
 /** Список выражений в текстовом представлении */
 class TextExpressionList
 {
@@ -17,28 +10,26 @@ class TextExpressionList
      */
     private $list = [];
 
+    /**
+     * @return TextExpression[]
+     */
+    protected function getList(): array
+    {
+        return $this->list;
+    }
+
     /** Добавление выражения в список
      * @param string $name название выражения
-     * @param Expression $textExpression выражение
-     * @return $this
+     * @param TextExpression $textExpression выражение
+     * @return TextExpressionList
      */
     public function append(string $name, TextExpression $textExpression) : TextExpressionList
     {
-        $arrTextExpression = explode(':', $textExpression->getExpressionText());
-        $strTextExpression = trim($arrTextExpression[1]);
+        $variableList = $this->createVariableList($textExpression);
 
-        if(preg_match_all ('/'. TypeRegExp::VARIABLE. '/', $strTextExpression, $match)) {
-            foreach ($match[1] as $var) {
-                if ($this->get($var)) {
-                    $strTextExpression =
-                        preg_replace('/\$'.$var.'/', '('.$this->get($var)->getExpressionText().')', $strTextExpression);
-                }
-            }
-        }
+        $textExpression->setVariableList($variableList);
 
         $this->list[$name] = $textExpression;
-        $textExpression->setExpressionText($strTextExpression);
-        $textExpression->setVariableList($this->getVariableList());
 
         return $this;
     }
@@ -54,19 +45,22 @@ class TextExpressionList
     }
 
     /**
-     * Получение списка переменных
+     * Создания списка переменных для текстового выражения
+     * @param TextExpression $textExpression текстовое выражение
      * @return VariableList
      */
-    private function getVariableList() : VariableList
+    private function createVariableList(TextExpression $textExpression) : VariableList
     {
-        $variableList = new VariableList();
-        foreach ($this->list as $name => $textExpression){
-            if($textExpression instanceof TextExpression){
-                $existVariables = $textExpression->getVariableList()->getAll();
-                foreach ($existVariables as $variableName => $variableValue){
-                    $variableList->append($variableName, $variableValue);
+        $variableList = clone $textExpression->getVariableList();
+        foreach ($this->getList() as $listExpressionName => $listTextExpression){
+            $listTextVariableList = $listTextExpression->getVariableList()->getAll();
+            foreach ($listTextVariableList as $listTextVariableName => $listTextVariable){
+                if($variableList->exists($listTextVariableName) === false){
+                    $variableList->append($listTextVariableName, $listTextVariable);
                 }
             }
+            $listExpression = $listTextExpression->toExpression();
+            $variableList->append($listExpressionName, $listExpression);
         }
         return $variableList;
     }

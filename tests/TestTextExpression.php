@@ -391,7 +391,7 @@ class TestTextExpression extends TestCase
         $textExpressionRatePerMonth = new TextExpression();
         $textExpressionRatePerMonth
             ->setVariableList($variablesListRatePerMonth)
-            ->setExpressionText('ratePerMonth: $yearPercent / $monthsInYear / $rateToPercentFactor');
+            ->setExpressionText('$yearPercent / $monthsInYear / $rateToPercentFactor');
 
         //annuity payment
         $variablesListAnnuityPayment = new VariableList();
@@ -402,7 +402,7 @@ class TestTextExpression extends TestCase
         $textExpressionAnnuityPayment = new TextExpression();
         $textExpressionAnnuityPayment
             ->setVariableList($variablesListAnnuityPayment)
-            ->setExpressionText('annuityPayment: $creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))');
+            ->setExpressionText('$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))');
 
         //text expr list
         $textExpressionList = new TextExpressionList();
