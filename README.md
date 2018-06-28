@@ -317,7 +317,7 @@ DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 <= 2018.06.19 15
 --- | ---
 `{date}`<br> `{days in year}`<br> `{days}`<br> `$function[]`<br> `{ ? : }`| 10
 `==`<br> `>`<br> `>=`<br> `<`<br> `<=`| 6
-`!`<br> `&&`<br> `||`<br> | 5
+`!`<br> `&&`<br> `\|\|`<br> | 5
 `**` | 4
 `*`, `/`, `%` | 3
 `+`, `-` | 2
