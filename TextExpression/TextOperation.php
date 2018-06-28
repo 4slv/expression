@@ -8,6 +8,9 @@ use Slov\Expression\Operation\OperationSign;
 /** Операция выражения в текстовом представлении */
 class TextOperation
 {
+    /** @var string тестовое представление операции */
+    protected $operationValue;
+
     /** @var OperationSign знак операции */
     protected $operationSign;
 
@@ -16,6 +19,24 @@ class TextOperation
 
     /** @var int номер позиции в выражении */
     protected $position;
+
+    /**
+     * @return string тестовое представление операции
+     */
+    public function getOperationValue(): string
+    {
+        return $this->operationValue;
+    }
+
+    /**
+     * @param string $operationValue тестовое представление операции
+     * @return $this
+     */
+    public function setOperationValue(string $operationValue)
+    {
+        $this->operationValue = $operationValue;
+        return $this;
+    }
 
     /**
      * @return OperationSign знак операции

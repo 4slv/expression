@@ -65,7 +65,6 @@ class FunctionOperation extends Operation
     public function calculate()
     {
         $functionStructure = $this->getFunctionStructure();
-        $returnType = $this->getTypeFactory()->create($functionStructure->getReturnTypeName());
         $functionParameterList = [];
         foreach($this->getFunctionParameterList() as $functionParameter)
         {

@@ -25,7 +25,7 @@ class IfElseOperation extends Operation
      * @param IfElseStructure $ifElseStructure
      * @return $this
      */
-    public function setIfElseStructure(IfElseStructure $ifElseStructure) : IfElseOperation
+    public function setIfElseStructure(IfElseStructure $ifElseStructure)
     {
         $this->ifElseStructure = $ifElseStructure;
         return $this;

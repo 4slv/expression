@@ -37,7 +37,7 @@ class BooleanType extends Type{
      */
     public function stringToValue($string) : bool
     {
-        return (bool)$string;
+        return $string === 'true' ? true : false;
     }
 
 }

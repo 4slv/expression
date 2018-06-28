@@ -10,35 +10,8 @@ use DateTime;
 /** Операция сравнения 'меньше или равно' */
 class LessOrEqualOperation extends Operation
 {
-    use DigitOperationTrait;
+    use CompareOperationTrait;
 
-    protected function resolveReturnTypeName()
-    {
-        $firstOperandType = $this->getFirstOperandType();
-        $secondOperandType = $this->getSecondOperandType();
-
-        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
-            return $this->getTypeNameFactory()->createMoney();
-        }
-
-        if($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval()){
-            return $this->getTypeNameFactory()->createDateInterval();
-        }
-
-        if($firstOperandType->isDateTime() && $secondOperandType->isDateTime()){
-            return $this->getTypeNameFactory()->createDateTime();
-        }
-
-        if(
-            ($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())
-            ||
-            ($firstOperandType->isDateInterval() && $secondOperandType->isDateTime())
-        ){
-            return $this->getTypeNameFactory()->createDateTime();
-        }
-
-        return $this->resolveDigitReturnTypeName();
-    }
 
     /**
      * @return OperationName

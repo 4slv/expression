@@ -3,17 +3,11 @@
 namespace Slov\Expression\Operation;
 
 use Slov\Expression\Type\BooleanType;
-use Slov\Money\Money;
 
 /** Логическая операция 'не' */
 class NotOperation extends Operation
 {
-    use DigitOperationTrait;
-
-    protected function resolveReturnTypeName()
-    {
-        return $this->getTypeNameFactory()->createBoolean();
-    }
+    use BooleanOperationTrait;
 
     /**
      * @return OperationName
@@ -30,6 +24,6 @@ class NotOperation extends Operation
      */
     protected function calculateValues($firstOperandValue, $secondOperandValue) : bool
     {
-        return !(bool)$secondOperandValue;
+        return !$secondOperandValue;
     }
 }

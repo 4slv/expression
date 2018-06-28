@@ -192,6 +192,13 @@ class OperationFactory
         return new IntOperation();
     }
 
+    /**
+     * @return AssignOperation
+     */
+    public function createAssignOperation()
+    {
+        return new AssignOperation();
+    }
 
     /**
      * @param OperationName $operationName
@@ -242,6 +249,8 @@ class OperationFactory
                 return $this->createOrOperation();
             case OperationName::INT:
                 return $this->createIntOperation();
+            case OperationName::ASSIGN:
+                return $this->createAssignOperation();
         }
         return null;
     }
