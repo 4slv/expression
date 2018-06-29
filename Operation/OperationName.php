@@ -50,6 +50,8 @@ class OperationName extends Enum
 
     const ASSIGN = 'assign';
 
+    const FOR = 'for';
+
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)
      */
@@ -83,6 +85,7 @@ class OperationName extends Enum
             case self::DAYS:
             case self::FUNCTION:
             case self::IF_ELSE:
+            case self::FOR:
                 return 10;
         }
         return 0;

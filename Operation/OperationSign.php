@@ -50,4 +50,6 @@ class OperationSign extends Enum
     const ASSIGN = '{ $variableName = valueExpression }';
 
     const FUNCTION = '$functionName[ expressionParameter1, expressionParameter2, ...]';
+
+    const FOR = 'for{firstExpression; conditionExpression, eachStepExpression; doExpression}';
 }

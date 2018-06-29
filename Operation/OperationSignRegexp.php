@@ -51,4 +51,6 @@ class OperationSignRegexp extends Enum
     const FUNCTION = '\$([a-zA-Z][\w\d]*)\[([^\[\]]+)?\]';
 
     const ASSIGN = '\$([a-zA-Z][\w\d]*)\s*\=(.*)';
+
+    const FOR = 'for\{([^;]+);([^;]+);([^;]+);([^}]+)}';
 }
