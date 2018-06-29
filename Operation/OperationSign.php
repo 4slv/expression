@@ -47,7 +47,7 @@ class OperationSign extends Enum
 
     const IF_ELSE = '{ conditionExpression ? trueExpression : falseExpression }';
 
-    const ASSIGN = '{ $variableName = valueExpression }';
+    const ASSIGN = '=';
 
     const FUNCTION = '$functionName[ expressionParameter1, expressionParameter2, ...]';
 

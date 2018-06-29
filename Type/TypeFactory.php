@@ -90,6 +90,14 @@ class TypeFactory {
     }
 
     /**
+     * @return VariableType
+     */
+    public function createVariable()
+    {
+        return new VariableType();
+    }
+
+    /**
      * @param TypeName $typeName название типа
      * @return Type
      */
@@ -113,6 +121,8 @@ class TypeFactory {
                 return $this->createString();
             case TypeName::BOOLEAN:
                 return $this->createBoolean();
+            case TypeName::VARIABLE:
+                return $this->createVariable();
         }
         return null;
     }

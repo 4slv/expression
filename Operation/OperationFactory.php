@@ -201,6 +201,14 @@ class OperationFactory
     }
 
     /**
+     * @return ForOperation
+     */
+    public function createForOperation()
+    {
+        return new ForOperation();
+    }
+
+    /**
      * @param OperationName $operationName
      * @return Operation
      */
@@ -251,6 +259,8 @@ class OperationFactory
                 return $this->createIntOperation();
             case OperationName::ASSIGN:
                 return $this->createAssignOperation();
+            case OperationName::FOR:
+                return $this->createForOperation();
         }
         return null;
     }

@@ -3,6 +3,7 @@
 namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\Expression;
+use Slov\Expression\Operation\ForOperation;
 use Slov\Expression\Operation\FunctionOperation;
 use Slov\Expression\Operation\IfElseOperation;
 use Slov\Expression\Operation\OperationName;
@@ -12,8 +13,8 @@ use Slov\Expression\Type\BooleanType;
 use Slov\Expression\Type\TypeName;
 use Slov\Expression\Type\Type;
 use Slov\Expression\ExpressionException;
-use Slov\Expression\Type\TypeRegExp;
 use Slov\Expression\Operation\Operation;
+use Slov\Expression\Type\VariableType;
 
 /** Выражение в текстовом представлении без скобок */
 class SimpleTextExpression extends TextExpression
@@ -157,7 +158,9 @@ class SimpleTextExpression extends TextExpression
      */
     protected function createOperation(TextOperation $textOperation)
     {
-        $operation = $this->getOperationFactory()->create($textOperation->getOperationName());
+        $operation = $this
+            ->getOperationFactory()
+            ->create($textOperation->getOperationName());
         $operationValue = $textOperation->getOperationValue();
 
         switch($textOperation->getOperationName()->getValue())
@@ -170,12 +173,50 @@ class SimpleTextExpression extends TextExpression
                 /* @var FunctionOperation $operation */
                 $this->initFunctionOperation($operation, $operationValue);
                 break;
-            case OperationName::ASSIGN:
-                $this->initAssignOperation($operationValue);
+            //case OperationName::ASSIGN:
+            //    $this->initAssignOperation($operationValue);
                 break;
+            case OperationName::FOR:
+                /* @var ForOperation $operation */
+                $this->initForOperation($operation, $operationValue);
         }
 
         return $operation;
+    }
+
+    /**
+     * @param ForOperation $operation операция for
+     * @param string $forOperationText текстовое представление операции for
+     */
+    private function initForOperation($operation, $forOperationText)
+    {
+        if(preg_match('/^'. OperationSignRegexp::FOR. '$/', $forOperationText, $match))
+        {
+            $first = $this->createTextExpression(trim($match[1]))->toExpression();
+            $condition = $this->createTextExpression(trim($match[2]))->toExpression();
+            $eachStep = $this->createTextExpression(trim($match[3]))->toExpression();
+            $action = $this->createTextExpression(trim($match[4]))->toExpression();
+
+            $forStructure = $this->createForStructure($first, $condition, $eachStep, $action);
+            $operation->setForStructure($forStructure);
+        }
+    }
+
+    /**
+     * @param Expression $first выражение выполняющееся первым
+     * @param Expression $condition логическое выражение, пока true - цикл не завершается
+     * @param Expression $eachStep выражение выполняющееся каждый шаг
+     * @param Expression $action выражение, которое необходимо многократно повторить
+     * @return ForStructure
+     */
+    private function createForStructure($first, $condition, $eachStep, $action)
+    {
+        $forStructure = new ForStructure();
+        return $forStructure
+            ->setFirst($first)
+            ->setCondition($condition)
+            ->setEachStep($eachStep)
+            ->setAction($action);
     }
 
     /**
@@ -275,26 +316,13 @@ class SimpleTextExpression extends TextExpression
             case TypeName::EXPRESSION:
                 return $this->getExpressionByText($operand);
             case TypeName::VARIABLE:
-                return $this->getVariable($operand);
+                /* @var VariableType $variableType */
+                $variableType = $this->getTypeFactory()->createFromString($operand);
+                return $variableType->setVariableList($this->getVariableList());
             default:
                 return $this->getTypeFactory()->createFromString($operand);
         }
     }
-
-    /**
-     * @param string $variableText текстовое представление переменной
-     * @return Expression|Type
-     */
-    protected function getVariable($variableText)
-    {
-        if(preg_match('/^'. TypeRegExp::VARIABLE. '$/', $variableText, $match))
-        {
-            $variableName = $match[1];
-            return $this->getVariableList()->get($variableName);
-        }
-        return $this->getTypeFactory()->createNull();
-    }
-
 
     /**
      * @param string $expressionText выражение в текстовом представлении

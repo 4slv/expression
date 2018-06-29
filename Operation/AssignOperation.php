@@ -1,6 +1,7 @@
 <?php
 
 namespace Slov\Expression\Operation;
+use Slov\Expression\Type\VariableType;
 
 /** Операция присваивания */
 class AssignOperation extends Operation
@@ -16,11 +17,18 @@ class AssignOperation extends Operation
     protected function resolveReturnTypeName()
     {
         if(
-            $this->getFirstOperandType()->isNull()
-            &&
-            $this->getFirstOperandType()->isNull()
+            $this->getFirstOperandType()->isVariable()
         ){
-            return $this->getTypeNameFactory()->createBoolean();
+            /** @var VariableType $firstOperand */
+            $firstOperand = $this->getFirstOperand();
+            $variable = $firstOperand->getVariableList()->get($firstOperand->getValue());
+
+            var_dump("\n======", [$firstOperand->getValue()]);
+
+
+            $firstOperand->getVariableList()->append($firstOperand->getValue(), $variable->calculate());
+
+            return $this->getTypeFactory()->createBoolean();
         }
         return null;
     }

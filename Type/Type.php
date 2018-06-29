@@ -3,6 +3,7 @@
 namespace Slov\Expression\Type;
 
 use Slov\Expression\Calculation;
+use Slov\Expression\TextExpression\VariableStructure;
 use Slov\Money\Money;
 use DateTime;
 use DateInterval;
@@ -10,7 +11,7 @@ use DateInterval;
 
 abstract class Type implements TypeInterface, Calculation {
 
-    /** @var int|float|Money|DateTime|DateInterval */
+    /** @var int|float|Money|DateTime|DateInterval|VariableStructure */
     protected $value;
 
     /**

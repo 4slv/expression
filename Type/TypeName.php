@@ -91,5 +91,13 @@ class TypeName extends Enum
     {
         return $this->getValue() === self::BOOLEAN;
     }
+
+    /**
+     * @return bool true - тип переменная
+     */
+    public function isVariable()
+    {
+        return $this->getValue() === self::VARIABLE;
+    }
 }
 

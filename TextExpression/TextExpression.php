@@ -4,6 +4,7 @@ namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\ExpressionException;
 use Slov\Expression\Operation\OperationSignRegexp;
+use Slov\Expression\Type\Type;
 use Slov\Expression\Type\TypeName;
 use Slov\Expression\Type\TypeRegExp;
 use Slov\Expression\FactoryRepository;
@@ -112,7 +113,7 @@ class TextExpression
     }
 
     /**
-     * @return Expression выражение
+     * @return Expression|Type выражение или тип
      * @throws ExpressionException
      */
     public function toExpression()

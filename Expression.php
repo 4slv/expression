@@ -9,19 +9,19 @@ use Slov\Expression\Type\Type;
 class Expression implements Calculation
 {
     /** @var Calculation первый операнд */
-    protected $firstOperand;
+    private $firstOperand;
 
     /** @var Calculation второй операнд */
-    protected $secondOperand;
+    private $secondOperand;
 
     /** @var Operation операция */
-    protected $operation;
+    private $operation;
 
     /** @var Type результат рассчёта первого операнда */
-    protected $firstOperandResult;
+    private $firstOperandResult;
 
     /** @var Type результат рассчёта второго операнда */
-    protected $secondOperandResult;
+    private $secondOperandResult;
 
     /**
      * @return Calculation первый операнд
@@ -108,7 +108,6 @@ class Expression implements Calculation
     {
         $this->secondOperandResult = $secondOperandResult;
     }
-
 
     public function calculate()
     {

@@ -3,7 +3,9 @@
 namespace Slov\Expression\Operation;
 
 use Slov\Expression\CalculationException;
+use Slov\Expression\Expression;
 use Slov\Expression\FactoryRepository;
+use Slov\Expression\TextExpression\VariableList;
 use Slov\Expression\Type\Type;
 use Slov\Expression\Type\TypeInterface;
 use Slov\Expression\Type\TypeName;
@@ -12,14 +14,14 @@ trait OperationTrait
 {
     use FactoryRepository;
 
-    /** @var TypeInterface первый операнд */
+    /** @var TypeInterface|Expression первый операнд */
     protected $firstOperand;
 
-    /** @var TypeInterface второй операнд */
+    /** @var TypeInterface|Expression второй операнд */
     protected $secondOperand;
 
     /**
-     * @return TypeInterface первый операнд
+     * @return TypeInterface|Expression первый операнд
      */
     public function getFirstOperand(): TypeInterface
     {
@@ -27,7 +29,7 @@ trait OperationTrait
     }
 
     /**
-     * @param TypeInterface $firstOperand первый операнд
+     * @param TypeInterface|Expression $firstOperand первый операнд
      * @return $this
      */
     public function setFirstOperand(TypeInterface $firstOperand)
@@ -37,7 +39,7 @@ trait OperationTrait
     }
 
     /**
-     * @return TypeInterface второй операнд
+     * @return TypeInterface|Expression второй операнд
      */
     public function getSecondOperand(): TypeInterface
     {
@@ -45,7 +47,7 @@ trait OperationTrait
     }
 
     /**
-     * @param TypeInterface $secondOperand второй операнд
+     * @param TypeInterface|Expression $secondOperand второй операнд
      * @return $this
      */
     public function setSecondOperand(TypeInterface $secondOperand)

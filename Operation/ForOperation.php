@@ -37,6 +37,13 @@ class ForOperation extends Operation
 
     protected function calculateValues($firstOperandValue, $secondOperandValue)
     {
-        $firstExpression = $this->getForStructure();
+        for(
+            $this->getForStructure()->getFirst()->calculate();
+            $this->getForStructure()->getCondition()->calculate()->getValue();
+            $this->getForStructure()->getEachStep()->calculate()
+        ){
+            $this->getForStructure()->getAction()->calculate();
+        }
+        return true;
     }
 }
