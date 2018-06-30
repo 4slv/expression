@@ -4,6 +4,7 @@ namespace Slov\Expression\TextExpression;
 
 
 use Slov\Expression\Expression;
+use Slov\Expression\Type\Type;
 
 /** Структура цикла for */
 class ForStructure
@@ -21,72 +22,72 @@ class ForStructure
     private $action;
 
     /**
-     * @return Expression выражение выполняющееся первым
+     * @return Expression|Type выражение выполняющееся первым
      */
-    public function getFirst(): Expression
+    public function getFirst()
     {
         return $this->first;
     }
 
     /**
-     * @param Expression $first выражение выполняющееся первым
+     * @param Expression|Type $first выражение выполняющееся первым
      * @return $this
      */
-    public function setFirst(Expression $first)
+    public function setFirst($first)
     {
         $this->first = $first;
         return $this;
     }
 
     /**
-     * @return Expression логическое выражение, пока true - цикл не завершается
+     * @return Expression|Type логическое выражение, пока true - цикл не завершается
      */
-    public function getCondition(): Expression
+    public function getCondition()
     {
         return $this->condition;
     }
 
     /**
-     * @param Expression $condition логическое выражение, пока true - цикл не завершается
+     * @param Expression|Type $condition логическое выражение, пока true - цикл не завершается
      * @return $this
      */
-    public function setCondition(Expression $condition)
+    public function setCondition($condition)
     {
         $this->condition = $condition;
         return $this;
     }
 
     /**
-     * @return Expression выражение выполняющееся каждый шаг
+     * @return Expression|Type выражение выполняющееся каждый шаг
      */
-    public function getEachStep(): Expression
+    public function getEachStep()
     {
         return $this->eachStep;
     }
 
     /**
-     * @param Expression $eachStep выражение выполняющееся каждый шаг
+     * @param Expression|Type $eachStep выражение выполняющееся каждый шаг
      * @return $this
      */
-    public function setEachStep(Expression $eachStep)
+    public function setEachStep($eachStep)
     {
         $this->eachStep = $eachStep;
         return $this;
     }
 
     /**
-     * @return Expression выражение, которое необходимо многократно повторить
+     * @return Expression|Type выражение, которое необходимо многократно повторить
      */
-    public function getAction(): Expression
+    public function getAction()
     {
         return $this->action;
     }
 
     /**
-     * @param Expression $action выражение, которое необходимо многократно повторить
+     * @param Expression|Type $action выражение, которое необходимо многократно повторить
      * @return $this
      */
-    public function setAction(Expression $action)
+    public function setAction($action)
     {
         $this->action = $action;
         return $this;

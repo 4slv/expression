@@ -12,15 +12,13 @@ class FunctionList
 
     /** добавление функции в список
      * @param string $name название функции
-     * @param TypeName $returnTypeName название типа возвращаемого значения функции
      * @param callable $function функция
      * @return $this */
-    public function append($name, $returnTypeName, $function)
+    public function append($name, $function)
     {
         $functionStructure = new FunctionStructure();
         $this->list[$name] = $functionStructure
             ->setName($name)
-            ->setReturnTypeName($returnTypeName)
             ->setFunction($function);
         return $this;
     }

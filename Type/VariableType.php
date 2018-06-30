@@ -75,7 +75,7 @@ class VariableType extends Type
             }
             return $variable;
         } else {
-            return TypeFactory::getInstance()->createVariable();
+            return $this;
         }
     }
 }

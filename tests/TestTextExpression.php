@@ -12,6 +12,7 @@ use Slov\Expression\TextExpression\VariableList;
 use Slov\Expression\Type\FloatType;
 use Slov\Expression\Type\IntType;
 use Slov\Expression\Type\MoneyType;
+use Slov\Expression\Type\StringType;
 use Slov\Expression\Type\TypeFactory;
 use Slov\Expression\Type\TypeName;
 use Slov\Money\Money;
@@ -27,7 +28,7 @@ class TestTextExpression extends TestCase
         $ratePerMonth = 12.25 / 12 / 100;
         $creditMonths = 12 * 15;
         return [
-            /*# операции с целыми числами
+            # операции с целыми числами
             ['2 + 1', 3],
             ['2 - 1', 1],
             ['15 * 12', 180],
@@ -216,14 +217,14 @@ class TestTextExpression extends TestCase
             ['{1 < 2 ? 1 + 1 : 2 + 2}', 2],
             ['{1 > 2 ? 1 + 1 : 2 + 2}', 4],
 
-            // assign*/
+            // assign
             ['$i = 1', true],
-            /*['{ $i = 1 ? $i : 2}', 1],
+            ['{ $i = 1 ? $i : 2}', 1],
             ['{ $i = 1 ? $i : 2} + $i', 2],
-            [' { ($i = 1) && ($i = $i + 1) ? $i : 3} ', 2],*/
+            [' { ($i = 1) && ($i = $i + 1) ? $i : 3} ', 2],
 
             // for
-            //['{ for{$i = 1; $i < 10; $i = $i + 1; $i} ? $i : 3}', 10]*/
+            ['{ for{$i = 1; $i < 10; $i = $i + 1; $a = $i} ? $a : 3}', 9]
         ];
     }
 
@@ -256,7 +257,7 @@ class TestTextExpression extends TestCase
      * @param int $expectedAnnuityPayment ожидаемое значение ануитетного платежа
      * @dataProvider expressionVariablesDataProvider
      */
-    public function atestExpressionVariables($yearPercent, $creditAmount, $creditMonths, $expectedAnnuityPayment)
+    public function testExpressionVariables($yearPercent, $creditAmount, $creditMonths, $expectedAnnuityPayment)
     {
         $monthsInYear = '12';
         $rateToPercentFactor = '100';
@@ -299,7 +300,7 @@ class TestTextExpression extends TestCase
      * @param int $expectedAnnuityPayment ожидаемое значение ануитетного платежа
      * @dataProvider expressionVariablesDataProvider
      */
-    public function atestExpressionFunctions($yearPercent, $creditAmount, $creditMonths, $expectedAnnuityPayment)
+    public function testExpressionFunctions($yearPercent, $creditAmount, $creditMonths, $expectedAnnuityPayment)
     {
         $monthsInYear = 12;
         $rateToPercentFactor = 100;
@@ -323,7 +324,7 @@ class TestTextExpression extends TestCase
         };
 
         $functionList = new FunctionList();
-        $functionList->append('annuityPayment', new TypeName(TypeName::MONEY), $annuityPayment);
+        $functionList->append('annuityPayment', $annuityPayment);
 
         $creditAmountVariable = TypeFactory::getInstance()->createMoney();
 
@@ -352,7 +353,7 @@ class TestTextExpression extends TestCase
         $this->assertEquals(3648896, $newActualAnnuityPayment);
     }
 
-    public function atestExpressionFunctionsWithoutParams()
+    public function testExpressionFunctionsWithoutParams()
     {
         $x = 100;
 
@@ -361,7 +362,7 @@ class TestTextExpression extends TestCase
         };
 
         $functionList = new FunctionList();
-        $functionList->append('func', new TypeName(TypeName::INT), $funcWithoutParams);
+        $functionList->append('func', $funcWithoutParams);
 
         $formula = '$func[]';
         $textExpression = new TextExpression();
@@ -382,7 +383,7 @@ class TestTextExpression extends TestCase
      * @param int $expectedAnnuityPayment ожидаемое значение ануитетного платежа
      * @dataProvider expressionVariablesDataProvider
      */
-    public function atestExpressionList($yearPercent, $creditAmount, $creditMonths, $expectedAnnuityPayment)
+    public function testExpressionList($yearPercent, $creditAmount, $creditMonths, $expectedAnnuityPayment)
     {
         $monthsInYear = '12';
         $rateToPercentFactor = '100';
@@ -420,5 +421,69 @@ class TestTextExpression extends TestCase
         $actualAnnuityPayment = $actualAnnuityExpression->toExpression()->calculate()->getValue()->getAmount();
 
         $this->assertEquals($expectedAnnuityPayment, $actualAnnuityPayment);
+    }
+
+    public function testForeachWithFunction()
+    {
+        /**
+         * @param StringType $string строка
+         * @param IntType $additional конкатинируемое значение
+         * @return StringType
+         */
+        $concat = function($string, $additional)
+        {
+            $result = new StringType();
+            return $result->setValue(
+                $string->getValue().
+                ' '.
+                $additional->getValue()
+            );
+
+        };
+
+        $functionList = new FunctionList();
+        $functionList->append('concat', $concat);
+
+        $prefix = TypeFactory::getInstance()->createString()->setValue('');
+
+        $variablesList = new VariableList();
+        $variablesList->append('prefix', $prefix);
+
+        $forFormula =
+            '{
+                for{ 
+                    ($i = 1) && ($result = $prefix);
+                    $i < 10;
+                    $i = $i + 1;
+                    $result = $concat[$result, $i]
+                }
+                ? $result
+                : \'\'
+             }';
+        $forTextExpression = new TextExpression();
+        $forTextExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($forFormula);
+
+        $forExpression = $forTextExpression->toExpression();
+
+        $this->assertEquals(
+            ' 1 2 3 4 5 6 7 8 9',
+            $forExpression->calculate()->getValue()
+        );
+
+
+        $this->assertEquals(
+            ' 1 2 3 4 5 6 7 8 9',
+            $variablesList->get('result')->getValue()
+        );
+
+        $prefix->setValue('0');
+
+        $this->assertEquals(
+            '0 1 2 3 4 5 6 7 8 9',
+            $forExpression->calculate()->getValue()
+        );
     }
 }

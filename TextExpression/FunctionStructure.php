@@ -10,9 +10,6 @@ class FunctionStructure
     /** @var string название функции */
     protected $name;
 
-    /** @var TypeName тип возвращаемого значения */
-    protected $returnTypeName;
-
     /** @var callable функция */
     protected $function;
 
@@ -31,24 +28,6 @@ class FunctionStructure
     public function setName(string $name)
     {
         $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return TypeName тип возвращаемого значения
-     */
-    public function getReturnTypeName(): TypeName
-    {
-        return $this->returnTypeName;
-    }
-
-    /**
-     * @param TypeName $returnTypeName тип возвращаемого значения
-     * @return $this
-     */
-    public function setReturnTypeName(TypeName $returnTypeName)
-    {
-        $this->returnTypeName = $returnTypeName;
         return $this;
     }
 

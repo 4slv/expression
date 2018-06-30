@@ -3,6 +3,7 @@
 namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\Expression;
+use Slov\Expression\Operation\AssignOperation;
 use Slov\Expression\Operation\ForOperation;
 use Slov\Expression\Operation\FunctionOperation;
 use Slov\Expression\Operation\IfElseOperation;
@@ -173,8 +174,9 @@ class SimpleTextExpression extends TextExpression
                 /* @var FunctionOperation $operation */
                 $this->initFunctionOperation($operation, $operationValue);
                 break;
-            //case OperationName::ASSIGN:
-            //    $this->initAssignOperation($operationValue);
+            case OperationName::ASSIGN:
+                /* @var AssignOperation $operation */
+                $this->initAssignOperation($operation, $operationValue);
                 break;
             case OperationName::FOR:
                 /* @var ForOperation $operation */
@@ -287,18 +289,17 @@ class SimpleTextExpression extends TextExpression
     }
 
     /**
-     * @param string $assignText текстовое представление присваивания
+     * @param AssignOperation $operation операция присваивания
+     * @param string $assignText текстовое представление присвоения
      */
-    private function initAssignOperation($assignText)
+    private function initAssignOperation($operation, $assignText)
     {
-        if(preg_match('/^'. OperationSignRegexp::ASSIGN. '$/', $assignText, $match)){
+        if(preg_match('/^'. OperationSignRegexp::ASSIGN. '$/', $assignText, $match))
+        {
             $variableName = $match[1];
-            $variableTextValueString = trim($match[2]);
-            $variableValueExpression = $this
-                ->createTextExpression($variableTextValueString)
-                ->toExpression();
-
-            $this->getVariableList()->append($variableName, $variableValueExpression);
+            $operation
+                ->setVariableName($variableName)
+                ->setVariableList($this->getVariableList());
         }
     }
 
