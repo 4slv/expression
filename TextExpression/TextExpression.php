@@ -113,7 +113,7 @@ class TextExpression
     }
 
     /**
-     * @return Expression|Type выражение или тип
+     * @return Expression выражение
      * @throws ExpressionException
      */
     public function toExpression()

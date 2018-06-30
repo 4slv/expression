@@ -2,8 +2,6 @@
 
 namespace Slov\Expression\TextExpression;
 
-use Slov\Expression\Type\TypeName;
-
 /** Структура функции */
 class FunctionStructure
 {

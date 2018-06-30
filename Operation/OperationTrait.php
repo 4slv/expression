@@ -14,14 +14,14 @@ trait OperationTrait
 {
     use FactoryRepository;
 
-    /** @var TypeInterface|Expression первый операнд */
+    /** @var TypeInterface первый операнд */
     protected $firstOperand;
 
-    /** @var TypeInterface|Expression второй операнд */
+    /** @var TypeInterface второй операнд */
     protected $secondOperand;
 
     /**
-     * @return TypeInterface|Expression первый операнд
+     * @return TypeInterface первый операнд
      */
     public function getFirstOperand(): TypeInterface
     {
@@ -29,7 +29,7 @@ trait OperationTrait
     }
 
     /**
-     * @param TypeInterface|Expression $firstOperand первый операнд
+     * @param TypeInterface $firstOperand первый операнд
      * @return $this
      */
     public function setFirstOperand(TypeInterface $firstOperand)
@@ -39,7 +39,7 @@ trait OperationTrait
     }
 
     /**
-     * @return TypeInterface|Expression второй операнд
+     * @return TypeInterface второй операнд
      */
     public function getSecondOperand(): TypeInterface
     {
@@ -47,7 +47,7 @@ trait OperationTrait
     }
 
     /**
-     * @param TypeInterface|Expression $secondOperand второй операнд
+     * @param TypeInterface $secondOperand второй операнд
      * @return $this
      */
     public function setSecondOperand(TypeInterface $secondOperand)

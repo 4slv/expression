@@ -14,7 +14,6 @@ use Slov\Expression\Type\IntType;
 use Slov\Expression\Type\MoneyType;
 use Slov\Expression\Type\StringType;
 use Slov\Expression\Type\TypeFactory;
-use Slov\Expression\Type\TypeName;
 use Slov\Money\Money;
 use DateInterval;
 use DateTime;
