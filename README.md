@@ -151,15 +151,198 @@ NullType |  DateTimeType |  IntType | {days in year} 2018.01.02 = 365<br> {days 
  --- | --- | --- | ---
 NullType |  DateIntervalType |  IntType | {days} 2 days = 2<br> {days} (2016.01.03 - 2016.01.01)  = 2
 
+### Преобразование числа во временной интервал
+**Знак** |  **Класс операции**
+--- | ---
+`{days}` | DaysOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример**
+ --- | --- | --- | ---
+NullType |  IntType |  DateIntervalType | {days} 1 = 1 day
+
+### Преобразование даты в дату первого числа года
+**Знак** |  **Класс операции**
+--- | ---
+`{first year day}` | FirstYearDayOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример**
+ --- | --- | --- | ---
+NullType |  DateTimeType |  DateTimeType | {first year day} 2018.06.12 08:56:10 = 2018.01.01 00:00:00
+
+### Преобразование числа с плавающей точкой в целое число
+**Знак** |  **Класс операции**
+--- | ---
+`{int}` | IntOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример**
+ --- | --- | --- | ---
+NullType |  FloatType |  IntType | {int} 1.1 = 1
+NullType |  FloatType |  IntType | {int} 3.9 = 3
+
+##Операции сравнения
+
+### Равно
+**Знак** |  **Класс операции**
+--- | ---
+ `==` | EqualOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример** | **Результат**
+ --- | --- | --- | --- | ---
+IntType |  IntType |  BooleanType | 1 == 1 | true
+IntType |  IntType |  BooleanType | 1 == 2 | false
+FloatType | FloatType | BooleanType | 1.1 == 1.1 | true
+FloatType | FloatType | BooleanType | 1.1 == 1.2 | false
+MoneyType | MoneyType | BooleanType | 100$ == 100$ | true
+MoneyType | MoneyType | BooleanType | 100$ == 200$ | false
+DateIntervalType | DateIntervalType | BooleanType | 2 day == 2 day | true
+DateIntervalType | DateIntervalType | BooleanType | 2 day == 3 day | false
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 == 2018.06.19 15:06:00 | true
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 == 2018.06.19 15:06:01 | false
+
+### Больше
+**Знак** |  **Класс операции**
+--- | ---
+ `>` | GreaterOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример** | **Результат**
+ --- | --- | --- | --- | ---
+IntType |  IntType |  BooleanType | 3 > 2 | true
+IntType |  IntType |  BooleanType | 3 > 3 | false
+IntType |  IntType |  BooleanType | 3 > 4 | false
+FloatType | FloatType | BooleanType | 3.14 > 3.13 | true
+FloatType | FloatType | BooleanType | 3.14 > 3.14 | false
+FloatType | FloatType | BooleanType | 3.14 > 3.15 | false
+MoneyType | MoneyType | BooleanType | 301$ > 300$ | true
+MoneyType | MoneyType | BooleanType | 300$ > 300$ | false
+MoneyType | MoneyType | BooleanType | 300$ > 301$ | false
+DateIntervalType | DateIntervalType | BooleanType | 6 day > 5 day | true
+DateIntervalType | DateIntervalType | BooleanType | 6 day > 6 day | false
+DateIntervalType | DateIntervalType | BooleanType | 6 day > 7 day | false
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 > 2018.06.19 15:05:59 | true
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 > 2018.06.19 15:06:00 | false
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 > 2018.06.19 15:06:01 | false
+
+### Меньше
+**Знак** |  **Класс операции**
+--- | ---
+ `<` | LessOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример** | **Результат**
+ --- | --- | --- | --- | ---
+IntType |  IntType |  BooleanType | 3 < 4 | true
+IntType |  IntType |  BooleanType | 3 < 3 | false
+IntType |  IntType |  BooleanType | 3 < 2 | false
+FloatType | FloatType | BooleanType | 3.14 < 3.15 | true
+FloatType | FloatType | BooleanType | 3.14 < 3.14 | false
+FloatType | FloatType | BooleanType | 3.14 < 3.13 | false
+MoneyType | MoneyType | BooleanType | 300$ < 301$ | true
+MoneyType | MoneyType | BooleanType | 300$ < 300$ | false
+MoneyType | MoneyType | BooleanType | 301$ < 300$ | false
+DateIntervalType | DateIntervalType | BooleanType | 6 day < 7 day | true
+DateIntervalType | DateIntervalType | BooleanType | 6 day < 6 day | false
+DateIntervalType | DateIntervalType | BooleanType | 6 day < 5 day | false
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 < 2018.06.19 15:06:01 | true
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 < 2018.06.19 15:06:00 | false
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 < 2018.06.19 15:05:59 | false
+
+### Больше или равно
+**Знак** |  **Класс операции**
+--- | ---
+ `>=` | GreaterOrEqualOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример** | **Результат**
+ --- | --- | --- | --- | ---
+IntType |  IntType |  BooleanType | 3 >= 2 | true
+IntType |  IntType |  BooleanType | 3 >= 3 | true
+IntType |  IntType |  BooleanType | 3 >= 4 | false
+FloatType | FloatType | BooleanType | 3.14 >= 3.13 | true
+FloatType | FloatType | BooleanType | 3.14 >= 3.14 | true
+FloatType | FloatType | BooleanType | 3.14 >= 3.15 | false
+MoneyType | MoneyType | BooleanType | 301$ >= 300$ | true
+MoneyType | MoneyType | BooleanType | 300$ >= 300$ | true
+MoneyType | MoneyType | BooleanType | 300$ >= 301$ | false
+DateIntervalType | DateIntervalType | BooleanType | 6 day >= 5 day | true
+DateIntervalType | DateIntervalType | BooleanType | 6 day >= 6 day | true
+DateIntervalType | DateIntervalType | BooleanType | 6 day >= 7 day | false
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 >= 2018.06.19 15:05:59 | true
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 >= 2018.06.19 15:06:00 | true
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 >= 2018.06.19 15:06:01 | false
+
+### Меньше или равно
+**Знак** |  **Класс операции**
+--- | ---
+ `<=` | LessOrEqualsOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример** | **Результат**
+ --- | --- | --- | --- | ---
+IntType |  IntType |  BooleanType | 3 <= 4 | true
+IntType |  IntType |  BooleanType | 3 <= 3 | true
+IntType |  IntType |  BooleanType | 3 <= 2 | false
+FloatType | FloatType | BooleanType | 3.14 <= 3.15 | true
+FloatType | FloatType | BooleanType | 3.14 <= 3.14 | true
+FloatType | FloatType | BooleanType | 3.14 <= 3.13 | false
+MoneyType | MoneyType | BooleanType | 300$ <= 301$ | true
+MoneyType | MoneyType | BooleanType | 300$ <= 300$ | true
+MoneyType | MoneyType | BooleanType | 301$ <= 300$ | false
+DateIntervalType | DateIntervalType | BooleanType | 6 day <= 7 day | true
+DateIntervalType | DateIntervalType | BooleanType | 6 day <= 6 day | true
+DateIntervalType | DateIntervalType | BooleanType | 6 day <= 5 day | false
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 <= 2018.06.19 15:06:01 | true
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 <= 2018.06.19 15:06:00 | true
+DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 <= 2018.06.19 15:05:59 | false
+
+### Условный оператор
+
+**Пример** | **Результат**
+ --- | ---
+{1 > 2 ? 1 : 2} | 2
+{1 < 2 ? 1 : 2} | 1
+{1 < 2 && 2 < 3 ? 1 : 2} | 1
+{1 < 2 && 2 > 3 ? 1 : 2} | 2
+{1 < 2 ? 1 + 1 : 2 + 2} | 2
+{1 > 2 ? 1 + 1 : 2 + 2} | 4
+
+### Присвоение
+**Пример** | **Результат**
+ --- | ---
+$a = 1 | true (создаётся переменная $a со значением 1)
+{ ($i = 1) && ($i = $i + 1) ? $i : 3} | 2 (создаётся переменная $i со значением 2)
+
+### Цикл for
+
+**синтаксис:**<br>
+**for**{firstExpression; conditionExpression, eachStepExpression; doExpression}<br>
+, где<br>
+**firstExpression** - выражение выполняющееся первым<br>
+**conditionExpression** - логическое выражение, пока оно возвращает true - цикл не завершается<br>
+**eachStepExpression** - выражение выполняющееся каждый шаг<br>
+**doExpression** - выражение, которое необходимо многократно повторить<br>
+
+**Пример** | **Результат**
+--- | ----
+for{$i = 1; $i < 10; $i = $i + 1; $a = $i} | true (переменная $a будет содержать значение 9)
+
+
 ## Приоритет операций
 Чем больше приоритет, тем раньше будет выполнена операция
 
 Обозначение операции | Приоритет
 --- | ---
-`{date}`<br> `{days in year}`<br> `{days}`| 10
-`**` | 3
-`*`, `/`, `%` | 2
-`+`, `-` | 1
+`{date}`<br> `{days in year}`<br> `{days}`<br> `$function[]`<br> `{ ? : }`| 10
+`==`<br> `>`<br> `>=`<br> `<`<br> `<=`| 6
+`!`<br> `&&`<br> `\|\|`<br> | 5
+`**` | 4
+`*`, `/`, `%` | 3
+`+`, `-` | 2
+`=` | 1
 
 В выражениях можно использовать скобки для изменения стандартных приоритетов
 
@@ -177,3 +360,12 @@ NullType |  DateIntervalType |  IntType | {days} 2 days = 2<br> {days} (2016.01.
 При объявлении пользовательской функции в качестве параметров и возвращаемого значения необходимо использовать типы или выражения.
 Пример использования пользовательской функции можно найти в тесте: 
 **TestTextExpression::testExpressionFunctions**
+
+## Текстовые выражения
+В текстовых выражениях можно использовать имена для дальнейшего использования.  
+Пример:   
+`ratePerMonth: $yearPercent / $monthsInYear / $rateToPercentFactor`  
+`annuityPayment: $creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))`  
+Во второй формуле будет доступна переменная `$ratePerMonth`, являющаяся выражением
+сформированным в первой формуле.
+

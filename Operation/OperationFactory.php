@@ -97,11 +97,115 @@ class OperationFactory
     }
 
     /**
+     * @return FirstYearDayOperation()
+     */
+    public function createFirstYearDayOperation()
+    {
+        return new FirstYearDayOperation();
+    }
+
+    /**
      * @return FunctionOperation
      */
     public function createFunctionOperation()
     {
         return new FunctionOperation();
+    }
+
+    /**
+     * @return IfElseOperation()
+     */
+    public function createIfElseOperation()
+    {
+        return new IfElseOperation();
+    }
+
+    /**
+     * @return EqualOperation
+     */
+    public function createEqualOperation()
+    {
+        return new EqualOperation();
+    }
+
+    /**
+     * @return GreaterOperation()
+     */
+    public function createGreaterOperation()
+    {
+        return new GreaterOperation();
+    }
+
+    /**
+     * @return LessOperation()
+     */
+    public function createLessOperation()
+    {
+        return new LessOperation();
+    }
+
+    /**
+     * @return GreaterOrEqualOperation()
+     */
+    public function createGreaterOrEqualOperation()
+    {
+        return new GreaterOrEqualOperation();
+    }
+
+    /**
+     * @return LessOrEqualOperation()
+     */
+    public function createLessOrEqualOperation()
+    {
+        return new LessOrEqualOperation();
+    }
+
+    /**
+     * @return NotOperation()
+     */
+    public function createNotOperation()
+    {
+        return new NotOperation();
+    }
+
+    /**
+     * @return AndOperation()
+     */
+    public function createAndOperation()
+    {
+        return new AndOperation();
+    }
+
+    /**
+     * @return OrOperation()
+     */
+    public function createOrOperation()
+    {
+        return new OrOperation();
+    }
+
+    /**
+     * @return IntOperation()
+     */
+    public function createIntOperation()
+    {
+        return new IntOperation();
+    }
+
+    /**
+     * @return AssignOperation
+     */
+    public function createAssignOperation()
+    {
+        return new AssignOperation();
+    }
+
+    /**
+     * @return ForOperation
+     */
+    public function createForOperation()
+    {
+        return new ForOperation();
     }
 
     /**
@@ -129,8 +233,34 @@ class OperationFactory
                 return $this->createDaysInYearOperation();
             case OperationName::DAYS:
                 return $this->createDaysOperation();
+            case OperationName::FIRST_YEAR_DAY:
+                return $this->createFirstYearDayOperation();
             case OperationName::FUNCTION:
                 return $this->createFunctionOperation();
+            case OperationName::IF_ELSE:
+                return $this->createIfElseOperation();
+            case OperationName::EQUAL:
+                return $this->createEqualOperation();
+            case OperationName::GREATER:
+                return $this->createGreaterOperation();
+            case OperationName::LESS:
+                return $this->createLessOperation();
+            case OperationName::GREATER_OR_EQUALS:
+                return $this->createGreaterOrEqualOperation();
+            case OperationName::LESS_OR_EQUALS:
+                return $this->createLessOrEqualOperation();
+            case OperationName::NOT:
+                return $this->createNotOperation();
+            case OperationName::AND:
+                return $this->createAndOperation();
+            case OperationName::OR:
+                return $this->createOrOperation();
+            case OperationName::INT:
+                return $this->createIntOperation();
+            case OperationName::ASSIGN:
+                return $this->createAssignOperation();
+            case OperationName::FOR:
+                return $this->createForOperation();
         }
         return null;
     }

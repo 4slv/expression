@@ -17,6 +17,9 @@ class TypeName extends Enum
     const EXPRESSION = '_Expression';
     const VARIABLE = 'variable';
     const FUNCTION = 'function';
+    const IF_ELSE = 'if_else';
+    const BOOLEAN = 'boolean';
+    const ASSIGN = 'assign';
 
     /**
      * @return bool тип является цифровым
@@ -74,10 +77,27 @@ class TypeName extends Enum
     }
 
     /**
-     * @return bool true - тип String
+     * @return bool true - тип string
      */
     public function isString()
     {
         return $this->getValue() === self::STRING;
     }
+
+    /**
+     * @return bool true - тип boolean
+     */
+    public function isBoolean()
+    {
+        return $this->getValue() === self::BOOLEAN;
+    }
+
+    /**
+     * @return bool true - тип переменная
+     */
+    public function isVariable()
+    {
+        return $this->getValue() === self::VARIABLE;
+    }
 }
+

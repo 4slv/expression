@@ -3,7 +3,9 @@
 namespace Slov\Expression\Operation;
 
 use Slov\Expression\CalculationException;
+use Slov\Expression\Expression;
 use Slov\Expression\FactoryRepository;
+use Slov\Expression\TextExpression\VariableList;
 use Slov\Expression\Type\Type;
 use Slov\Expression\Type\TypeInterface;
 use Slov\Expression\Type\TypeName;

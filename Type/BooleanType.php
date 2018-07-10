@@ -2,27 +2,27 @@
 
 namespace Slov\Expression\Type;
 
+/** Булев тип */
+class BooleanType extends Type{
 
-class StringType extends Type
-{
     /**
      * @return TypeName
      */
-    function getType()
+    function getType() : TypeName
     {
-        return new TypeName(TypeName::STRING);
+        return new TypeName(TypeName::BOOLEAN);
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getValue()
+    public function getValue() : bool
     {
         return $this->value;
     }
 
     /**
-     * @param int $value
+     * @param bool $value
      * @return $this;
      */
     public function setValue($value)
@@ -33,12 +33,11 @@ class StringType extends Type
 
     /**
      * @param string $string строковое представление значения
-     * @return string значение
+     * @return bool значение
      */
-    public function stringToValue($string)
+    public function stringToValue($string) : bool
     {
-        preg_match('/'.TypeRegExp::STRING.'/', $string,$out);
-        return $out[1] ?? '';
+        return $string === 'true' ? true : false;
     }
 
 }

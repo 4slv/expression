@@ -38,4 +38,13 @@ class VariableList
     {
         return $this->list[$name];
     }
+
+    /**
+     * Список всех переменных
+     * @return Expression|Type
+     */
+    public function getAll()
+    {
+        return $this->list;
+    }
 }

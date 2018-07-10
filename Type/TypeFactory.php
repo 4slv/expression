@@ -74,11 +74,27 @@ class TypeFactory {
     }
 
     /**
+     * @return BooleanType()
+     */
+    public function createBoolean()
+    {
+        return new BooleanType();
+    }
+
+    /**
      * @return StringType
      */
     public function createString()
     {
         return new StringType();
+    }
+
+    /**
+     * @return VariableType
+     */
+    public function createVariable()
+    {
+        return new VariableType();
     }
 
     /**
@@ -103,6 +119,10 @@ class TypeFactory {
                 return $this->createDateInterval();
             case TypeName::STRING:
                 return $this->createString();
+            case TypeName::BOOLEAN:
+                return $this->createBoolean();
+            case TypeName::VARIABLE:
+                return $this->createVariable();
         }
         return null;
     }

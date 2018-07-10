@@ -3,7 +3,8 @@
 namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\ExpressionException;
-use Slov\Expression\Operation\OperationSign;
+use Slov\Expression\Operation\OperationSignRegexp;
+use Slov\Expression\Type\Type;
 use Slov\Expression\Type\TypeName;
 use Slov\Expression\Type\TypeRegExp;
 use Slov\Expression\FactoryRepository;
@@ -209,23 +210,13 @@ class TextExpression
     }
 
     /**
-     * @return string[] список символов операций
-     */
-    protected function getSignList()
-    {
-        $signList = OperationSign::values();
-        /* @var string[] $signList */
-        return $signList;
-    }
-
-    /**
      * @return string[] список экранированных символов операций для регулярного выражения
      */
-    protected function getRegexpQuoteSignList()
+    protected function getRegexpSignList()
     {
-        return array_map(function($sign){
-            return preg_quote($sign);
-        }, $this->getSignList());
+        $signRegexpList = OperationSignRegexp::toArray();
+        /* @var string[] $signRegexpList */
+        return $signRegexpList;
     }
 
     /**
@@ -233,16 +224,16 @@ class TextExpression
      */
     protected function getOperationListRegexp()
     {
-        $signListRegexp = implode('|', $this->getRegexpQuoteSignList());
+        $signListRegexp = implode('|', $this->getRegexpSignList());
         $operationListRegexp = '#('. $signListRegexp. ')#';
         return $operationListRegexp;
     }
 
     /**
      * @param string $expressionText выражение в текстовом представлении
-     * @return string[] список знаков операций
+     * @return string[] список операций
      */
-    protected function getOperationSignList($expressionText)
+    protected function getOperationList($expressionText)
     {
         preg_match_all($this->getOperationListRegexp(), $expressionText, $match);
         return $match[0];

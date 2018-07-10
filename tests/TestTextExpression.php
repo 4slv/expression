@@ -7,12 +7,13 @@ use PHPUnit\Framework\TestCase;
 use Slov\Expression\ExpressionException;
 use Slov\Expression\TextExpression\FunctionList;
 use Slov\Expression\TextExpression\TextExpression;
+use Slov\Expression\TextExpression\TextExpressionList;
 use Slov\Expression\TextExpression\VariableList;
 use Slov\Expression\Type\FloatType;
 use Slov\Expression\Type\IntType;
 use Slov\Expression\Type\MoneyType;
+use Slov\Expression\Type\StringType;
 use Slov\Expression\Type\TypeFactory;
-use Slov\Expression\Type\TypeName;
 use Slov\Money\Money;
 use DateInterval;
 use DateTime;
@@ -75,7 +76,154 @@ class TestTextExpression extends TestCase
             [
                 "$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))",
                 Money::create(4257045)
-            ]
+            ],
+
+            //daysOpearion
+            ['{days} 0', DateInterval::createFromDateString('0 day')],
+            ['{days} 1', DateInterval::createFromDateString('1 day')],
+            ['{days} 365', DateInterval::createFromDateString('365 day')],
+
+            //FirstYearDayOperation
+            ['{first year day} 2018.05.10', DateTime::createFromFormat('Y.m.d H:i:s', '2018.01.01 00:00:00')],
+            ['{first year day} 2022.06.12 08:56:10', DateTime::createFromFormat('Y.m.d H:i:s', '2022.01.01 00:00:00')],
+
+            //IntOperation
+            ['{int} 1.1', 1],
+            ['{int} 2.195896', 2],
+            ['{int} 3.9', 3],
+
+            //equal, int
+            ['3 == 3', true],
+            ['1 == 3', false],
+            //equal, float
+            ['3.14 == 3.14', true],
+            ['3.14 == 2.14', false],
+            //equal, DateTime
+            ['2018.06.19 15:06:00 == 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 == 2018.06.19 15:06:01', false],
+            //equal, DateInterval
+            ['6 day == 6 day', true],
+            ['6 day == 5 day', false],
+            //equal, Money
+            ['300$ == 300$', true],
+            ['300$ == 301$', false],
+
+            //greater, int
+            ['3 > 2', true],
+            ['3 > 3', false],
+            ['3 > 4', false],
+            //greater, float
+            ['3.14 > 3.13', true],
+            ['3.14 > 3.14', false],
+            ['3.14 > 3.15', false],
+            //greater, DateTime
+            ['2018.06.19 15:06:00 > 2018.06.19 15:05:59', true],
+            ['2018.06.19 15:06:00 > 2018.06.19 15:06:00', false],
+            ['2018.06.19 15:06:00 > 2018.06.19 15:06:01', false],
+            //greater, DateInterval
+            ['6 day > 5 day', true],
+            ['6 day > 6 day', false],
+            ['6 day > 7 day', false],
+            //greater, Money
+            ['301$ > 300$', true],
+            ['300$ > 300$', false],
+            ['300$ > 301$', false],
+
+            //less, int
+            ['3 < 4', true],
+            ['3 < 3', false],
+            ['3 < 2', false],
+            //less, float
+            ['3.14 < 3.15', true],
+            ['3.14 < 3.14', false],
+            ['3.14 < 3.13', false],
+            //less, DateTime
+            ['2018.06.19 15:06:00 < 2018.06.19 15:06:01', true],
+            ['2018.06.19 15:06:00 < 2018.06.19 15:06:00', false],
+            ['2018.06.19 15:06:00 < 2018.06.19 15:05:59', false],
+            //less, DateInterval
+            ['6 day < 7 day', true],
+            ['6 day < 6 day', false],
+            ['6 day < 5 day', false],
+            //less, Money
+            ['300$ < 301$', true],
+            ['300$ < 300$', false],
+            ['301$ < 300$', false],
+
+            //greater or equals, int
+            ['3 >= 2', true],
+            ['3 >= 3', true],
+            ['3 >= 4', false],
+            //greater or equals, float
+            ['3.14 >= 3.13', true],
+            ['3.14 >= 3.14', true],
+            ['3.14 >= 3.15', false],
+            //greater or equals, DateTime
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:05:59', true],
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:06:01', false],
+            //greater or equals, DateInterval
+            ['6 day >= 5 day', true],
+            ['6 day >= 6 day', true],
+            ['6 day >= 7 day', false],
+            //greater or equals, Money
+            ['301$ >= 300$', true],
+            ['300$ >= 300$', true],
+            ['300$ >= 301$', false],
+
+            //less or equals, int
+            ['3 <= 4', true],
+            ['3 <= 3', true],
+            ['3 <= 2', false],
+            //less or equals, float
+            ['3.14 <= 3.15', true],
+            ['3.14 <= 3.14', true],
+            ['3.14 <= 3.13', false],
+            //less or equals, DateTime
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:06:01', true],
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:05:59', false],
+            //less or equals, DateInterval
+            ['6 day <= 7 day', true],
+            ['6 day <= 6 day', true],
+            ['6 day <= 5 day', false],
+            //less or equals, Money
+            ['300$ <= 301$', true],
+            ['300$ <= 300$', true],
+            ['301$ <= 300$', false],
+
+            //not
+            ['!true', false],
+            ['!false', true],
+
+            //and
+            ['false && false', false],
+            ['false && true', false],
+            ['true && false', false],
+            ['true && true', true],
+
+            //or
+            ['false || false', false],
+            ['false || true', true],
+            ['true || false', true],
+            ['true || true', true],
+
+            //if-else operation
+            ['{1 > 2 ? 1 : 2}', 2],
+            ['{1 < 2 ? 1 : 2}', 1],
+            ['{1 < 2 && 2 < 3 ? 1 : 2}', 1],
+            ['{1 < 2 && 2 > 3 ? 1 : 2}', 2],
+            ['{1 < 2 ? 1 + 1 : 2 + 2}', 2],
+            ['{1 > 2 ? 1 + 1 : 2 + 2}', 4],
+
+            // assign
+            ['$i = 1', true],
+            ['{ $i = 1 ? $i : 2}', 1],
+            ['{ $i = 1 ? $i : 2} + $i', 2],
+            [' { ($i = 1) && ($i = $i + 1) ? $i : 3} ', 2],
+
+            // for
+            ['{ for{$i = 1; $i < 10; $i = $i + 1; $a = $i} ? $a : 3}', 9]
         ];
     }
 
@@ -175,7 +323,7 @@ class TestTextExpression extends TestCase
         };
 
         $functionList = new FunctionList();
-        $functionList->append('annuityPayment', new TypeName(TypeName::MONEY), $annuityPayment);
+        $functionList->append('annuityPayment', $annuityPayment);
 
         $creditAmountVariable = TypeFactory::getInstance()->createMoney();
 
@@ -202,5 +350,139 @@ class TestTextExpression extends TestCase
         $newActualAnnuityPayment = $annuityPaymentExpression->calculate()->getValue()->getAmount();
 
         $this->assertEquals(3648896, $newActualAnnuityPayment);
+    }
+
+    public function testExpressionFunctionsWithoutParams()
+    {
+        $x = 100;
+
+        $funcWithoutParams = function (){
+            return 100;
+        };
+
+        $functionList = new FunctionList();
+        $functionList->append('func', $funcWithoutParams);
+
+        $formula = '$func[]';
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setExpressionText($formula);
+
+        $expression = $textExpression->toExpression();
+        $actualResult = $expression->calculate();
+
+        $this->assertEquals($x, $actualResult);
+    }
+
+    /**
+     * @param float $yearPercent годовая ставка
+     * @param int $creditAmount сумма займа в копейках
+     * @param int $creditMonths число месяцев в кредите
+     * @param int $expectedAnnuityPayment ожидаемое значение ануитетного платежа
+     * @dataProvider expressionVariablesDataProvider
+     */
+    public function testExpressionList($yearPercent, $creditAmount, $creditMonths, $expectedAnnuityPayment)
+    {
+        $monthsInYear = '12';
+        $rateToPercentFactor = '100';
+
+        //rate per month
+        $variablesListRatePerMonth = new VariableList();
+        $variablesListRatePerMonth
+            ->append('yearPercent',         TypeFactory::getInstance()->createFloat()->setValue($yearPercent))
+            ->append('monthsInYear',        TypeFactory::getInstance()->createInt()->setValue($monthsInYear))
+            ->append('rateToPercentFactor', TypeFactory::getInstance()->createInt()->setValue($rateToPercentFactor));
+
+        $textExpressionRatePerMonth = new TextExpression();
+        $textExpressionRatePerMonth
+            ->setVariableList($variablesListRatePerMonth)
+            ->setExpressionText('$yearPercent / $monthsInYear / $rateToPercentFactor');
+
+        //annuity payment
+        $variablesListAnnuityPayment = new VariableList();
+        $variablesListAnnuityPayment
+            ->append('creditAmount', TypeFactory::getInstance()->createMoney()->setValue(Money::create($creditAmount)))
+            ->append('creditMonths', TypeFactory::getInstance()->createInt()->setValue($creditMonths));
+
+        $textExpressionAnnuityPayment = new TextExpression();
+        $textExpressionAnnuityPayment
+            ->setVariableList($variablesListAnnuityPayment)
+            ->setExpressionText('$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))');
+
+        //text expr list
+        $textExpressionList = new TextExpressionList();
+        $actualAnnuityExpression = $textExpressionList
+            ->append('ratePerMonth',    $textExpressionRatePerMonth)
+            ->append('annuityPayment',  $textExpressionAnnuityPayment)
+            ->get('annuityPayment');
+
+        $actualAnnuityPayment = $actualAnnuityExpression->toExpression()->calculate()->getValue()->getAmount();
+
+        $this->assertEquals($expectedAnnuityPayment, $actualAnnuityPayment);
+    }
+
+    public function testForeachWithFunction()
+    {
+        /**
+         * @param StringType $string строка
+         * @param IntType $additional конкатинируемое значение
+         * @return StringType
+         */
+        $concat = function($string, $additional)
+        {
+            $result = new StringType();
+            return $result->setValue(
+                $string->getValue().
+                ' '.
+                $additional->getValue()
+            );
+
+        };
+
+        $functionList = new FunctionList();
+        $functionList->append('concat', $concat);
+
+        $prefix = TypeFactory::getInstance()->createString()->setValue('');
+
+        $variablesList = new VariableList();
+        $variablesList->append('prefix', $prefix);
+
+        $forFormula =
+            '{
+                for{ 
+                    ($i = 1) && ($result = $prefix);
+                    $i < 10;
+                    $i = $i + 1;
+                    $result = $concat[$result, $i]
+                }
+                ? $result
+                : \'\'
+             }';
+        $forTextExpression = new TextExpression();
+        $forTextExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($forFormula);
+
+        $forExpression = $forTextExpression->toExpression();
+
+        $this->assertEquals(
+            ' 1 2 3 4 5 6 7 8 9',
+            $forExpression->calculate()->getValue()
+        );
+
+
+        $this->assertEquals(
+            ' 1 2 3 4 5 6 7 8 9',
+            $variablesList->get('result')->getValue()
+        );
+
+        $prefix->setValue('0');
+
+        $this->assertEquals(
+            '0 1 2 3 4 5 6 7 8 9',
+            $forExpression->calculate()->getValue()
+        );
     }
 }
