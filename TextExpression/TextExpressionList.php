@@ -45,6 +45,31 @@ class TextExpressionList
     }
 
     /**
+     * @param string $name
+     * @return bool
+     */
+    public function remove(string $name):bool
+    {
+        if(!isset($this->list[$name]))
+            return false;
+        unset($this->list[$name]);
+        return true;
+    }
+
+    /**
+     * @param TextExpression $textExpression
+     * @return \Slov\Expression\Type\Type
+     */
+    public function execute(TextExpression $textExpression)
+    {
+        $name = 'execute'.uniqid();
+        $this->append($name,$textExpression);
+        $returned = $this->get($name)->toExpression()->calculate();
+        $this->remove($name);
+        return $returned;
+    }
+
+    /**
      * Создания списка переменных для текстового выражения
      * @param TextExpression $textExpression текстовое выражение
      * @return VariableList
