@@ -2,6 +2,8 @@
 
 namespace Slov\Expression\TextExpression;
 
+use Slov\Expression\Type\Type;
+
 /** Список выражений в текстовом представлении */
 class TextExpressionList
 {
@@ -46,24 +48,23 @@ class TextExpressionList
 
     /**
      * @param string $name
-     * @return bool
      */
-    public function remove(string $name):bool
+    public function remove(string $name): void
     {
-        if(!isset($this->list[$name]))
-            return false;
-        unset($this->list[$name]);
-        return true;
+        if(array_key_exists($name, $this->list))
+        {
+            unset($this->list[$name]);
+        }
     }
 
     /**
      * @param TextExpression $textExpression
-     * @return \Slov\Expression\Type\Type
+     * @return Type
      */
     public function execute(TextExpression $textExpression)
     {
-        $name = 'execute'.uniqid();
-        $this->append($name,$textExpression);
+        $name = 'execute'. uniqid();
+        $this->append($name, $textExpression);
         $returned = $this->get($name)->toExpression()->calculate();
         $this->remove($name);
         return $returned;
