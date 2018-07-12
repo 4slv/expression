@@ -388,31 +388,27 @@ class TestTextExpression extends TestCase
         $rateToPercentFactor = '100';
 
         //rate per month
-        $variablesListRatePerMonth = new VariableList();
-        $variablesListRatePerMonth
-            ->append('yearPercent',         TypeFactory::getInstance()->createFloat()->setValue($yearPercent))
-            ->append('monthsInYear',        TypeFactory::getInstance()->createInt()->setValue($monthsInYear))
-            ->append('rateToPercentFactor', TypeFactory::getInstance()->createInt()->setValue($rateToPercentFactor));
-
-        $textExpressionRatePerMonth = new TextExpression();
-        $textExpressionRatePerMonth
-            ->setVariableList($variablesListRatePerMonth)
-            ->setExpressionText('$yearPercent / $monthsInYear / $rateToPercentFactor');
-
-        //annuity payment
-        $variablesListAnnuityPayment = new VariableList();
-        $variablesListAnnuityPayment
+        $variablesList = new VariableList();
+        $variablesList
+            ->append('yearPercent', TypeFactory::getInstance()->createFloat()->setValue($yearPercent))
+            ->append('monthsInYear', TypeFactory::getInstance()->createInt()->setValue($monthsInYear))
+            ->append('rateToPercentFactor', TypeFactory::getInstance()->createInt()->setValue($rateToPercentFactor))
             ->append('creditAmount', TypeFactory::getInstance()->createMoney()->setValue(Money::create($creditAmount)))
             ->append('creditMonths', TypeFactory::getInstance()->createInt()->setValue($creditMonths));
 
+        $textExpressionRatePerMonth = new TextExpression();
+        $textExpressionRatePerMonth
+            ->setVariableList($variablesList)
+            ->setExpressionText('$yearPercent / $monthsInYear / $rateToPercentFactor');
+
         $textExpressionAnnuityPayment = new TextExpression();
         $textExpressionAnnuityPayment
-            ->setVariableList($variablesListAnnuityPayment)
             ->setExpressionText('$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))');
 
         //text expr list
         $textExpressionList = new TextExpressionList();
         $actualAnnuityExpression = $textExpressionList
+            ->setVariableList($variablesList)
             ->append('ratePerMonth',    $textExpressionRatePerMonth)
             ->append('annuityPayment',  $textExpressionAnnuityPayment)
             ->get('annuityPayment');
@@ -484,5 +480,25 @@ class TestTextExpression extends TestCase
             '0 1 2 3 4 5 6 7 8 9',
             $forExpression->calculate()->getValue()
         );
+    }
+
+    public function testTextExpressionList()
+    {
+        $textExpressionAdd = new TextExpression();
+        $textExpressionAdd
+            ->setExpressionText('$i + 100');
+
+        $textExpressionFor = new TextExpression();
+        $textExpressionFor
+            ->setExpressionText('{(for{$i = 1; $i < 2; $i = $i + 1; $b = $a}) ? $b : 2}');
+
+        $textExpressionList = new TextExpressionList();
+        $textExpressionList
+            ->append('a', $textExpressionAdd);
+
+        $actual = $textExpressionList
+            ->execute($textExpressionFor)->calculate();
+
+        $this->assertEquals(101, $actual->getValue());
     }
 }
