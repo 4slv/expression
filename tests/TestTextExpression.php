@@ -82,6 +82,7 @@ class TestTextExpression extends TestCase
             ['{days} 0', DateInterval::createFromDateString('0 day')],
             ['{days} 1', DateInterval::createFromDateString('1 day')],
             ['{days} 365', DateInterval::createFromDateString('365 day')],
+            ['{days} 365 days', 365],
 
             //FirstYearDayOperation
             ['{first year day} 2018.05.10', DateTime::createFromFormat('Y.m.d H:i:s', '2018.01.01 00:00:00')],
@@ -388,7 +389,7 @@ class TestTextExpression extends TestCase
         $rateToPercentFactor = '100';
 
         //rate per month
-        $variablesList = new VariableList();
+        $variablesList= new VariableList();
         $variablesList
             ->append('yearPercent', TypeFactory::getInstance()->createFloat()->setValue($yearPercent))
             ->append('monthsInYear', TypeFactory::getInstance()->createInt()->setValue($monthsInYear))

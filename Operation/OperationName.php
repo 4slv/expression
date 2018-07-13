@@ -83,6 +83,7 @@ class OperationName extends Enum
             case self::DATE:
             case self::DAYS_IN_YEAR:
             case self::DAYS:
+                return 7;
             case self::FUNCTION:
             case self::IF_ELSE:
             case self::FOR:
