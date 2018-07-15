@@ -111,14 +111,8 @@ class Expression implements Calculation
 
     public function calculate()
     {
-        if($this->getFirstOperandPriority() >= $this->getSecondOperandPriority())
-        {
-            $this->setFirstOperandResult($this->getFirstOperand()->calculate());
-            $this->setSecondOperandResult($this->getSecondOperand()->calculate());
-        } else {
-            $this->setSecondOperandResult($this->getSecondOperand()->calculate());
-            $this->setFirstOperandResult($this->getFirstOperand()->calculate());
-        }
+        $this->setFirstOperandResult($this->getFirstOperand()->calculate());
+        $this->setSecondOperandResult($this->getSecondOperand()->calculate());
 
         return $this
             ->getOperation()
@@ -127,34 +121,4 @@ class Expression implements Calculation
             ->calculate();
     }
 
-    /**
-     * @param Calculation $operand операнд
-     * @return int приоритет рассчёта операнда
-     */
-    protected function getOperandPriority(Calculation $operand)
-    {
-        if($operand instanceof Expression)
-        {
-            /* @var Expression $operand */
-            return $operand->getOperation()->getOperationName()->getPriority();
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * @return int приоритет рассчёта первого операнда
-     */
-    protected function getFirstOperandPriority()
-    {
-        return $this->getOperandPriority($this->getFirstOperand());
-    }
-
-    /**
-     * @return int приоритет рассчёта второго операнда
-     */
-    protected function getSecondOperandPriority()
-    {
-        return $this->getOperandPriority($this->getSecondOperand());
-    }
 }

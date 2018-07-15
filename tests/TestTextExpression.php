@@ -9,6 +9,7 @@ use Slov\Expression\TextExpression\FunctionList;
 use Slov\Expression\TextExpression\TextExpression;
 use Slov\Expression\TextExpression\TextExpressionList;
 use Slov\Expression\TextExpression\VariableList;
+use Slov\Expression\Type\BooleanType;
 use Slov\Expression\Type\FloatType;
 use Slov\Expression\Type\IntType;
 use Slov\Expression\Type\MoneyType;
@@ -224,7 +225,11 @@ class TestTextExpression extends TestCase
             [' { ($i = 1) && ($i = $i + 1) ? $i : 3} ', 2],
 
             // for
-            ['{ for{$i = 1; $i < 10; $i = $i + 1; $a = $i} ? $a : 3}', 9]
+            ['{ for{$i = 1; $i < 10; $i = $i + 1; $a = $i} ? $a : 3}', 9],
+
+            // проверка приоритета выполнения операций
+            ['7 - 2 * 3', 1],
+            ['7 - 2 - 3', 2]
         ];
     }
 
@@ -352,6 +357,42 @@ class TestTextExpression extends TestCase
 
         $this->assertEquals(3648896, $newActualAnnuityPayment);
     }
+
+    public function testExpressionFunctionsOrder()
+    {
+        /**
+         * @param StringType $leftString левая строка
+         * @param StringType $rightString правая строка
+         * @return BooleanType
+         */
+        $concat = function($leftString, $rightString)
+        {
+            $leftString->setValue($leftString->getValue(). $rightString->getValue());
+            return TypeFactory::getInstance()->createBoolean()->setValue(true);
+        };
+
+        $functionList = new FunctionList();
+        $functionList->append('concat', $concat);
+
+        $variablesList = new VariableList();
+        $variablesList
+            ->append('a', TypeFactory::getInstance()->createString()->setValue('a')
+            );
+
+        $expressionFormula =
+            '{ $concat[$a, \'b\'] && $concat[$a, \'c\'] && $concat[$a, \'d\'] && $concat[$a, \'e\'] ? $a : \'123\' }';
+
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($expressionFormula);
+
+        $actualText = $textExpression->toExpression()->calculate()->getValue();
+        $expectedText = 'abcde';
+        $this->assertEquals($expectedText, $actualText);
+    }
+
 
     public function testExpressionFunctionsWithoutParams()
     {

@@ -8,6 +8,31 @@ use Slov\Expression\Type\TypeRegExp;
 /** Регулярное выражение операции */
 class OperationSignRegexp extends Enum
 {
+    const FUNCTION = '\$([a-zA-Z][\w\d]*)\[([^\[\]]+)?\]';
+
+    const ASSIGN = '\$([a-zA-Z][\w\d]*)\s*\=(?!\=)';
+
+    const FOR = 'for\{([^;]+);([^;]+);([^;]+);([^}]+)}';
+
+    const DATE = '\{date\}';
+
+    const DAYS_IN_YEAR = '\{days in year\}';
+
+    const DAYS = '\{days\}';
+
+    const FIRST_YEAR_DAY = '\{first year day\}';
+
+    const EQUAL = '\=\=';
+
+    const GREATER_OR_EQUALS = '\>\=';
+
+    const LESS_OR_EQUALS = '\<\=';
+
+    const GREATER = '\>';
+
+    const LESS = '\<';
+
+
     const EXPONENTIATION = '\*\*';
 
     const ADD = '\+';
@@ -20,25 +45,13 @@ class OperationSignRegexp extends Enum
 
     const REMAINDER_OF_DIVISION = '\%';
 
-    const DATE = '\{date\}';
 
-    const DAYS_IN_YEAR = '\{days in year\}';
 
-    const DAYS = '\{days\}';
 
-    const FIRST_YEAR_DAY = '\{first year day\}';
 
     const INT = '\{int\}';
 
-    const EQUAL = '\=\=';
 
-    const GREATER_OR_EQUALS = '\>\=';
-
-    const LESS_OR_EQUALS = '\<\=';
-
-    const GREATER = '\>';
-
-    const LESS = '\<';
 
     const NOT = '\!';
 
@@ -48,9 +61,5 @@ class OperationSignRegexp extends Enum
 
     const IF_ELSE = '\{([^?]+)\?([^:]+)\:([^}]+)\}';
 
-    const FUNCTION = '\$([a-zA-Z][\w\d]*)\[([^\[\]]+)?\]';
 
-    const ASSIGN = '\$([a-zA-Z][\w\d]*)\s*\=(?!\=)';
-
-    const FOR = 'for\{([^;]+);([^;]+);([^;]+);([^}]+)}';
 }
