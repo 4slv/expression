@@ -150,7 +150,8 @@ class SimpleTextExpression extends TextExpression
             ->createExpression()
             ->setOperation($operation)
             ->setFirstOperand($firstOperand)
-            ->setSecondOperand($secondOperand);
+            ->setSecondOperand($secondOperand)
+            ->setTextDescription($firstOperandValue. " ". $textOperation->getOperationValue(). " ". $secondOperandValue);
     }
 
     /**
