@@ -32,7 +32,6 @@ class OperationSignRegexp extends Enum
 
     const LESS = '\<';
 
-
     const EXPONENTIATION = '\*\*';
 
     const ADD = '\+';
@@ -45,13 +44,7 @@ class OperationSignRegexp extends Enum
 
     const REMAINDER_OF_DIVISION = '\%';
 
-
-
-
-
     const INT = '\{int\}';
-
-
 
     const NOT = '\!';
 
@@ -59,7 +52,7 @@ class OperationSignRegexp extends Enum
 
     const OR = '\|\|';
 
-    const IF_ELSE = '\{([^?]+)\?([^:]+)\:([^}]+)\}';
+    const IF_ELSE = '\{([^?]+)\?([^:]+)(\:([^}]+))?\}';
 
 
 }

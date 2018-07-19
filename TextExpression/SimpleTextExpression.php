@@ -11,6 +11,7 @@ use Slov\Expression\Operation\OperationName;
 use Slov\Expression\Operation\OperationSign;
 use Slov\Expression\Operation\OperationSignRegexp;
 use Slov\Expression\Type\BooleanType;
+use Slov\Expression\Type\TypeFactory;
 use Slov\Expression\Type\TypeName;
 use Slov\Expression\Type\Type;
 use Slov\Expression\ExpressionException;
@@ -238,9 +239,13 @@ class SimpleTextExpression extends TextExpression
                 ->createTextExpression(trim($match[2]))
                 ->toExpression();
 
-            $falseResult = $this
-                ->createTextExpression(trim($match[3]))
-                ->toExpression();
+            $falseResult = isset($match[3])
+                ? $this
+                    ->createTextExpression(trim($match[4]))
+                    ->toExpression()
+                : TypeFactory::getInstance()
+                    ->createBoolean()
+                    ->setValue(true);
 
             $ifElseStructure = $this->createIfElseStructure($condition, $trueResult, $falseResult);
 

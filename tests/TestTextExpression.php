@@ -211,6 +211,8 @@ class TestTextExpression extends TestCase
             ['true || true', true],
 
             //if-else operation
+            ['{1 > 2 ? 1}', true],
+            ['{2 > 1 ? 1}', 1],
             ['{1 > 2 ? 1 : 2}', 2],
             ['{1 < 2 ? 1 : 2}', 1],
             ['{1 < 2 && 2 < 3 ? 1 : 2}', 1],
