@@ -78,7 +78,7 @@ class AssignOperation extends Operation
      * @param null $firstOperandValue значение первого операнда
      * @param null $secondOperandValue значение второго операнда
      */
-    protected function calculateValues($firstOperandValue, $secondOperandValue)
+    protected function calculateValues($firstOperandValue, $secondOperandValue): void
     {
     }
 }

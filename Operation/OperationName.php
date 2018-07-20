@@ -94,4 +94,39 @@ class OperationName extends Enum
         }
         return 0;
     }
+
+    /**
+     * @return bool true - левый операнд используется
+     */
+    public function leftOperandUsed(){
+        switch ($this->getValue())
+        {
+            case self::ASSIGN:
+            case self::NOT:
+            case self::DATE:
+            case self::DAYS_IN_YEAR:
+            case self::DAYS:
+            case self::FUNCTION:
+            case self::IF_ELSE:
+            case self::FOR:
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * @return bool true - правый операнд используется
+     */
+    public function rightOperandUsed(){
+        switch ($this->getValue())
+        {
+            case self::FUNCTION:
+            case self::IF_ELSE:
+            case self::FOR:
+                return false;
+            default:
+                return true;
+        }
+    }
 }

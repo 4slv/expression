@@ -8,11 +8,11 @@ use Slov\Expression\Type\TypeRegExp;
 /** Регулярное выражение операции */
 class OperationSignRegexp extends Enum
 {
+    const FOR = 'for\{([^;?}]+);([^;?}]+);([^;?}]+);([^}\?]+)}';
+
+    const IF_ELSE = '\{([^\?\{\}]+)\?([^\:\{\}]+)(\:([^\{\}]+))?\}';
+
     const FUNCTION = '\$([a-zA-Z][\w\d]*)\[([^\[\]]+)?\]';
-
-    const ASSIGN = '\$([a-zA-Z][\w\d]*)\s*\=(?!\=)';
-
-    const FOR = 'for\{([^;]+);([^;]+);([^;]+);([^}]+)}';
 
     const DATE = '\{date\}';
 
@@ -52,7 +52,5 @@ class OperationSignRegexp extends Enum
 
     const OR = '\|\|';
 
-    const IF_ELSE = '\{([^?]+)\?([^:]+)(\:([^}]+))?\}';
-
-
+    const ASSIGN = '\$([a-zA-Z][\w\d]*)\s*\=(?!\=)';
 }
