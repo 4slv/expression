@@ -82,19 +82,10 @@ class SimpleTextExpression extends TextExpression
                 $textOperationList[] = $this->createTextOperation($operationSign, $operationPosition);
             }
             $maxTextOperation = $this->getMaxTextOperation($textOperationList);
-
             $operandList = $this->getTrimOperandList($expressionText);
 
-            try{
-                $replacedExpressionText = $this->replaceExpressionText($maxTextOperation, $operationList, $operandList);
-                return $this->createExpressionFromTextExpression($replacedExpressionText);
-            } catch (ExpressionException $exception){
-                throw new ExpressionException(
-                    $exception->getMessage().
-                    "\n===\n".
-                    $replacedExpressionText
-                );
-            }
+            $replacedExpressionText = $this->replaceExpressionText($maxTextOperation, $operationList, $operandList);
+            return $this->createExpressionFromTextExpression($replacedExpressionText);
         } else {
             return $this->getOperandFromString($expressionText);
         }
@@ -117,21 +108,13 @@ class SimpleTextExpression extends TextExpression
 
         $operation = $textOperation->getOperationName();
 
-        if($operation->leftOperandUsed() && $operation->rightOperandUsed()) {
+        if($operation->leftOperandUsed() or $operationPosition === 0) {
             array_splice(
                 $operandListWithoutExpressionOperands, $operationPosition, 2, $expressionLabel
             );
-        } else if ($operation->leftOperandUsed() === false && $operation->rightOperandUsed()) {
-            array_splice(
-                $operandListWithoutExpressionOperands, $operationPosition + 1, 1, $expressionLabel
-            );
-        } else if ($operation->leftOperandUsed() && $operation->rightOperandUsed() === false) {
-            array_splice(
-                $operandListWithoutExpressionOperands, $operationPosition, 1, $expressionLabel
-            );
         } else {
             array_splice(
-                $operandListWithoutExpressionOperands, $operationPosition, 0, $expressionLabel
+                $operandListWithoutExpressionOperands, $operationPosition, 1, $expressionLabel
             );
         }
 
@@ -146,8 +129,6 @@ class SimpleTextExpression extends TextExpression
                 $expressionTextParts[] = $operationSign;
             }
         }
-//        $lastOperand = array_pop($operandListWithoutExpressionOperands);
-//        $expressionTextParts[] = $lastOperand;
 
         return implode('', $expressionTextParts);
 
