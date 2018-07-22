@@ -2,6 +2,7 @@
 
 namespace Slov\Expression\Operation;
 
+use DateTime;
 use DateInterval;
 use Slov\Expression\Type\DateIntervalType;
 
@@ -39,13 +40,18 @@ class DaysOperation extends Operation
      */
     protected function calculateValues($firstOperandValue, $secondOperandValue)
     {
-        if($secondOperandValue instanceof DateInterval)
+        if($secondOperandValue instanceof DateInterval) {
             /** Операция определения количества дней в интервале */
-            return $secondOperandValue->d;
-        else
+            $seconds = (new DateTime())
+                ->setTimeStamp(0)
+                ->add($secondOperandValue)
+                ->getTimeStamp();
+            $days = $seconds / 86400;
+            return (int) $days;
+
+        } else {
             /** Преобразование целого числа во временной интервал */
             return DateInterval::createFromDateString($secondOperandValue . " day");
-
-        return null;
+        }
     }
 }
