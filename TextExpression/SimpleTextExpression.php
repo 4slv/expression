@@ -104,29 +104,22 @@ class SimpleTextExpression extends TextExpression
         $expressionLabel = $this->appendExpression($expression);
         $operationPosition = $textOperation->getPosition();
 
-        $operandListWithoutExpressionOperands = $operandList;
-
         $operation = $textOperation->getOperationName();
 
-        if($operation->leftOperandUsed() or $operationPosition === 0) {
-            array_splice(
-                $operandListWithoutExpressionOperands, $operationPosition, 2, $expressionLabel
-            );
-        } else {
-            array_splice(
-                $operandListWithoutExpressionOperands, $operationPosition, 1, $expressionLabel
-            );
-        }
-
-        $operationSignListWithoutExpressionOperation = $operationSignList;
-        array_splice($operationSignListWithoutExpressionOperation, $operationPosition, 1);
-
         $expressionTextParts = [];
-        foreach($operandListWithoutExpressionOperands as $position => $operand){
-            $expressionTextParts[] = $operand;
-            if(array_key_exists($position, $operationSignListWithoutExpressionOperation)){
-                $operationSign = $operationSignListWithoutExpressionOperation[$position];
-                $expressionTextParts[] = $operationSign;
+        foreach($operandList as $position => $operand){
+            if(
+                ($position !== $operationPosition || $operation->leftOperandUsed() === false)
+                &&
+                ($position !== $operationPosition + 1 || $operation->rightOperandUsed() === false)
+            ) {
+                $expressionTextParts[] = $operand;
+            }
+            if(array_key_exists($position, $operationSignList)){
+                $operationSign = $operationSignList[$position];
+                $expressionTextParts[] = $position === $operationPosition
+                    ? $expressionLabel
+                    : $operationSign;
             }
         }
 
