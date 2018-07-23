@@ -36,19 +36,22 @@ class DaysOperation extends Operation
     /**
      * @param null $firstOperandValue значение первого операнда
      * @param DateInterval|int $secondOperandValue значение второго операнда
-     * @return int|DateIntervalType
+     * @return int|DateInterval
      */
     protected function calculateValues($firstOperandValue, $secondOperandValue)
     {
         if($secondOperandValue instanceof DateInterval) {
             /** Операция определения количества дней в интервале */
-            $seconds = (new DateTime())
-                ->setTimeStamp(0)
-                ->add($secondOperandValue)
-                ->getTimeStamp();
-            $days = $seconds / 86400;
-            return (int) $days;
-
+            if($secondOperandValue->days === false){
+                $seconds = (new DateTime())
+                    ->setTimeStamp(0)
+                    ->add($secondOperandValue)
+                    ->getTimeStamp();
+                $days = $seconds / 86400;
+                return (int) $days;
+            } else {
+                return $secondOperandValue->days;
+            }
         } else {
             /** Преобразование целого числа во временной интервал */
             return DateInterval::createFromDateString($secondOperandValue . " day");

@@ -85,6 +85,7 @@ class TestTextExpression extends TestCase
             ['{days} 365', DateInterval::createFromDateString('365 day')],
             ['{days} 365 days', 365],
             ['{days} (2018.01.01 - 2017.01.01)', 365],
+            ['{days} (2016.09.13 - 2016.07.13) - 1', 61],
 
             //FirstYearDayOperation
             ['{first year day} 2018.05.10', DateTime::createFromFormat('Y.m.d H:i:s', '2018.01.01 00:00:00')],
