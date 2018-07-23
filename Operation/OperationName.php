@@ -86,6 +86,7 @@ class OperationName extends Enum
             case self::DATE:
             case self::DAYS_IN_YEAR:
             case self::DAYS:
+            case self::INT:
                 return 23;
             case self::FUNCTION:
             case self::IF_ELSE:
@@ -109,6 +110,7 @@ class OperationName extends Enum
             case self::FUNCTION:
             case self::IF_ELSE:
             case self::FOR:
+            case self::INT:
                 return false;
             default:
                 return true;
