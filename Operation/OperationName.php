@@ -52,6 +52,10 @@ class OperationName extends Enum
 
     const FOR = 'for';
 
+    const MIN = 'min';
+
+    const MAX = 'max';
+
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)
      */
@@ -91,6 +95,8 @@ class OperationName extends Enum
             case self::FUNCTION:
             case self::IF_ELSE:
             case self::FOR:
+            case self::MIN:
+            case self::MAX:
                 return 24;
         }
         return 0;
@@ -111,6 +117,8 @@ class OperationName extends Enum
             case self::IF_ELSE:
             case self::FOR:
             case self::INT:
+            case self::MIN:
+            case self::MAX:
                 return false;
             default:
                 return true;
@@ -126,6 +134,8 @@ class OperationName extends Enum
             case self::FUNCTION:
             case self::IF_ELSE:
             case self::FOR:
+            case self::MIN:
+            case self::MAX:
                 return false;
             default:
                 return true;

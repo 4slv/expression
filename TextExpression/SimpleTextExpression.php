@@ -7,6 +7,8 @@ use Slov\Expression\Operation\AssignOperation;
 use Slov\Expression\Operation\ForOperation;
 use Slov\Expression\Operation\FunctionOperation;
 use Slov\Expression\Operation\IfElseOperation;
+use Slov\Expression\Operation\MaxOperation;
+use Slov\Expression\Operation\MinOperation;
 use Slov\Expression\Operation\OperationName;
 use Slov\Expression\Operation\OperationSign;
 use Slov\Expression\Operation\OperationSignRegexp;
@@ -187,9 +189,40 @@ class SimpleTextExpression extends TextExpression
             case OperationName::FOR:
                 /* @var ForOperation $operation */
                 $this->initForOperation($operation, $operationValue);
+                break;
+            case OperationName::MIN:
+                /* @var MinOperation $operation */
+                $this->initGetListElementOperation(
+                    $operation, $operationValue, OperationSignRegexp::MIN
+                );
+                break;
+            case OperationName::MAX:
+                /* @var MaxOperation $operation */
+                $this->initGetListElementOperation(
+                    $operation, $operationValue, OperationSignRegexp::MAX
+                );
+                break;
         }
 
         return $operation;
+    }
+
+    /**
+     * @param MinOperation|MaxOperation $operation операция min или max
+     * @param string $minOperationText текстовое представление операции min
+     * @param string $operationRegExp регулярное выражение операции
+     */
+    private function initGetListElementOperation($operation, $minOperationText, $operationRegExp)
+    {
+        if(preg_match('/^'. $operationRegExp. '$/', $minOperationText, $match))
+        {
+            $expressionTextList = explode(',', $match[1]);
+            $parametersList = [];
+            foreach ($expressionTextList as $expressionText) {
+                $parametersList[] = $this->createTextExpression(trim($expressionText))->toExpression();
+            }
+            $operation->setParameterList($parametersList);
+        }
     }
 
     /**

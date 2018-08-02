@@ -52,4 +52,8 @@ class OperationSign extends Enum
     const FUNCTION = '$functionName[ expressionParameter1, expressionParameter2, ...]';
 
     const FOR = 'for{firstExpression; conditionExpression, eachStepExpression; doExpression}';
+
+    const MIN = 'min{firstExpression, secondExpression, ...}';
+
+    const MAX = 'max{firstExpression, secondExpression, ...}';
 }

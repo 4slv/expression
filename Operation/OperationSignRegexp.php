@@ -8,7 +8,11 @@ use Slov\Expression\Type\TypeRegExp;
 /** Регулярное выражение операции */
 class OperationSignRegexp extends Enum
 {
-    const FOR = 'for\{([^;?}]+);([^;?}]+);([^;?}]+);([^}\?]+)}';
+    const MIN = 'min\{([^}]+)\}';
+
+    const MAX = 'max\{([^}]+)\}';
+
+    const FOR = 'for\{([^;?}]+);([^;?}]+);([^;?}]+);([^}\?]+)\}';
 
     const IF_ELSE = '\{([^\?\{\}]+)\?([^\:\{\}]+)(\:([^\{\}]+))?\}';
 
