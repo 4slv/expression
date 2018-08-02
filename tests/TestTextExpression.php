@@ -52,6 +52,14 @@ class TestTextExpression extends TestCase
             ['1$10 * 2.2', Money::create(242)],
             # операции с датами
             [
+                '2018.02.05.033333',
+                DateTime::createFromFormat('Y.m.d H:i:s.u', '2018.02.05 00:00:00.033333')
+            ],
+            [
+                '2018.02.05 22:30:23.033333',
+                DateTime::createFromFormat('Y.m.d H:i:s.u', '2018.02.05 22:30:23.033333')
+            ],
+            [
                 '2018.02.05 + 1 day',
                 DateTime::createFromFormat('Y.m.d H:i:s', '2018.02.06 00:00:00')
             ],
@@ -236,6 +244,8 @@ class TestTextExpression extends TestCase
             // min, max
             ['min{3,2,1}', 1],
             ['max{1,2,3}', 3],
+            ['min{3$,1$,2$}', Money::create(100)],
+            ['max{1$,3$,2$}', Money::create(300)],
 
             // проверка приоритета выполнения операций
             ['7 - 2 * 3', 1],

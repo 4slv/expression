@@ -50,12 +50,13 @@ trait GetListElementOperationTrait
             $parameterList[] = $parameter;
             $parameterValuesList[] = $parameterValue;
         }
-        $position = array_pop(
-            array_keys(
-                $parameterValuesList,
-                $this->getListElement($parameterValuesList)
-            )
+
+        $listElement = $this->getListElement($parameterValuesList);
+        $minimalElementList = array_keys(
+            $parameterValuesList,
+            $listElement
         );
+        $position = array_pop($minimalElementList);
 
         return $parameterList[$position];
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Slov\Expression\Operation;
+use Slov\Money\Money;
 
 /** Операция выбора минимального значения */
 class MinOperation extends Operation
@@ -15,6 +16,11 @@ class MinOperation extends Operation
 
     protected function getListElement(array $list)
     {
+        $firstElement = current($list);
+        if(is_object($firstElement) && $firstElement instanceof Money)
+        {
+            return Money::min($list);
+        }
         return min($list);
     }
 }
