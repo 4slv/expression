@@ -299,6 +299,20 @@ DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 <= 2018.06.19 15
 DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 <= 2018.06.19 15:06:00 | true
 DateTimeType | DateTimeType | BooleanType | 2018.06.19 15:06:00 <= 2018.06.19 15:05:59 | false
 
+
+### Операторы min, max
+
+**синтаксис:**<br>
+**min**{firstExpression, secondExpression, ...}<br>
+**max**{firstExpression, secondExpression, ...}
+
+**Пример** | **Результат**
+ --- | ---
+min{3,1,2} | 1
+max{1,3,2} | 3
+min{3$, 1$, 2$} | 1$
+max{2018.01.01, 2019.01.01, 2015.01.01} | 2019.01.01
+
 ### Условный оператор
 
 **Пример** | **Результат**
