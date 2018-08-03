@@ -246,6 +246,14 @@ class TestTextExpression extends TestCase
             ['max{1,2,3}', 3],
             ['min{3$,1$,2$}', Money::create(100)],
             ['max{1$,3$,2$}', Money::create(300)],
+            [
+                'min{2018.01.01, 2015.02.02, 2016.03.03}',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2015.02.02 00:00:00')
+            ],
+            [
+                'max{2018.01.01, 2019.02.02, 2016.03.03}',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2019.02.02 00:00:00')
+            ],
 
             // проверка приоритета выполнения операций
             ['7 - 2 * 3', 1],
