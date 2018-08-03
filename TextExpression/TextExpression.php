@@ -28,6 +28,9 @@ class TextExpression
 
     /** @var string выражение в текстовом представлении */
     protected $expressionText;
+    
+    /** @var Expression[] Кэширование собранных текстовых представлений */
+    protected static $expressionCache;
 
     /**
      * @return ExpressionList список выражений
@@ -118,7 +121,10 @@ class TextExpression
      */
     public function toExpression()
     {
-        return $this->createExpressionFromTextExpression($this->getExpressionText());
+        if(!isset(static::$expressionCache[$this->getExpressionText()] )) {
+            static::$expressionCache[$this->getExpressionText()] = $this->createExpressionFromTextExpression($this->getExpressionText());
+        }
+        return static::$expressionCache[$this->getExpressionText()];
     }
 
     /**
