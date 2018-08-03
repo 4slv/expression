@@ -9,6 +9,7 @@ use Slov\Expression\TextExpression\FunctionList;
 use Slov\Expression\TextExpression\TextExpression;
 use Slov\Expression\TextExpression\TextExpressionList;
 use Slov\Expression\TextExpression\VariableList;
+use Slov\Expression\Type\BooleanType;
 use Slov\Expression\Type\FloatType;
 use Slov\Expression\Type\IntType;
 use Slov\Expression\Type\MoneyType;
@@ -51,6 +52,14 @@ class TestTextExpression extends TestCase
             ['1$10 * 2.2', Money::create(242)],
             # операции с датами
             [
+                '2018.02.05.033333',
+                DateTime::createFromFormat('Y.m.d H:i:s.u', '2018.02.05 00:00:00.033333')
+            ],
+            [
+                '2018.02.05 22:30:23.033333',
+                DateTime::createFromFormat('Y.m.d H:i:s.u', '2018.02.05 22:30:23.033333')
+            ],
+            [
                 '2018.02.05 + 1 day',
                 DateTime::createFromFormat('Y.m.d H:i:s', '2018.02.06 00:00:00')
             ],
@@ -82,6 +91,9 @@ class TestTextExpression extends TestCase
             ['{days} 0', DateInterval::createFromDateString('0 day')],
             ['{days} 1', DateInterval::createFromDateString('1 day')],
             ['{days} 365', DateInterval::createFromDateString('365 day')],
+            ['{days} 365 days', 365],
+            ['{days} (2018.01.01 - 2017.01.01)', 365],
+            ['{days} (2016.09.13 - 2016.07.13) - 1', 61],
 
             //FirstYearDayOperation
             ['{first year day} 2018.05.10', DateTime::createFromFormat('Y.m.d H:i:s', '2018.01.01 00:00:00')],
@@ -209,12 +221,15 @@ class TestTextExpression extends TestCase
             ['true || true', true],
 
             //if-else operation
+            ['{1 > 2 ? 1}', true],
             ['{1 > 2 ? 1 : 2}', 2],
             ['{1 < 2 ? 1 : 2}', 1],
             ['{1 < 2 && 2 < 3 ? 1 : 2}', 1],
             ['{1 < 2 && 2 > 3 ? 1 : 2}', 2],
             ['{1 < 2 ? 1 + 1 : 2 + 2}', 2],
             ['{1 > 2 ? 1 + 1 : 2 + 2}', 4],
+            ['{1 > 0 ? 1} + {1 > 2 ? 1 : 2} * {2 > 1 ? 3 : 2}', 7],
+            ['{ 2 > 1 ? {int} ({days} (2018.01.02 - 2018.01.01) / 14 ) + 1 : 1}', 1],
 
             // assign
             ['$i = 1', true],
@@ -223,7 +238,27 @@ class TestTextExpression extends TestCase
             [' { ($i = 1) && ($i = $i + 1) ? $i : 3} ', 2],
 
             // for
-            ['{ for{$i = 1; $i < 10; $i = $i + 1; $a = $i} ? $a : 3}', 9]
+            ['{ for{$i = 1; $i < 10; $i = $i + 1; $a = $i} ? $a : 3}', 9],
+            [' { for{$i = 1; $i < 10; $i = $i + 1; $a = {$i % 2 > 0 ? 1}} ? $a : 3}', 1],
+
+            // min, max
+            ['min{3,2,1}', 1],
+            ['max{1,2,3}', 3],
+            ['min{3$,1$,2$}', Money::create(100)],
+            ['max{1$,3$,2$}', Money::create(300)],
+            [
+                'min{2018.01.01, 2015.02.02, 2016.03.03}',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2015.02.02 00:00:00')
+            ],
+            [
+                'max{2018.01.01, 2019.02.02, 2016.03.03}',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2019.02.02 00:00:00')
+            ],
+
+            // проверка приоритета выполнения операций
+            ['7 - 2 * 3', 1],
+            ['7 - 2 - 3', 2],
+            ['1 < 2 + 1', true]
         ];
     }
 
@@ -352,6 +387,42 @@ class TestTextExpression extends TestCase
         $this->assertEquals(3648896, $newActualAnnuityPayment);
     }
 
+    public function testExpressionFunctionsOrder()
+    {
+        /**
+         * @param StringType $leftString левая строка
+         * @param StringType $rightString правая строка
+         * @return BooleanType
+         */
+        $concat = function($leftString, $rightString)
+        {
+            $leftString->setValue($leftString->getValue(). $rightString->getValue());
+            return TypeFactory::getInstance()->createBoolean()->setValue(true);
+        };
+
+        $functionList = new FunctionList();
+        $functionList->append('concat', $concat);
+
+        $variablesList = new VariableList();
+        $variablesList
+            ->append('a', TypeFactory::getInstance()->createString()->setValue('a')
+            );
+
+        $expressionFormula =
+            '{ $concat[$a, \'b\'] && $concat[$a, \'c\'] && $concat[$a, \'d\'] && $concat[$a, \'e\'] ? $a : \'123\' }';
+
+        $textExpression = new TextExpression();
+        $textExpression
+            ->setFunctionList($functionList)
+            ->setVariableList($variablesList)
+            ->setExpressionText($expressionFormula);
+
+        $actualText = $textExpression->toExpression()->calculate()->getValue();
+        $expectedText = 'abcde';
+        $this->assertEquals($expectedText, $actualText);
+    }
+
+
     public function testExpressionFunctionsWithoutParams()
     {
         $x = 100;
@@ -388,31 +459,27 @@ class TestTextExpression extends TestCase
         $rateToPercentFactor = '100';
 
         //rate per month
-        $variablesListRatePerMonth = new VariableList();
-        $variablesListRatePerMonth
-            ->append('yearPercent',         TypeFactory::getInstance()->createFloat()->setValue($yearPercent))
-            ->append('monthsInYear',        TypeFactory::getInstance()->createInt()->setValue($monthsInYear))
-            ->append('rateToPercentFactor', TypeFactory::getInstance()->createInt()->setValue($rateToPercentFactor));
-
-        $textExpressionRatePerMonth = new TextExpression();
-        $textExpressionRatePerMonth
-            ->setVariableList($variablesListRatePerMonth)
-            ->setExpressionText('$yearPercent / $monthsInYear / $rateToPercentFactor');
-
-        //annuity payment
-        $variablesListAnnuityPayment = new VariableList();
-        $variablesListAnnuityPayment
+        $variablesList= new VariableList();
+        $variablesList
+            ->append('yearPercent', TypeFactory::getInstance()->createFloat()->setValue($yearPercent))
+            ->append('monthsInYear', TypeFactory::getInstance()->createInt()->setValue($monthsInYear))
+            ->append('rateToPercentFactor', TypeFactory::getInstance()->createInt()->setValue($rateToPercentFactor))
             ->append('creditAmount', TypeFactory::getInstance()->createMoney()->setValue(Money::create($creditAmount)))
             ->append('creditMonths', TypeFactory::getInstance()->createInt()->setValue($creditMonths));
 
+        $textExpressionRatePerMonth = new TextExpression();
+        $textExpressionRatePerMonth
+            ->setVariableList($variablesList)
+            ->setExpressionText('$yearPercent / $monthsInYear / $rateToPercentFactor');
+
         $textExpressionAnnuityPayment = new TextExpression();
         $textExpressionAnnuityPayment
-            ->setVariableList($variablesListAnnuityPayment)
             ->setExpressionText('$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))');
 
         //text expr list
         $textExpressionList = new TextExpressionList();
         $actualAnnuityExpression = $textExpressionList
+            ->setVariableList($variablesList)
             ->append('ratePerMonth',    $textExpressionRatePerMonth)
             ->append('annuityPayment',  $textExpressionAnnuityPayment)
             ->get('annuityPayment');
@@ -484,5 +551,25 @@ class TestTextExpression extends TestCase
             '0 1 2 3 4 5 6 7 8 9',
             $forExpression->calculate()->getValue()
         );
+    }
+
+    public function testTextExpressionList()
+    {
+        $textExpressionAdd = new TextExpression();
+        $textExpressionAdd
+            ->setExpressionText('$i + 100');
+
+        $textExpressionFor = new TextExpression();
+        $textExpressionFor
+            ->setExpressionText('{(for{$i = 1; $i < 2; $i = $i + 1; $b = $a}) ? $b : 2}');
+
+        $textExpressionList = new TextExpressionList();
+        $textExpressionList
+            ->append('a', $textExpressionAdd);
+
+        $actual = $textExpressionList
+            ->execute($textExpressionFor)->calculate();
+
+        $this->assertEquals(101, $actual->getValue());
     }
 }

@@ -2,20 +2,48 @@
 
 namespace Slov\Expression\TextExpression;
 
+use Slov\Expression\Type\Type;
+
 /** Список выражений в текстовом представлении */
 class TextExpressionList
 {
+    /**
+     * @var VariableList список переменных
+     */
+    private $variableList;
+
     /**
      * @var TextExpression[] ассоциативный массив с текстовыми выражениями
      */
     private $list = [];
 
     /**
-     * @return TextExpression[]
+     * @return TextExpression[] ассоциативный массив с текстовыми выражениями
      */
     protected function getList(): array
     {
         return $this->list;
+    }
+
+    /**
+     * @param VariableList $variableList список переменных
+     * @return $this
+     */
+    public function setVariableList(VariableList $variableList)
+    {
+        $this->variableList = $variableList;
+        return $this;
+    }
+
+    /**
+     * @return VariableList список переменных
+     */
+    public function getVariableList(): VariableList
+    {
+        if(is_null($this->variableList)){
+            $this->variableList = new VariableList();
+        }
+        return $this->variableList;
     }
 
     /** Добавление выражения в список
@@ -25,12 +53,10 @@ class TextExpressionList
      */
     public function append(string $name, TextExpression $textExpression) : TextExpressionList
     {
-        $variableList = $this->createVariableList($textExpression);
-
-        $textExpression->setVariableList($variableList);
-
+        $textExpression->setVariableList($this->getVariableList());
         $this->list[$name] = $textExpression;
-
+        $this->fillVariableList($textExpression);
+        $this->getVariableList()->append($name, $textExpression->toExpression());
         return $this;
     }
 
@@ -46,47 +72,38 @@ class TextExpressionList
 
     /**
      * @param string $name
-     * @return bool
      */
-    public function remove(string $name):bool
+    public function remove(string $name): void
     {
-        if(!isset($this->list[$name]))
-            return false;
-        unset($this->list[$name]);
-        return true;
+        if(array_key_exists($name, $this->list))
+        {
+            unset($this->list[$name]);
+        }
     }
 
     /**
      * @param TextExpression $textExpression
-     * @return \Slov\Expression\Type\Type
+     * @return Type
      */
     public function execute(TextExpression $textExpression)
     {
-        $name = 'execute'.uniqid();
-        $this->append($name,$textExpression);
-        $returned = $this->get($name)->toExpression()->calculate();
+        $name = 'execute'. uniqid();
+        $this->append($name, $textExpression);
+        $returned = $this
+            ->get($name)
+            ->toExpression()->calculate();
         $this->remove($name);
         return $returned;
     }
 
     /**
-     * Создания списка переменных для текстового выражения
+     * Заполнение списка переменных из текстового выражения
      * @param TextExpression $textExpression текстовое выражение
-     * @return VariableList
      */
-    private function createVariableList(TextExpression $textExpression) : VariableList
+    private function fillVariableList(TextExpression $textExpression)
     {
-        $variableList = clone $textExpression->getVariableList();
-        foreach ($this->getList() as $listExpressionName => $listTextExpression){
-            $listTextVariableList = $listTextExpression->getVariableList()->getAll();
-            foreach ($listTextVariableList as $listTextVariableName => $listTextVariable){
-                if($variableList->exists($listTextVariableName) === false){
-                    $variableList->append($listTextVariableName, $listTextVariable);
-                }
-            }
-            $listExpression = $listTextExpression->toExpression();
-            $variableList->append($listExpressionName, $listExpression);
+        foreach ($textExpression->getVariableList()->getAll() as $variableName => $variableExpression){
+            $this->getVariableList()->append($variableName, $variableExpression);
         }
-        return $variableList;
     }
 }

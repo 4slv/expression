@@ -41,7 +41,7 @@ class VariableList
 
     /**
      * Список всех переменных
-     * @return Expression|Type
+     * @return Expression[]|Type[]
      */
     public function getAll()
     {

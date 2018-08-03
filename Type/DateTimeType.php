@@ -36,19 +36,17 @@ class DateTimeType extends Type
      */
     public function stringToValue($string)
     {
-        $dateInfo = explode(' ', $string);
+        preg_match('/^'. TypeRegExp::DATE_TIME. '$/', $string, $match);
 
-        list($date, $time) = count($dateInfo) > 1
-            ? $dateInfo
-            : [current($dateInfo), null];
-        if(is_null($time)){
-            $time = '00:00:00';
+        $date = $match[1];
+        $time = isset($match[2]) && strlen($match[2]) > 0 ? $match[2] : ' 00:00:00';
+        $microseconds = isset($match[3]) ? $match[3] : null;
+
+        $dateTime = implode('', [$date, $time, $microseconds]);
+
+        if(isset($microseconds)) {
+            return DateTime::createFromFormat('Y.m.d H:i:s.u', $dateTime);
         }
-        $dateTime = implode(' ', [$date, $time]);
-
-        return DateTime::createFromFormat(
-            'Y.m.d H:i:s',
-            $dateTime
-        );
+        return DateTime::createFromFormat('Y.m.d H:i:s', $dateTime);
     }
 }

@@ -52,6 +52,10 @@ class OperationName extends Enum
 
     const FOR = 'for';
 
+    const MIN = 'min';
+
+    const MAX = 'max';
+
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)
      */
@@ -60,34 +64,81 @@ class OperationName extends Enum
         switch ($this->getValue())
         {
             case self::ASSIGN:
-                return 1;
-            case self::ADD:
-            case self::SUBTRACTION:
-                return 2;
-            case self::MULTIPLY:
-            case self::DIVISION:
-            case self::REMAINDER_OF_DIVISION:
-                return 3;
-            case self::EXPONENTIATION:
                 return 4;
-            case self::NOT:
-            case self::AND:
             case self::OR:
-                return 5;
+                return 7;
+            case self::AND:
+                return 8;
             case self::EQUAL:
+                return 12;
             case self::GREATER:
             case self::GREATER_OR_EQUALS:
             case self::LESS:
             case self::LESS_OR_EQUALS:
-                return 6;
+                return 13;
+            case self::ADD:
+            case self::SUBTRACTION:
+                return 15;
+            case self::MULTIPLY:
+            case self::DIVISION:
+            case self::REMAINDER_OF_DIVISION:
+                return 16;
+            case self::NOT:
+                return 17;
+            case self::EXPONENTIATION:
+                return 20;
+            case self::DATE:
+            case self::DAYS_IN_YEAR:
+            case self::DAYS:
+            case self::INT:
+                return 23;
+            case self::FUNCTION:
+            case self::IF_ELSE:
+            case self::FOR:
+            case self::MIN:
+            case self::MAX:
+                return 24;
+        }
+        return 0;
+    }
+
+    /**
+     * @return bool true - левый операнд используется
+     */
+    public function leftOperandUsed(){
+        switch ($this->getValue())
+        {
+            case self::ASSIGN:
+            case self::NOT:
             case self::DATE:
             case self::DAYS_IN_YEAR:
             case self::DAYS:
             case self::FUNCTION:
             case self::IF_ELSE:
             case self::FOR:
-                return 10;
+            case self::INT:
+            case self::MIN:
+            case self::MAX:
+                return false;
+            default:
+                return true;
         }
-        return 0;
+    }
+
+    /**
+     * @return bool true - правый операнд используется
+     */
+    public function rightOperandUsed(){
+        switch ($this->getValue())
+        {
+            case self::FUNCTION:
+            case self::IF_ELSE:
+            case self::FOR:
+            case self::MIN:
+            case self::MAX:
+                return false;
+            default:
+                return true;
+        }
     }
 }

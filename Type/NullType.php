@@ -23,10 +23,12 @@ class NullType extends Type
 
     /**
      * @param null $value
+     * @return $this
      */
     public function setValue($value)
     {
         $this->value = $value;
+        return $this;
     }
 
     /**

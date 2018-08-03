@@ -7,10 +7,13 @@ use Slov\Expression\Operation\AssignOperation;
 use Slov\Expression\Operation\ForOperation;
 use Slov\Expression\Operation\FunctionOperation;
 use Slov\Expression\Operation\IfElseOperation;
+use Slov\Expression\Operation\MaxOperation;
+use Slov\Expression\Operation\MinOperation;
 use Slov\Expression\Operation\OperationName;
 use Slov\Expression\Operation\OperationSign;
 use Slov\Expression\Operation\OperationSignRegexp;
 use Slov\Expression\Type\BooleanType;
+use Slov\Expression\Type\TypeFactory;
 use Slov\Expression\Type\TypeName;
 use Slov\Expression\Type\Type;
 use Slov\Expression\ExpressionException;
@@ -81,11 +84,9 @@ class SimpleTextExpression extends TextExpression
                 $textOperationList[] = $this->createTextOperation($operationSign, $operationPosition);
             }
             $maxTextOperation = $this->getMaxTextOperation($textOperationList);
-
             $operandList = $this->getTrimOperandList($expressionText);
 
             $replacedExpressionText = $this->replaceExpressionText($maxTextOperation, $operationList, $operandList);
-
             return $this->createExpressionFromTextExpression($replacedExpressionText);
         } else {
             return $this->getOperandFromString($expressionText);
@@ -105,19 +106,24 @@ class SimpleTextExpression extends TextExpression
         $expressionLabel = $this->appendExpression($expression);
         $operationPosition = $textOperation->getPosition();
 
-        $operandListWithoutExpressionOperands = $operandList;
-        array_splice($operandListWithoutExpressionOperands, $operationPosition, 2, $expressionLabel);
-        $operationSignListWithoutExpressionOperation = $operationSignList;
-        array_splice($operationSignListWithoutExpressionOperation, $operationPosition, 1);
+        $operation = $textOperation->getOperationName();
 
         $expressionTextParts = [];
-        foreach($operationSignListWithoutExpressionOperation as $position => $operationSign){
-            $operand = $operandListWithoutExpressionOperands[$position];
-            $expressionTextParts[] = $operand;
-            $expressionTextParts[] = $operationSign;
+        foreach($operandList as $position => $operand){
+            if(
+                ($position !== $operationPosition || $operation->leftOperandUsed() === false)
+                &&
+                ($position !== $operationPosition + 1 || $operation->rightOperandUsed() === false)
+            ) {
+                $expressionTextParts[] = $operand;
+            }
+            if(array_key_exists($position, $operationSignList)){
+                $operationSign = $operationSignList[$position];
+                $expressionTextParts[] = $position === $operationPosition
+                    ? $expressionLabel
+                    : $operationSign;
+            }
         }
-        $lastOperand = array_pop($operandListWithoutExpressionOperands);
-        $expressionTextParts[] = $lastOperand;
 
         return implode('', $expressionTextParts);
 
@@ -140,8 +146,9 @@ class SimpleTextExpression extends TextExpression
     protected function createExpressionFromOperationAndOperands(TextOperation $textOperation, $operandList)
     {
         $operationPosition = $textOperation->getPosition();
-        $firstOperandValue = $operandList[$operationPosition];
-        $secondOperandValue = $operandList[$operationPosition + 1];
+        $operation = $textOperation->getOperationName();
+        $firstOperandValue = $operation->leftOperandUsed() ? $operandList[$operationPosition] : '';
+        $secondOperandValue = $operation->rightOperandUsed() ? $operandList[$operationPosition + 1] : '';
         $firstOperand = $this->getOperandFromString($firstOperandValue);
         $secondOperand = $this->getOperandFromString($secondOperandValue);
         $operation = $this->createOperation($textOperation);
@@ -150,7 +157,8 @@ class SimpleTextExpression extends TextExpression
             ->createExpression()
             ->setOperation($operation)
             ->setFirstOperand($firstOperand)
-            ->setSecondOperand($secondOperand);
+            ->setSecondOperand($secondOperand)
+            ->setTextDescription($firstOperandValue. " ". $textOperation->getOperationValue(). " ". $secondOperandValue);
     }
 
     /**
@@ -181,9 +189,40 @@ class SimpleTextExpression extends TextExpression
             case OperationName::FOR:
                 /* @var ForOperation $operation */
                 $this->initForOperation($operation, $operationValue);
+                break;
+            case OperationName::MIN:
+                /* @var MinOperation $operation */
+                $this->initGetListElementOperation(
+                    $operation, $operationValue, OperationSignRegexp::MIN
+                );
+                break;
+            case OperationName::MAX:
+                /* @var MaxOperation $operation */
+                $this->initGetListElementOperation(
+                    $operation, $operationValue, OperationSignRegexp::MAX
+                );
+                break;
         }
 
         return $operation;
+    }
+
+    /**
+     * @param MinOperation|MaxOperation $operation операция min или max
+     * @param string $minOperationText текстовое представление операции min
+     * @param string $operationRegExp регулярное выражение операции
+     */
+    private function initGetListElementOperation($operation, $minOperationText, $operationRegExp)
+    {
+        if(preg_match('/^'. $operationRegExp. '$/', $minOperationText, $match))
+        {
+            $expressionTextList = explode(',', $match[1]);
+            $parametersList = [];
+            foreach ($expressionTextList as $expressionText) {
+                $parametersList[] = $this->createTextExpression(trim($expressionText))->toExpression();
+            }
+            $operation->setParameterList($parametersList);
+        }
     }
 
     /**
@@ -237,9 +276,9 @@ class SimpleTextExpression extends TextExpression
                 ->createTextExpression(trim($match[2]))
                 ->toExpression();
 
-            $falseResult = $this
-                ->createTextExpression(trim($match[3]))
-                ->toExpression();
+            $falseResult = isset($match[3])
+                ? $this->createTextExpression(trim($match[4]))->toExpression()
+                : TypeFactory::getInstance()->createBoolean()->setValue(true);
 
             $ifElseStructure = $this->createIfElseStructure($condition, $trueResult, $falseResult);
 

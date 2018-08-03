@@ -209,6 +209,22 @@ class OperationFactory
     }
 
     /**
+     * @return MinOperation
+     */
+    public function createMinOperation()
+    {
+        return new MinOperation();
+    }
+
+    /**
+     * @return MaxOperation
+     */
+    public function createMaxOperation()
+    {
+        return new MaxOperation();
+    }
+
+    /**
      * @param OperationName $operationName
      * @return Operation
      */
@@ -261,6 +277,10 @@ class OperationFactory
                 return $this->createAssignOperation();
             case OperationName::FOR:
                 return $this->createForOperation();
+            case OperationName::MIN:
+                return $this->createMinOperation();
+            case OperationName::MAX:
+                return $this->createMaxOperation();
         }
         return null;
     }

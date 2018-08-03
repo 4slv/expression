@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "4slovo/money": "v1.0.1",
+    "4slovo/money": "v1.0.2",
     "myclabs/php-enum": "1.5.2"
   },
   "require-dev": {

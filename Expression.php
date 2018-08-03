@@ -23,6 +23,9 @@ class Expression implements Calculation
     /** @var Type результат рассчёта второго операнда */
     private $secondOperandResult;
 
+    /** @var string текстовое описание выражения */
+    private $textDescription;
+
     /**
      * @return Calculation первый операнд
      */
@@ -109,52 +112,43 @@ class Expression implements Calculation
         $this->secondOperandResult = $secondOperandResult;
     }
 
+    /**
+     * @return string текстовое описание выражения
+     */
+    public function getTextDescription(): ?string
+    {
+        return $this->textDescription;
+    }
+
+    /**
+     * @param string $textDescription текстовое описание выражения
+     * @return $this
+     */
+    public function setTextDescription(?string $textDescription)
+    {
+        $this->textDescription = $textDescription;
+        return $this;
+    }
+
     public function calculate()
     {
-        if($this->getFirstOperandPriority() >= $this->getSecondOperandPriority())
-        {
-            $this->setFirstOperandResult($this->getFirstOperand()->calculate());
-            $this->setSecondOperandResult($this->getSecondOperand()->calculate());
-        } else {
-            $this->setSecondOperandResult($this->getSecondOperand()->calculate());
-            $this->setFirstOperandResult($this->getFirstOperand()->calculate());
-        }
+        $this->setFirstOperandResult($this->getFirstOperand()->calculate());
+        $this->setSecondOperandResult($this->getSecondOperand()->calculate());
 
-        return $this
-            ->getOperation()
-            ->setFirstOperand($this->getFirstOperandResult())
-            ->setSecondOperand($this->getSecondOperandResult())
-            ->calculate();
-    }
-
-    /**
-     * @param Calculation $operand операнд
-     * @return int приоритет рассчёта операнда
-     */
-    protected function getOperandPriority(Calculation $operand)
-    {
-        if($operand instanceof Expression)
+        try {
+            return $this
+                ->getOperation()
+                ->setFirstOperand($this->getFirstOperandResult())
+                ->setSecondOperand($this->getSecondOperandResult())
+                ->calculate();
+        } catch (CalculationException $exception)
         {
-            /* @var Expression $operand */
-            return $operand->getOperation()->getOperationName()->getPriority();
-        } else {
-            return 0;
+            throw new CalculationException(
+                $exception->getMessage().
+                "\n===\n".
+                $this->getTextDescription()
+            );
         }
     }
 
-    /**
-     * @return int приоритет рассчёта первого операнда
-     */
-    protected function getFirstOperandPriority()
-    {
-        return $this->getOperandPriority($this->getFirstOperand());
-    }
-
-    /**
-     * @return int приоритет рассчёта второго операнда
-     */
-    protected function getSecondOperandPriority()
-    {
-        return $this->getOperandPriority($this->getSecondOperand());
-    }
 }
