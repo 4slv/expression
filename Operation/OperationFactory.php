@@ -225,6 +225,14 @@ class OperationFactory
     }
 
     /**
+     * @return MoneyOperation
+     */
+    public function createMoneyOperation()
+    {
+        return new MoneyOperation();
+    }
+
+    /**
      * @param OperationName $operationName
      * @return Operation
      */
@@ -281,6 +289,8 @@ class OperationFactory
                 return $this->createMinOperation();
             case OperationName::MAX:
                 return $this->createMaxOperation();
+            case OperationName::MONEY:
+                return $this->createMoneyOperation();
         }
         return null;
     }

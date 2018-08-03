@@ -50,6 +50,8 @@ class OperationSignRegexp extends Enum
 
     const INT = '\{int\}';
 
+    const MONEY = '\{money\}';
+
     const NOT = '\!';
 
     const AND = '\&\&';

@@ -255,10 +255,14 @@ class TestTextExpression extends TestCase
                 DateTime::createFromFormat('Y.m.d H:i:s', '2019.02.02 00:00:00')
             ],
 
+            // money
+            ['{money}100', Money::create(100)],
+
             // проверка приоритета выполнения операций
             ['7 - 2 * 3', 1],
             ['7 - 2 - 3', 2],
-            ['1 < 2 + 1', true]
+            ['1 < 2 + 1', true],
+            ['{money}({int}200000$ * 0.03822 * ((1 + 0.03822) ** 8) / ((1 + 0.03822) ** 8 - 1))', Money::create(2948761)]
         ];
     }
 

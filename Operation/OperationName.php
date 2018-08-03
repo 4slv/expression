@@ -30,6 +30,8 @@ class OperationName extends Enum
 
     const INT = 'int';
 
+    const MONEY = 'money';
+
     const IF_ELSE = 'ifElse';
 
     const EQUAL = 'equal';
@@ -91,6 +93,7 @@ class OperationName extends Enum
             case self::DAYS_IN_YEAR:
             case self::DAYS:
             case self::INT:
+            case self::MONEY:
                 return 23;
             case self::FUNCTION:
             case self::IF_ELSE:
@@ -117,6 +120,7 @@ class OperationName extends Enum
             case self::IF_ELSE:
             case self::FOR:
             case self::INT:
+            case self::MONEY:
             case self::MIN:
             case self::MAX:
                 return false;

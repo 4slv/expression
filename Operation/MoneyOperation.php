@@ -2,11 +2,10 @@
 
 namespace Slov\Expression\Operation;
 
-use Slov\Expression\Type\IntType;
 use Slov\Money\Money;
 
-/** Операция преобразования числа с плавающей точкой к целому числу */
-class IntOperation extends Operation
+/** Операция преобразования денег к целому числу */
+class MoneyOperation extends Operation
 {
     use DigitOperationTrait;
 
@@ -17,11 +16,9 @@ class IntOperation extends Operation
             &&
             (
                 $this->getSecondOperandType()->isDigit()
-                ||
-                $this->getSecondOperandType()->isMoney()
             )
         )
-            return $this->getTypeNameFactory()->createInt();
+            return $this->getTypeNameFactory()->createMoney();
 
         return null;
     }
@@ -41,13 +38,10 @@ class IntOperation extends Operation
     /**
      * @param float $firstOperandValue
      * @param float $secondOperandValue
-     * @return int
+     * @return Money
      */
     protected function calculateValues($firstOperandValue, $secondOperandValue)
     {
-        if(is_object($secondOperandValue) && $secondOperandValue instanceof Money){
-            return $secondOperandValue->getAmount();
-        }
-        return (int)$secondOperandValue;
+        return Money::create($secondOperandValue);
     }
 }

@@ -29,6 +29,8 @@ class OperationSign extends Enum
 
     const INT = '{int}';
 
+    const MONEY = '{money}';
+
     const EQUAL = '==';
 
     const GREATER_OR_EQUALS = '>=';
