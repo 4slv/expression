@@ -55,7 +55,6 @@ class TextExpressionList
     {
         $textExpression->setVariableList($this->getVariableList());
         $this->list[$name] = $textExpression;
-        $this->fillVariableList($textExpression);
         $this->getVariableList()->append($name, $textExpression->toExpression());
         return $this;
     }
@@ -94,16 +93,5 @@ class TextExpressionList
             ->toExpression()->calculate();
         $this->remove($name);
         return $returned;
-    }
-
-    /**
-     * Заполнение списка переменных из текстового выражения
-     * @param TextExpression $textExpression текстовое выражение
-     */
-    private function fillVariableList(TextExpression $textExpression)
-    {
-        foreach ($textExpression->getVariableList()->getAll() as $variableName => $variableExpression){
-            $this->getVariableList()->append($variableName, $variableExpression);
-        }
     }
 }
