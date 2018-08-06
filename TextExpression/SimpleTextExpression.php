@@ -162,14 +162,23 @@ class SimpleTextExpression extends TextExpression
     }
 
     /**
+     * @param OperationName $operationName
+     * @return Operation
+     */
+    protected function createOperationByName(OperationName $operationName)
+    {
+        return $this
+            ->getOperationFactory()
+            ->create($operationName);
+    }
+
+    /**
      * @param TextOperation $textOperation
      * @return Operation
      */
     protected function createOperation(TextOperation $textOperation)
     {
-        $operation = $this
-            ->getOperationFactory()
-            ->create($textOperation->getOperationName());
+        $operation = $this->createOperationByName($textOperation->getOperationName());
         $operationValue = $textOperation->getOperationValue();
 
         switch($textOperation->getOperationName()->getValue())

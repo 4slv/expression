@@ -133,7 +133,7 @@ class TextExpression
      */
     protected function createSimpleTextExpression($expressionText)
     {
-        $simpleTextExpression = new SimpleTextExpression();
+        $simpleTextExpression = new SimpleTextExpressionCache();
         return $simpleTextExpression
             ->setExpressionText($expressionText)
             ->setExpressionList($this->getExpressionList())

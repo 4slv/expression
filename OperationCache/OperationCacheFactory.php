@@ -1,28 +1,13 @@
 <?php
 
-namespace Slov\Expression\Operation;
 
-/** Фабрика операций */
-class OperationFactory
+namespace Slov\Expression\OperationCache;
+
+
+use Slov\Expression\Operation\OperationFactory;
+
+class OperationCacheFactory extends OperationFactory
 {
-
-    /**
-     * @var OperationFactory
-     */
-    protected static $instance;
-
-    protected function __construct(){}
-
-    /**
-     * @return OperationFactory
-     */
-    public static function getInstance()
-    {
-        if(is_null(static::$instance)){
-            static::$instance = new static();
-        }
-        return static::$instance;
-    }
 
     /**
      * @return AddOperation
@@ -224,64 +209,5 @@ class OperationFactory
         return new MaxOperation();
     }
 
-    /**
-     * @param OperationName $operationName
-     * @return Operation
-     */
-    public function create(OperationName $operationName)
-    {
-        switch($operationName->getValue()){
-            case OperationName::ADD:
-                return $this->createAddOperation();
-            case OperationName::MULTIPLY:
-                return $this->createMultiplyOperation();
-            case OperationName::SUBTRACTION:
-                return $this->createSubtractionOperation();
-            case OperationName::DIVISION:
-                return $this->createDivisionOperation();
-            case OperationName::EXPONENTIATION:
-                return $this->createExponentiationOperation();
-            case OperationName::REMAINDER_OF_DIVISION:
-                return $this->createRemainderOfDivisionOperation();
-            case OperationName::DATE:
-                return $this->createDateOperation();
-            case OperationName::DAYS_IN_YEAR:
-                return $this->createDaysInYearOperation();
-            case OperationName::DAYS:
-                return $this->createDaysOperation();
-            case OperationName::FIRST_YEAR_DAY:
-                return $this->createFirstYearDayOperation();
-            case OperationName::FUNCTION:
-                return $this->createFunctionOperation();
-            case OperationName::IF_ELSE:
-                return $this->createIfElseOperation();
-            case OperationName::EQUAL:
-                return $this->createEqualOperation();
-            case OperationName::GREATER:
-                return $this->createGreaterOperation();
-            case OperationName::LESS:
-                return $this->createLessOperation();
-            case OperationName::GREATER_OR_EQUALS:
-                return $this->createGreaterOrEqualOperation();
-            case OperationName::LESS_OR_EQUALS:
-                return $this->createLessOrEqualOperation();
-            case OperationName::NOT:
-                return $this->createNotOperation();
-            case OperationName::AND:
-                return $this->createAndOperation();
-            case OperationName::OR:
-                return $this->createOrOperation();
-            case OperationName::INT:
-                return $this->createIntOperation();
-            case OperationName::ASSIGN:
-                return $this->createAssignOperation();
-            case OperationName::FOR:
-                return $this->createForOperation();
-            case OperationName::MIN:
-                return $this->createMinOperation();
-            case OperationName::MAX:
-                return $this->createMaxOperation();
-        }
-        return null;
-    }
+
 }

@@ -136,7 +136,7 @@ trait OperationTrait
             ->getTypeFactory()
             ->create($typeName)
             ->setValue(
-                $this->calculateValues(
+                $this->createCode(
                     $this->getFirstOperandValue(),
                     $this->getSecondOperandValue()
                 )
