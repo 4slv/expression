@@ -6,9 +6,15 @@ namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\ExpressionCache;
 use Slov\Expression\Operation\OperationName;
+use Slov\Expression\TemplateProcessor\TemplateProcessor;
 
 class SimpleTextExpressionCache extends SimpleTextExpression
 {
+
+    /**
+     * @var TemplateProcessor
+     */
+    protected $templateProcessor;
 
     protected function createOperationByName(OperationName $operationName)
     {
@@ -17,12 +23,14 @@ class SimpleTextExpressionCache extends SimpleTextExpression
             ->create($operationName);
     }
 
+
     /**
      * @return ExpressionCache выражение
      */
     protected function createExpression()
     {
-        return new ExpressionCache();
+        return (new ExpressionCache())
+            ->setFunctionList($this->getFunctionList());
     }
 
 }

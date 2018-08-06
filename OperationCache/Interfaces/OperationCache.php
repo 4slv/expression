@@ -6,5 +6,4 @@ interface OperationCache
 {
     public function generatePhpCode();
 
-    public function getTemplate();
 }

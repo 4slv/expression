@@ -1,13 +1,13 @@
 <?php
 
-namespace Slov\Expression\Type;
+namespace Slov\Expression\Type\Interfaces;
 
 use Slov\Money\Money;
 use DateTime;
 use DateInterval;
 
 /** Интерфейс типа */
-interface TypeInterface
+interface Type
 {
     /**
      * @return int|float|Money|DateTime|DateInterval|null|boolean

@@ -3,54 +3,51 @@
 namespace Slov\Expression\Operation;
 
 use Slov\Expression\CalculationException;
-use Slov\Expression\Expression;
 use Slov\Expression\FactoryRepository;
-use Slov\Expression\TextExpression\VariableList;
 use Slov\Expression\Type\Type;
-use Slov\Expression\Type\TypeInterface;
 use Slov\Expression\Type\TypeName;
 
 trait OperationTrait
 {
     use FactoryRepository;
 
-    /** @var TypeInterface первый операнд */
+    /** @var Type первый операнд */
     protected $firstOperand;
 
-    /** @var TypeInterface второй операнд */
+    /** @var Type второй операнд */
     protected $secondOperand;
 
     /**
-     * @return TypeInterface первый операнд
+     * @return Type первый операнд
      */
-    public function getFirstOperand(): TypeInterface
+    public function getFirstOperand(): Type
     {
         return $this->firstOperand;
     }
 
     /**
-     * @param TypeInterface $firstOperand первый операнд
+     * @param Type $firstOperand первый операнд
      * @return $this
      */
-    public function setFirstOperand(TypeInterface $firstOperand)
+    public function setFirstOperand(Type $firstOperand)
     {
         $this->firstOperand = $firstOperand;
         return $this;
     }
 
     /**
-     * @return TypeInterface второй операнд
+     * @return Type второй операнд
      */
-    public function getSecondOperand(): TypeInterface
+    public function getSecondOperand(): Type
     {
         return $this->secondOperand;
     }
 
     /**
-     * @param TypeInterface $secondOperand второй операнд
+     * @param Type $secondOperand второй операнд
      * @return $this
      */
-    public function setSecondOperand(TypeInterface $secondOperand)
+    public function setSecondOperand(Type $secondOperand)
     {
         $this->secondOperand = $secondOperand;
         return $this;
@@ -136,7 +133,7 @@ trait OperationTrait
             ->getTypeFactory()
             ->create($typeName)
             ->setValue(
-                $this->createCode(
+                $this->calculateValues(
                     $this->getFirstOperandValue(),
                     $this->getSecondOperandValue()
                 )

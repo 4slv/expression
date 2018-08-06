@@ -18,6 +18,32 @@ class TextExpressionList
     private $list = [];
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        if(is_null($this->config))
+            $this->config = new Config();
+        return $this->config;
+    }
+
+    /**
+     * @param Config $config
+     * @return $this
+     */
+    public function setConfig(Config $config)
+    {
+        $this->config = $config;
+        return $this;
+    }
+
+
+    /**
      * @return TextExpression[] ассоциативный массив с текстовыми выражениями
      */
     protected function getList(): array

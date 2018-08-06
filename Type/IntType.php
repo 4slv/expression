@@ -2,8 +2,25 @@
 
 namespace Slov\Expression\Type;
 
+use Slov\Expression\TemplateProcessor\TemplateProcessor;
+use Slov\Helper\StringHelper;
+
 /** Тип целое число */
 class IntType extends Type{
+
+    const template = 'int_type';
+
+    const templateFolder = 'type';
+
+    /**
+     * @return bool|string
+     */
+    protected function getTemplate()
+    {
+
+        return TemplateProcessor::getInstance()
+            ->getTemplateByName(static::template,[static::templateFolder]);
+    }
 
     /**
      * @return TypeName
@@ -38,6 +55,14 @@ class IntType extends Type{
     public function stringToValue($string)
     {
         return (int)$string;
+    }
+
+    public function generatePhpCode(): string
+    {
+        return StringHelper::replacePatterns(
+            $this->getTemplate(),
+            ['%value%' => "'".$this->getValue()."'"]
+        );
     }
 
 }

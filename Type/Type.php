@@ -9,7 +9,7 @@ use DateTime;
 use DateInterval;
 
 
-abstract class Type implements TypeInterface, Calculation {
+abstract class Type implements \Slov\Expression\Type\Interfaces\Type, Calculation {
 
     /** @var int|float|Money|DateTime|DateInterval|VariableStructure */
     protected $value;

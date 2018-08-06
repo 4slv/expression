@@ -3,10 +3,12 @@
 namespace Slov\Expression\Type;
 
 use Slov\Expression\Expression;
+use Slov\Expression\ExpressionCache;
 use Slov\Expression\TextExpression\VariableList;
+use Slov\Expression\Type\Interfaces\CacheVariable;
 
 /** Тип переменной */
-class VariableType extends Type
+class VariableType extends Type implements CacheVariable
 {
     /** @var VariableList список переменных */
     private $variableList;
@@ -78,4 +80,20 @@ class VariableType extends Type
             return $this;
         }
     }
+
+    public function generatePhpCode(): string
+    {
+        if($this->getVariableList()->exists($this->getValue()))
+        {
+            $variable = $this->getVariableList()->get($this->getValue());
+            if($variable instanceof ExpressionCache) {
+                return $variable->generatePhpCode();
+            }
+            return $variable->generatePhpCode();
+        } else {
+            return "$$this->getValue()";
+        }
+    }
+
+
 }

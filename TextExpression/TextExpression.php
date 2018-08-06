@@ -32,6 +32,29 @@ class TextExpression
     /** @var Expression[] Кэширование собранных текстовых представлений */
     protected static $expressionCache;
 
+    /** @var Config */
+    private $config;
+
+    /**
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        if(is_null($this->config))
+            $this->config = new Config();
+        return $this->config;
+    }
+
+    /**
+     * @param Config $config
+     * @return $this
+     */
+    public function setConfig(Config $config)
+    {
+        $this->config = $config;
+        return $this;
+    }
+
     /**
      * @return ExpressionList список выражений
      */
@@ -133,7 +156,10 @@ class TextExpression
      */
     protected function createSimpleTextExpression($expressionText)
     {
-        $simpleTextExpression = new SimpleTextExpressionCache();
+        $simpleTextExpression =
+            $this->getConfig()->isCache()
+                ? (new SimpleTextExpressionCache)->setFunctionList($this->getFunctionList())
+                : new SimpleTextExpression;
         return $simpleTextExpression
             ->setExpressionText($expressionText)
             ->setExpressionList($this->getExpressionList())

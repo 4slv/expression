@@ -1,0 +1,1 @@
+Slov\Expression\Type\TypeFactory::getInstance()->createInt()->setValue(%firstOperandValue% * %secondOperandValue%)
