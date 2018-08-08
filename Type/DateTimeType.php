@@ -3,10 +3,18 @@
 namespace Slov\Expression\Type;
 
 use DateTime;
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+use Slov\Helper\StringHelper;
 
 /** Тип дата и время */
 class DateTimeType extends Type
 {
+    use SingleTemplate;
+
+    const template = 'date_time';
+
+    const templateFolder = 'type';
+
     public function getType()
     {
         return new TypeName(TypeName::DATE_TIME);
@@ -48,5 +56,13 @@ class DateTimeType extends Type
             return DateTime::createFromFormat('Y.m.d H:i:s.u', $dateTime);
         }
         return DateTime::createFromFormat('Y.m.d H:i:s', $dateTime);
+    }
+
+    public function generatePhpCode(): string
+    {
+        return StringHelper::replacePatterns(
+            $this->getTemplate(),
+            ['%date%' => $this->getValue()->format('Y-m-d H:i:s')]
+        );
     }
 }

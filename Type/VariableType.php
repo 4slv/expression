@@ -2,16 +2,30 @@
 
 namespace Slov\Expression\Type;
 
+use PHPUnit\Runner\Exception;
 use Slov\Expression\Expression;
 use Slov\Expression\ExpressionCache;
+use Slov\Expression\TemplateProcessor\MultiplyTemplate;
+use Slov\Expression\TextExpression\Config;
 use Slov\Expression\TextExpression\VariableList;
 use Slov\Expression\Type\Interfaces\CacheVariable;
+use Slov\Helper\StringHelper;
 
 /** Тип переменной */
 class VariableType extends Type implements CacheVariable
 {
+    use MultiplyTemplate;
     /** @var VariableList список переменных */
     private $variableList;
+
+    /** @var  TypeName */
+    private $typeName;
+
+    const subTemplateFolder = 'variable';
+
+    const templateFolder = 'type';
+
+
 
     /**
      * @return VariableList список переменных
@@ -34,9 +48,21 @@ class VariableType extends Type implements CacheVariable
     /**
      * @return TypeName
      */
-    function getType(): TypeName
+    public function getType(): TypeName
     {
-        return new TypeName(TypeName::VARIABLE);
+        if(is_null($this->typeName))
+            $this->typeName = new TypeName(TypeName::VARIABLE);
+        return $this->typeName;
+    }
+
+    /**
+     * @param TypeName $typeName
+     * @return $this
+     */
+    public function setType(TypeName $typeName)
+    {
+        $this->typeName = $typeName;
+        return $this;
     }
 
     /**
@@ -87,11 +113,15 @@ class VariableType extends Type implements CacheVariable
         {
             $variable = $this->getVariableList()->get($this->getValue());
             if($variable instanceof ExpressionCache) {
-                return $variable->generatePhpCode();
+                return
+                Config::getInstance()->isExpressionInSingleFile()
+                ? $variable->generatePhpCode()
+                : StringHelper::replacePatterns($this->getTemplate('expression'),['%function_name%' => $variable->createExpressionCacheFile()->getFunctionName()]);
             }
-            return $variable->generatePhpCode();
+            $this->setType($variable->getType());
+            return StringHelper::replacePatterns($this->getTemplate('variable_list'),['%name%' => $this->getValue()]);
         } else {
-            return "$$this->getValue()";
+            return StringHelper::replacePatterns($this->getTemplate('local_variable_list'),['%name%' => $this->getValue()]);
         }
     }
 

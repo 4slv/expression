@@ -2,8 +2,14 @@
 
 namespace Slov\Expression\Type;
 
+use Slov\Helper\StringHelper;
+
 /** Тип число с плавающей запятой */
 class FloatType extends Type {
+
+    const template = 'float';
+
+    const templateFolder = 'type';
 
     /**
      * @return TypeName
@@ -39,4 +45,13 @@ class FloatType extends Type {
     {
         return (float)$string;
     }
+
+    public function generatePhpCode(): string
+    {
+        return StringHelper::replacePatterns(
+            $this->getTemplate(),
+            ['%value%' => $this->getValue()]
+        );
+    }
+
 }

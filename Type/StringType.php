@@ -3,7 +3,7 @@
 namespace Slov\Expression\Type;
 
 
-use Slov\Expression\TemplateProcessor\TemplateProcessor;
+use Slov\Expression\TemplateProcessor\SingleTemplate;
 use Slov\Expression\Type\Interfaces\CacheVariable;
 use Slov\Helper\StringHelper;
 
@@ -11,19 +11,12 @@ class StringType extends Type implements CacheVariable
 {
 
 
-    const template = 'string_type';
+    use SingleTemplate;
+
+    const template = 'string';
 
     const templateFolder = 'type';
 
-    /**
-     * @return bool|string
-     */
-    protected function getTemplate()
-    {
-
-        return TemplateProcessor::getInstance()
-            ->getTemplateByName(static::template,[static::templateFolder]);
-    }
 
     /**
      * @return TypeName

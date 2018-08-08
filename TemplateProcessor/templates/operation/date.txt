@@ -1,1 +1,1 @@
-Slov\Expression\Type\TypeFactory::getInstance()->createDateTime()->setValue(Slov\Money\Money::create(new DateTime(%date%)))
+(new DateTime((%date_time%)->format('Y-m-d')))

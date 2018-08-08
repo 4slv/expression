@@ -4,10 +4,18 @@ namespace Slov\Expression\Type;
 
 use DateInterval;
 use Exception;
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+use Slov\Helper\StringHelper;
 
 /** Тип интервал дат и времени */
 class DateIntervalType extends Type
 {
+    use SingleTemplate;
+
+    const template = 'date_interval';
+
+    const templateFolder = 'type';
+
     protected static $intervalTypeList = ['y', 'm', 'd', 'h', 'i', 's'];
 
     /**
@@ -162,5 +170,13 @@ class DateIntervalType extends Type
         }
 
         return true;
+    }
+
+    public function generatePhpCode(): string
+    {
+        return StringHelper::replacePatterns(
+            $this->getTemplate(),
+            ['%interval%' => $this->getValue()->format('P%yY%mM%dDT%hH%iM%sS')]
+        );
     }
 }

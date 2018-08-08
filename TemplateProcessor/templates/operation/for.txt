@@ -1,3 +1,6 @@
-for(%initialization%;%condition%;%step%;){
-    %action%;
-}
+(function($functionList,$variableList){
+    for(%initialization%;%condition%;%step%){
+        %action%;
+    }
+    return true;
+})($functionList,$variableList)

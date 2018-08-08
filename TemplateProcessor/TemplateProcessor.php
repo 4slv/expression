@@ -3,6 +3,7 @@
 namespace Slov\Expression\TemplateProcessor;
 
 use Slov\Expression\TextExpression\Config;
+use Slov\Helper\StringHelper;
 
 class TemplateProcessor
 {
@@ -51,6 +52,23 @@ class TemplateProcessor
     public function getTemplateByName(string $name, $relativePath = [])
     {
         return file_get_contents($this->getTemplateDir($relativePath).DIRECTORY_SEPARATOR.$name.static::extension);
+    }
+
+    /**
+     * @param string $template
+     * @param array $variables
+     * @return string
+     */
+    public function render(string $template,$variables = [])
+    {
+        $out = [];
+        foreach ($variables as $name => $value) {
+            $out["%".$name."%"] = $value;
+        }
+        return StringHelper::replacePatterns(
+            $template,
+            $out
+        );
     }
 
 

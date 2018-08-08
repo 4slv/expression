@@ -6,7 +6,8 @@ namespace Slov\Expression\OperationCache;
 
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
 use Slov\Expression\OperationCache\Traits\PhpValues;
-use Slov\Expression\TemplateProcessor\TemplateProcessor;
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+use Slov\Expression\Type\TypeName;
 use Slov\Helper\StringHelper;
 
 class ForOperation extends \Slov\Expression\Operation\ForOperation implements OperationCache
@@ -14,25 +15,35 @@ class ForOperation extends \Slov\Expression\Operation\ForOperation implements Op
 
     use PhpValues;
 
+    use SingleTemplate;
+
     const template = 'for';
 
     const templateFolder = 'operation';
 
-    protected function getTemplate()
+    /**
+     * @return TypeName
+     */
+    public function resolveReturnTypeName()
     {
-        return TemplateProcessor::getInstance()
-            ->getTemplateByName(static::template,[static::templateFolder]);
+        return TypeName::BOOLEAN();
     }
 
-    protected function generatePhpValues($firstOperandValue, $secondOperandValue)
+    /**
+     * @param string $firstOperandValue
+     * @param string $secondOperandValue
+     * @param TypeName $firstType
+     * @param TypeName $secondType
+     * @return string
+     */
+    protected function generatePhpValues(string $firstOperandValue,string $secondOperandValue, TypeName $firstType,TypeName $secondType)
     {
-        return StringHelper::replacePatterns(
-            $this->getTemplate(),
+        return $this->render(
             [
-            "%initialization%" => $this->getForStructure()->getFirst()->generatePhpCode(),
-            "%condition%" => $this->getForStructure()->getCondition()->generatePhpCode(),
-            "%step%" => $this->getForStructure()->getEachStep()->generatePhpCode(),
-            "%action%" => $this->getForStructure()->getAction()->generatePhpCode()
+            "initialization" => $this->getForStructure()->getFirst()->generatePhpCode(),
+            "condition" => $this->getForStructure()->getCondition()->generatePhpCode(),
+            "step" => $this->getForStructure()->getEachStep()->generatePhpCode(),
+            "action" => $this->getForStructure()->getAction()->generatePhpCode()
         ]);
     }
 }

@@ -6,31 +6,36 @@ namespace Slov\Expression\OperationCache;
 
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
 use Slov\Expression\OperationCache\Traits\PhpValues;
-use Slov\Expression\TemplateProcessor\TemplateProcessor;
-use Slov\Helper\StringHelper;
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+use Slov\Expression\Type\TypeName;
 
 class AssignOperation extends \Slov\Expression\Operation\AssignOperation implements OperationCache
 {
     use PhpValues;
 
+    use SingleTemplate;
 
     const template = 'assign';
 
     const templateFolder = 'operation';
 
-    protected function getTemplate()
+    /**
+     * @return TypeName
+     */
+    public function resolveReturnTypeName()
     {
-        return TemplateProcessor::getInstance()
-            ->getTemplateByName(static::template,[static::templateFolder]);
+        return $this->secondOperand->getType();
     }
 
+    /**
+     * @return string
+     */
     public function generatePhpCode()
     {
-        return StringHelper::replacePatterns(
-            $this->getTemplate(),
+        return $this->render(
             [
-                '%variable%' => $this->getVariableName(),
-                '%value%'=>$this->secondOperand->generatePhpCode()
+                'variable' => $this->getVariableName(),
+                'value'=>$this->secondOperand->generatePhpCode(),
             ]
         );
     }

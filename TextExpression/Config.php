@@ -6,13 +6,34 @@ namespace Slov\Expression\TextExpression;
 
 class Config
 {
+    /**
+     * @var bool
+     */
     protected $cache = true;
+
+    /**
+     * @var bool
+     */
+    protected $expressionInSingleFile = true;
 
     /**
      * @var string
      */
     protected $cacheFolder = __DIR__.DIRECTORY_SEPARATOR.'../tmp';
 
+    protected static $self;
+
+    protected function __construct(){}
+
+    /**
+     * @return $this
+     */
+    public static function getInstance()
+    {
+        if(is_null(static::$self))
+            static::$self = new static();
+        return static::$self;
+    }
 
     /**
      * @return bool|null
@@ -50,6 +71,23 @@ class Config
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
+    public function isExpressionInSingleFile(): ?bool
+    {
+        return $this->expressionInSingleFile;
+    }
+
+    /**
+     * @param bool $expressionInSingleFile
+     * @return $this
+     */
+    public function setExpressionInSingleFile(?bool $expressionInSingleFile)
+    {
+        $this->expressionInSingleFile = $expressionInSingleFile;
+        return $this;
+    }
 
 
 }

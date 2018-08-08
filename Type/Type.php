@@ -3,6 +3,7 @@
 namespace Slov\Expression\Type;
 
 use Slov\Expression\Calculation;
+use Slov\Expression\Interfaces\Operand;
 use Slov\Expression\TextExpression\VariableStructure;
 use Slov\Money\Money;
 use DateTime;

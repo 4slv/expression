@@ -2,12 +2,14 @@
 
 namespace Slov\Expression\Type\Interfaces;
 
+use Slov\Expression\Interfaces\Operand;
+use Slov\Expression\Type\TypeName;
 use Slov\Money\Money;
 use DateTime;
 use DateInterval;
 
 /** Интерфейс типа */
-interface Type
+interface Type extends  Operand
 {
     /**
      * @return int|float|Money|DateTime|DateInterval|null|boolean

@@ -1,6 +1,6 @@
 <?php
 
-function %name%($functionList)
+function %name%($functionList,$variableList)
 {
     return %body%;
 }

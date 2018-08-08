@@ -108,7 +108,7 @@ class OperationName extends Enum
     public function leftOperandUsed(){
         switch ($this->getValue())
         {
-            case self::ASSIGN:
+         //   case self::ASSIGN:
             case self::NOT:
             case self::DATE:
             case self::DAYS_IN_YEAR:

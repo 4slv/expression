@@ -41,7 +41,7 @@ class TextExpression
     public function getConfig(): Config
     {
         if(is_null($this->config))
-            $this->config = new Config();
+            $this->config = Config::getInstance();
         return $this->config;
     }
 

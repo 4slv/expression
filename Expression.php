@@ -2,11 +2,14 @@
 
 namespace Slov\Expression;
 
+use Slov\Expression\Interfaces\Operand;
 use Slov\Expression\Operation\Operation;
 use Slov\Expression\Type\Type;
+use Slov\Expression\Type\TypeFactory;
+use Slov\Expression\Type\TypeName;
 
 /** Выражение */
-class Expression implements Calculation
+class Expression implements Calculation, Operand
 {
     /** @var Calculation первый операнд */
     private $firstOperand;
@@ -83,7 +86,7 @@ class Expression implements Calculation
     /**
      * @return Type результат рассчёта первого операнда
      */
-    protected function getFirstOperandResult(): Type
+    protected function getFirstOperandResult()
     {
         return $this->firstOperandResult;
     }
@@ -91,7 +94,7 @@ class Expression implements Calculation
     /**
      * @param Type $firstOperandResult результат рассчёта первого операнда
      */
-    protected function setFirstOperandResult(Type $firstOperandResult)
+    protected function setFirstOperandResult( $firstOperandResult)
     {
         $this->firstOperandResult = $firstOperandResult;
     }
@@ -99,7 +102,7 @@ class Expression implements Calculation
     /**
      * @return Type результат рассчёта второго операнда
      */
-    protected function getSecondOperandResult(): Type
+    protected function getSecondOperandResult()
     {
         return $this->secondOperandResult;
     }
@@ -107,7 +110,7 @@ class Expression implements Calculation
     /**
      * @param Type $secondOperandResult результат рассчёта второго операнда
      */
-    protected function setSecondOperandResult(Type $secondOperandResult)
+    protected function setSecondOperandResult( $secondOperandResult)
     {
         $this->secondOperandResult = $secondOperandResult;
     }
@@ -149,6 +152,11 @@ class Expression implements Calculation
                 $this->getTextDescription()
             );
         }
+    }
+
+    public function getType()
+    {
+        return TypeName::EXPRESSION();
     }
 
 }

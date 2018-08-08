@@ -2,26 +2,17 @@
 
 namespace Slov\Expression\Type;
 
-use Slov\Expression\TemplateProcessor\TemplateProcessor;
+use Slov\Expression\TemplateProcessor\SingleTemplate;
 use Slov\Helper\StringHelper;
 
 /** Тип целое число */
 class IntType extends Type{
 
-    const template = 'int_type';
+    use SingleTemplate;
+
+    const template = 'int';
 
     const templateFolder = 'type';
-
-    /**
-     * @return bool|string
-     */
-    protected function getTemplate()
-    {
-
-        return TemplateProcessor::getInstance()
-            ->getTemplateByName(static::template,[static::templateFolder]);
-    }
-
     /**
      * @return TypeName
      */
@@ -61,7 +52,7 @@ class IntType extends Type{
     {
         return StringHelper::replacePatterns(
             $this->getTemplate(),
-            ['%value%' => "'".$this->getValue()."'"]
+            ['%value%' => $this->getValue()]
         );
     }
 

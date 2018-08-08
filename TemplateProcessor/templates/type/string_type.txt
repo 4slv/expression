@@ -1,1 +1,0 @@
-Slov\Expression\Type\TypeFactory::getInstance()->createString()->setValue(%value%)

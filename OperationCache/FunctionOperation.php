@@ -5,37 +5,42 @@ namespace Slov\Expression\OperationCache;
 
 
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
-use Slov\Expression\TemplateProcessor\TemplateProcessor;
-use Slov\Helper\StringHelper;
+use Slov\Expression\OperationCache\Traits\PhpValues;
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+use Slov\Expression\Type\TypeName;
 
 class FunctionOperation extends \Slov\Expression\Operation\FunctionOperation implements OperationCache
 {
 
+    use PhpValues;
+
+    use SingleTemplate;
 
     const template = 'function';
 
     const templateFolder = 'operation';
 
     /**
-     * @return bool|string
+     * @return TypeName
      */
-    protected function getTemplate()
+    public function resolveReturnTypeName()
     {
-        return TemplateProcessor::getInstance()
-        ->getTemplateByName(static::template,[static::templateFolder]);
+        return $this->getFunctionStructure()->getReturnType();
     }
 
+    /**
+     * @return string
+     */
     public function generatePhpCode()
     {
         $functionStructure = $this->getFunctionStructure();
         $functionParameterList = array_map(function($functionParameter){
             return $functionParameter->generatePhpCode();
         },$this->getFunctionParameterList());
-        return StringHelper::replacePatterns(
-            $this->getTemplate(),
+        return $this->render(
             [
-                '%name%' => $functionStructure->getName(),
-                "%params%" => implode(', ',$functionParameterList)
+                'name' => $functionStructure->getName(),
+                "params" => implode(', ',$functionParameterList)
             ]
         );
     }

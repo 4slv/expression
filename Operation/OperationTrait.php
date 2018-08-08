@@ -4,7 +4,8 @@ namespace Slov\Expression\Operation;
 
 use Slov\Expression\CalculationException;
 use Slov\Expression\FactoryRepository;
-use Slov\Expression\Type\Type;
+use Slov\Expression\Interfaces\Operand;
+use Slov\Expression\Type\Interfaces\Type;
 use Slov\Expression\Type\TypeName;
 
 trait OperationTrait
@@ -18,36 +19,36 @@ trait OperationTrait
     protected $secondOperand;
 
     /**
-     * @return Type первый операнд
+     * @return Operand первый операнд
      */
-    public function getFirstOperand(): Type
+    public function getFirstOperand(): Operand
     {
         return $this->firstOperand;
     }
 
     /**
-     * @param Type $firstOperand первый операнд
+     * @param Operand $firstOperand первый операнд
      * @return $this
      */
-    public function setFirstOperand(Type $firstOperand)
+    public function setFirstOperand(Operand $firstOperand)
     {
         $this->firstOperand = $firstOperand;
         return $this;
     }
 
     /**
-     * @return Type второй операнд
+     * @return Operand второй операнд
      */
-    public function getSecondOperand(): Type
+    public function getSecondOperand(): Operand
     {
         return $this->secondOperand;
     }
 
     /**
-     * @param Type $secondOperand второй операнд
+     * @param Operand $secondOperand второй операнд
      * @return $this
      */
-    public function setSecondOperand(Type $secondOperand)
+    public function setSecondOperand(Operand $secondOperand)
     {
         $this->secondOperand = $secondOperand;
         return $this;

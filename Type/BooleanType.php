@@ -5,6 +5,10 @@ namespace Slov\Expression\Type;
 /** Булев тип */
 class BooleanType extends Type{
 
+    const template = 'bool';
+
+    const templateFolder = 'type';
+
     /**
      * @return TypeName
      */
@@ -38,6 +42,14 @@ class BooleanType extends Type{
     public function stringToValue($string) : bool
     {
         return $string === 'true' ? true : false;
+    }
+
+    public function generatePhpCode(): string
+    {
+        return StringHelper::replacePatterns(
+            $this->getTemplate(),
+            ['%value%' => $this->getValue()]
+        );
     }
 
 }

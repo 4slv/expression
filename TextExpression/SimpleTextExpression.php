@@ -3,6 +3,7 @@
 namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\Expression;
+use Slov\Expression\Interfaces\Operand;
 use Slov\Expression\Operation\AssignOperation;
 use Slov\Expression\Operation\ForOperation;
 use Slov\Expression\Operation\FunctionOperation;
@@ -23,6 +24,11 @@ use Slov\Expression\Type\VariableType;
 /** Выражение в текстовом представлении без скобок */
 class SimpleTextExpression extends TextExpression
 {
+    /**
+     * @var LocalVariableList
+     */
+    protected static $localVariableList;
+
     /**
      * @param string $operationValue текстовое представление операции
      * @param int $position позиция в выражении
@@ -145,13 +151,14 @@ class SimpleTextExpression extends TextExpression
      */
     protected function createExpressionFromOperationAndOperands(TextOperation $textOperation, $operandList)
     {
+
         $operationPosition = $textOperation->getPosition();
         $operation = $textOperation->getOperationName();
         $firstOperandValue = $operation->leftOperandUsed() ? $operandList[$operationPosition] : '';
         $secondOperandValue = $operation->rightOperandUsed() ? $operandList[$operationPosition + 1] : '';
         $firstOperand = $this->getOperandFromString($firstOperandValue);
         $secondOperand = $this->getOperandFromString($secondOperandValue);
-        $operation = $this->createOperation($textOperation);
+        $operation = $this->createOperation($textOperation,$firstOperand,$secondOperand);
 
         return $this
             ->createExpression()
@@ -176,11 +183,10 @@ class SimpleTextExpression extends TextExpression
      * @param TextOperation $textOperation
      * @return Operation
      */
-    protected function createOperation(TextOperation $textOperation)
+    protected function createOperation(TextOperation $textOperation, Operand $firstOperand,Operand $secondOperand)
     {
         $operation = $this->createOperationByName($textOperation->getOperationName());
         $operationValue = $textOperation->getOperationValue();
-
         switch($textOperation->getOperationName()->getValue())
         {
             case OperationName::IF_ELSE:
@@ -193,7 +199,7 @@ class SimpleTextExpression extends TextExpression
                 break;
             case OperationName::ASSIGN:
                 /* @var AssignOperation $operation */
-                $this->initAssignOperation($operation, $operationValue);
+                $this->initAssignOperation($operation, $firstOperand,$secondOperand);
                 break;
             case OperationName::FOR:
                 /* @var ForOperation $operation */
@@ -238,7 +244,7 @@ class SimpleTextExpression extends TextExpression
      * @param ForOperation $operation операция for
      * @param string $forOperationText текстовое представление операции for
      */
-    private function initForOperation($operation, $forOperationText)
+    protected function initForOperation($operation, $forOperationText)
     {
         if(preg_match('/^'. OperationSignRegexp::FOR. '$/', $forOperationText, $match))
         {
@@ -246,7 +252,6 @@ class SimpleTextExpression extends TextExpression
             $condition = $this->createTextExpression(trim($match[2]))->toExpression();
             $eachStep = $this->createTextExpression(trim($match[3]))->toExpression();
             $action = $this->createTextExpression(trim($match[4]))->toExpression();
-
             $forStructure = $this->createForStructure($first, $condition, $eachStep, $action);
             $operation->setForStructure($forStructure);
         }
@@ -259,7 +264,7 @@ class SimpleTextExpression extends TextExpression
      * @param Expression $action выражение, которое необходимо многократно повторить
      * @return ForStructure
      */
-    private function createForStructure($first, $condition, $eachStep, $action)
+    protected function createForStructure($first, $condition, $eachStep, $action)
     {
         $forStructure = new ForStructure();
         return $forStructure
@@ -337,18 +342,23 @@ class SimpleTextExpression extends TextExpression
     }
 
     /**
+     * @return LocalVariableList
+     */
+    protected static function getInstanceLocalVariableList()
+    {
+        if(is_null(static::$localVariableList))
+            static::$localVariableList = new LocalVariableList();
+        return static::$localVariableList;
+    }
+
+    /**
      * @param AssignOperation $operation операция присваивания
      * @param string $assignText текстовое представление присвоения
      */
-    private function initAssignOperation($operation, $assignText)
+    private function initAssignOperation($operation, Operand $firatOperand,Operand $secondOperand)
     {
-        if(preg_match('/^'. OperationSignRegexp::ASSIGN. '$/', $assignText, $match))
-        {
-            $variableName = $match[1];
-            $operation
-                ->setVariableName($variableName)
-                ->setVariableList($this->getVariableList());
-        }
+        $firatOperand->setType($secondOperand->getType());
+        $operation->setVariableName($firatOperand->getValue())->setVariableList($this->getVariableList());
     }
 
     /**
@@ -366,7 +376,12 @@ class SimpleTextExpression extends TextExpression
                 return $this->getExpressionByText($operand);
             case TypeName::VARIABLE:
                 /* @var VariableType $variableType */
+                if(static::getInstanceLocalVariableList()->exists($operand)) {
+                    return static::getInstanceLocalVariableList()->get($operand);
+                }
                 $variableType = $this->getTypeFactory()->createFromString($operand);
+                if(!$this->getVariableList()->exists($operand))
+                    static::getInstanceLocalVariableList()->append($operand,$variableType);
                 return $variableType->setVariableList($this->getVariableList());
             default:
                 return $this->getTypeFactory()->createFromString($operand);
