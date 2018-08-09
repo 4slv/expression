@@ -184,10 +184,8 @@ class ExpressionCache extends Expression implements Operand
 
     public function expressionAutoloadRegister()
     {
-        dump(!Config::getInstance()->isExpressionInSingleFile() && !static::isAutoloadRegister());
         if(!Config::getInstance()->isExpressionInSingleFile() && !static::isAutoloadRegister()){
             $a = spl_autoload_register([static::class,'expressionAutoload']);
-            dump($a);
         }
     }
 
