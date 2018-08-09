@@ -10,6 +10,7 @@ use Slov\Expression\TemplateProcessor\TemplateProcessor;
 use Slov\Expression\TextExpression\Config;
 use Slov\Expression\TextExpression\FunctionList;
 use Slov\Expression\TextExpression\VariableList;
+use Slov\Expression\Type\TypeName;
 
 class ExpressionCache extends Expression implements Operand
 {
@@ -177,10 +178,14 @@ class ExpressionCache extends Expression implements Operand
         static::$isAutoloadRegister = $isAutoloadRegister;
     }
 
+    /**
+     * @param string $name
+     */
     public static function  expressionAutoload($name)
     {
         require_once Config::getInstance()->getCacheFolder().DIRECTORY_SEPARATOR.str_replace(Config::getInstance()->getCacheClassPrefix(),'',$name).'.php';
     }
+
 
     public function expressionAutoloadRegister()
     {
@@ -190,6 +195,9 @@ class ExpressionCache extends Expression implements Operand
     }
 
 
+    /**
+     * @return mixed
+     */
     public function calculate()
     {
         $this->expressionAutoloadRegister();
@@ -199,6 +207,9 @@ class ExpressionCache extends Expression implements Operand
         return call_user_func([$className,$functionName],$this->getFunctionList(),$this->getVariableList());
     }
 
+    /**
+     * @return $this
+     */
     public function createExpressionCacheFile()
     {
         $fileName = md5($this->getTextDescription());
@@ -219,6 +230,10 @@ class ExpressionCache extends Expression implements Operand
 
     }
 
+    /**
+     * @return string
+     * @throws CalculationException
+     */
     public function generatePhpCode()
     {
         $this->setFirstOperandCodeResult($this->getFirstOperand()->generatePhpCode());
@@ -242,7 +257,9 @@ class ExpressionCache extends Expression implements Operand
     }
 
 
-
+    /**
+     * @return TypeName
+     */
     public function getType()
     {
         /** @var OperationCache $operation */

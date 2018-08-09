@@ -14,7 +14,7 @@ class Config
     /**
      * @var bool
      */
-    protected $expressionInSingleFile = false;
+    protected $expressionInSingleFile = true;
 
     /**
      * @var string
