@@ -32,6 +32,11 @@ trait Comparison
             case ($firstType == TypeName::INT() && $secondType  == TypeName::UNKNOWN()):
             case ($firstType == TypeName::UNKNOWN() && $secondType  == TypeName::INT()):
             case ($firstType == TypeName::INT() && $secondType  == TypeName::INT()):
+            case ($firstType == TypeName::FLOAT() && $secondType  == TypeName::UNKNOWN()):
+            case ($firstType == TypeName::UNKNOWN() && $secondType  == TypeName::FLOAT()):
+            case ($firstType == TypeName::FLOAT() && $secondType  == TypeName::FLOAT()):
+            case ($firstType == TypeName::INT() && $secondType  == TypeName::FLOAT()):
+            case ($firstType == TypeName::FLOAT() && $secondType  == TypeName::INT()):
                 $templateName = 'numeric_numeric';
                 break;
             case ($firstType == TypeName::MONEY() && $secondType  == TypeName::UNKNOWN()):

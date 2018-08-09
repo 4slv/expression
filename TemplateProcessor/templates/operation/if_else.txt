@@ -1,1 +1,1 @@
-%condition% ? %trueResult% : %falseResult%
+(%condition% ? %trueResult% : %falseResult%)

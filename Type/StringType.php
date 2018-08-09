@@ -56,9 +56,8 @@ class StringType extends Type implements CacheVariable
 
     public function generatePhpCode(): string
     {
-        return StringHelper::replacePatterns(
-            $this->getTemplate(),
-            ['%value%' => "'".$this->getValue()."'"]
+        return $this->render(
+            ['value' => $this->getValue()]
         );
     }
 

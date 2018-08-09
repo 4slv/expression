@@ -111,6 +111,7 @@ class VariableType extends Type implements CacheVariable
         if($this->getVariableList()->exists($this->getValue()))
         {
             $variable = $this->getVariableList()->get($this->getValue());
+            $this->setType($variable->getType());
             if($variable instanceof ExpressionCache) {
                 return
                 Config::getInstance()->isExpressionInSingleFile()
@@ -120,7 +121,6 @@ class VariableType extends Type implements CacheVariable
                     'class_name' => $variable->createExpressionCacheFile()->getClassName(),
                 ]);
             }
-            $this->setType($variable->getType());
             return $this->render('variable_list',['name' => $this->getValue()]);
         } else {
             return $this->render('local_variable_list',['name' => $this->getValue()]);

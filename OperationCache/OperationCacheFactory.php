@@ -209,5 +209,13 @@ class OperationCacheFactory extends OperationFactory
         return new Max();
     }
 
+    /**
+     * @return Money
+     */
+    public function createMoneyOperation()
+    {
+        return new Money();
+    }
+
 
 }

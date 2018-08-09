@@ -1,1 +1,1 @@
-(%secondValue%)->diff(%firstValue%)
+%secondValue%->diff(%firstValue%)

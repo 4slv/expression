@@ -29,6 +29,8 @@ class RemainderOfDivision extends \Slov\Expression\Operation\RemainderOfDivision
      */
     public function resolveReturnTypeName()
     {
+        if(in_array(TypeName::FLOAT(),[$this->getSecondOperandType(),$this->getFirstOperandType()]))
+            return TypeName::FLOAT();
         return TypeName::INT();
     }
 
@@ -43,7 +45,7 @@ class RemainderOfDivision extends \Slov\Expression\Operation\RemainderOfDivision
      */
     protected function generatePhpValues(string $firstValue, string $secondValue, TypeName $firstType, TypeName $secondType)
     {
-        if(in_array($firstType, [TypeName::INT(),TypeName::UNKNOWN()]) && in_array($secondType, [TypeName::INT(),TypeName::UNKNOWN()]))
+        if(in_array($firstType, [TypeName::INT(),TypeName::FLOAT(),TypeName::UNKNOWN()]) && in_array($secondType, [TypeName::INT(),TypeName::FLOAT(),TypeName::UNKNOWN()]))
             return $this->render(compact('firstValue', 'secondValue'));
         $this->throwOperationException();
     }

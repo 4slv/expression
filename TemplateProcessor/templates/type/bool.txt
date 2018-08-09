@@ -1,1 +1,1 @@
-(bool)%value%
+((bool)%value%)

@@ -5,7 +5,6 @@ namespace Slov\Expression\tests;
 
 use PHPUnit\Framework\TestCase;
 use Slov\Expression\ExpressionException;
-use Slov\Expression\TextExpression\Config;
 use Slov\Expression\TextExpression\FunctionList;
 use Slov\Expression\TextExpression\TextExpression;
 use Slov\Expression\TextExpression\TextExpressionList;
@@ -20,7 +19,7 @@ use Slov\Money\Money;
 use DateInterval;
 use DateTime;
 
-class TestTextExpression extends TestCase
+class TestTextExpressionCache extends TestCase
 {
 
     public function expressionsDataProvider()
@@ -267,11 +266,6 @@ class TestTextExpression extends TestCase
         ];
     }
 
-    protected function setUp()
-    {
-        Config::getInstance()->setCache(false);
-    }
-
     /**
      * @param string $expressionText
      * @param float|int|Money $expectedResult
@@ -283,7 +277,7 @@ class TestTextExpression extends TestCase
         $textExpression = new TextExpression();
         $textExpression->setExpressionText($expressionText);
         $expression = $textExpression->toExpression();
-        $actualResult = $expression->calculate()->getValue();
+        $actualResult = $expression->calculate();
         $this->assertEquals($expectedResult, $actualResult);
     }
 
@@ -332,7 +326,7 @@ class TestTextExpression extends TestCase
             ->setExpressionText($annuityPaymentFormula)
             ->setVariableList($variablesList);
 
-        $actualAnnuityPayment = $annuityPaymentTextExpression->toExpression()->calculate()->getValue()->getAmount();
+        $actualAnnuityPayment = $annuityPaymentTextExpression->toExpression()->calculate()->getAmount();
 
         $this->assertEquals($expectedAnnuityPayment, $actualAnnuityPayment);
     }
@@ -358,13 +352,11 @@ class TestTextExpression extends TestCase
         $annuityPayment = function($yearPercent, $creditAmount, $creditMonths) use ($monthsInYear, $rateToPercentFactor)
         {
 
-            $ratePerMonth = $yearPercent->getValue() / $monthsInYear / $rateToPercentFactor;
-            $months = $creditMonths->getValue();
+            $ratePerMonth = $yearPercent / $monthsInYear / $rateToPercentFactor;
+            $months = $creditMonths;
             $creditAmountFactor = (($ratePerMonth * (1 + $ratePerMonth) ** $months) / ((1 + $ratePerMonth) ** $months - 1));
 
-            $result = TypeFactory::getInstance()->createMoney();
-
-            return $result->setValue($creditAmount->getValue()->mul($creditAmountFactor));
+            return $creditAmount->mul($creditAmountFactor);
         };
 
         $functionList = new FunctionList();
@@ -387,12 +379,12 @@ class TestTextExpression extends TestCase
 
         $annuityPaymentExpression = $annuityPaymentTextExpression->toExpression();
 
-        $actualAnnuityPayment = $annuityPaymentExpression->calculate()->getValue()->getAmount();
+        $actualAnnuityPayment = $annuityPaymentExpression->calculate()->getAmount();
         $this->assertEquals($expectedAnnuityPayment, $actualAnnuityPayment);
 
         $creditAmountVariable->setValue(Money::create(300000000));
 
-        $newActualAnnuityPayment = $annuityPaymentExpression->calculate()->getValue()->getAmount();
+        $newActualAnnuityPayment = $annuityPaymentExpression->calculate()->getAmount();
 
         $this->assertEquals(3648896, $newActualAnnuityPayment);
     }
@@ -406,8 +398,8 @@ class TestTextExpression extends TestCase
          */
         $concat = function($leftString, $rightString)
         {
-            $leftString->setValue($leftString->getValue(). $rightString->getValue());
-            return TypeFactory::getInstance()->createBoolean()->setValue(true);
+            $leftString = $leftString . $rightString;
+            return true;
         };
 
         $functionList = new FunctionList();
@@ -427,7 +419,7 @@ class TestTextExpression extends TestCase
             ->setVariableList($variablesList)
             ->setExpressionText($expressionFormula);
 
-        $actualText = $textExpression->toExpression()->calculate()->getValue();
+        $actualText = $textExpression->toExpression()->calculate();
         $expectedText = 'abcde';
         $this->assertEquals($expectedText, $actualText);
     }
@@ -494,7 +486,7 @@ class TestTextExpression extends TestCase
             ->append('annuityPayment',  $textExpressionAnnuityPayment)
             ->get('annuityPayment');
 
-        $actualAnnuityPayment = $actualAnnuityExpression->toExpression()->calculate()->getValue()->getAmount();
+        $actualAnnuityPayment = $actualAnnuityExpression->toExpression()->calculate()->getAmount();
 
         $this->assertEquals($expectedAnnuityPayment, $actualAnnuityPayment);
     }
@@ -508,12 +500,7 @@ class TestTextExpression extends TestCase
          */
         $concat = function($string, $additional)
         {
-            $result = new StringType();
-            return $result->setValue(
-                $string->getValue().
-                ' '.
-                $additional->getValue()
-            );
+            return $string.' '.$additional;
 
         };
 
@@ -546,20 +533,20 @@ class TestTextExpression extends TestCase
 
         $this->assertEquals(
             ' 1 2 3 4 5 6 7 8 9',
-            $forExpression->calculate()->getValue()
+            $forExpression->calculate()
         );
 
 
         $this->assertEquals(
             ' 1 2 3 4 5 6 7 8 9',
-            $variablesList->get('result')->getValue()
+            $variablesList->get('result')
         );
 
         $prefix->setValue('0');
 
         $this->assertEquals(
             '0 1 2 3 4 5 6 7 8 9',
-            $forExpression->calculate()->getValue()
+            $forExpression->calculate()
         );
     }
 
@@ -580,6 +567,6 @@ class TestTextExpression extends TestCase
         $actual = $textExpressionList
             ->execute($textExpressionFor)->calculate();
 
-        $this->assertEquals(101, $actual->getValue());
+        $this->assertEquals(101, $actual);
     }
 }

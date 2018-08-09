@@ -2,10 +2,12 @@
 
 namespace Slov\Expression\Type;
 
-use Slov\Helper\StringHelper;
+use Slov\Expression\TemplateProcessor\SingleTemplate;
 
 /** Тип число с плавающей запятой */
 class FloatType extends Type {
+
+    use SingleTemplate;
 
     const template = 'float';
 
@@ -46,12 +48,12 @@ class FloatType extends Type {
         return (float)$string;
     }
 
+    /**
+     * @return string
+     */
     public function generatePhpCode(): string
     {
-        return StringHelper::replacePatterns(
-            $this->getTemplate(),
-            ['%value%' => $this->getValue()]
-        );
+        return $this->render(['value' => $this->getValue()]);
     }
 
 }

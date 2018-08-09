@@ -34,14 +34,19 @@ class Multiply extends MultiplyOperation implements OperationCache
         $firstType = $this->getFirstOperandType();
         $secondType = $this->getSecondOperandType();
         switch (true){
-            case (
-                in_array($firstType,[ TypeName::UNKNOWN(), TypeName::INT()])
-                && in_array($secondType,[ TypeName::UNKNOWN(), TypeName::INT()])
-            ):
+            case ($firstType == TypeName::INT() && $secondType  == TypeName::UNKNOWN()):
+            case ($firstType == TypeName::UNKNOWN() && $secondType  == TypeName::INT()):
+            case ($firstType == TypeName::INT() && $secondType  == TypeName::INT()):
                 return TypeName::INT();
+            case ($firstType == TypeName::FLOAT() && $secondType  == TypeName::UNKNOWN()):
+            case ($firstType == TypeName::UNKNOWN() && $secondType  == TypeName::FLOAT()):
+            case ($firstType == TypeName::FLOAT() && $secondType  == TypeName::FLOAT()):
+            case ($firstType == TypeName::INT() && $secondType  == TypeName::FLOAT()):
+            case ($firstType == TypeName::FLOAT() && $secondType  == TypeName::INT()):
+                return TypeName::FLOAT();
             case (
-                in_array($firstType,[ TypeName::UNKNOWN(), TypeName::INT(),TypeName::MONEY()])
-                && in_array($secondType,[ TypeName::UNKNOWN(), TypeName::INT(),TypeName::MONEY()])
+                in_array($firstType,[ TypeName::UNKNOWN(), TypeName::INT(), TypeName::FLOAT(),TypeName::MONEY()])
+                && in_array($secondType,[ TypeName::UNKNOWN(), TypeName::INT(), TypeName::FLOAT(),TypeName::MONEY()])
                 && (($firstType == TypeName::MONEY()) xor ($secondType  == TypeName::MONEY()))
             ):
                 return TypeName::MONEY();
@@ -79,6 +84,7 @@ class Multiply extends MultiplyOperation implements OperationCache
     {
         switch ($type){
             case TypeName::INT():
+            case TypeName::FLOAT():
             case TypeName::UNKNOWN():
                 return 'numeric';
             case TypeName::MONEY():

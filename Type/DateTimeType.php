@@ -4,7 +4,6 @@ namespace Slov\Expression\Type;
 
 use DateTime;
 use Slov\Expression\TemplateProcessor\SingleTemplate;
-use Slov\Helper\StringHelper;
 
 /** Тип дата и время */
 class DateTimeType extends Type
@@ -60,9 +59,6 @@ class DateTimeType extends Type
 
     public function generatePhpCode(): string
     {
-        return StringHelper::replacePatterns(
-            $this->getTemplate(),
-            ['%date%' => $this->getValue()->format('Y-m-d H:i:s')]
-        );
+        return $this->render(['date' => $this->getValue()->format('Y-m-d H:i:s')]);
     }
 }

@@ -34,13 +34,13 @@ class Division extends DivisionOperation implements OperationCache
         $secondType = $this->getSecondOperandType();
         switch (true){
             case (
-                $firstType == TypeName::INT()
-                && in_array($secondType,[ TypeName::UNKNOWN(), TypeName::INT()])
+                in_array($firstType ,[ TypeName::INT(),TypeName::FLOAT()])
+                && in_array($secondType,[ TypeName::UNKNOWN(),TypeName::FLOAT(), TypeName::INT()])
             ):
-                return TypeName::INT();
+                return TypeName::FLOAT();
             case (
                 $firstType == TypeName::MONEY()
-                && in_array($secondType,[ TypeName::UNKNOWN(), TypeName::INT()])
+                && in_array($secondType,[ TypeName::UNKNOWN(),TypeName::FLOAT(), TypeName::INT()])
             ):
                 return TypeName::MONEY();
             default:
@@ -61,14 +61,14 @@ class Division extends DivisionOperation implements OperationCache
     {
         switch (true){
             case (
-                $firstType == TypeName::INT()
-                && in_array($secondType,[ TypeName::UNKNOWN(), TypeName::INT()])
+                in_array($firstType ,[ TypeName::INT(),TypeName::FLOAT()])
+                && in_array($secondType,[ TypeName::UNKNOWN(),TypeName::FLOAT(), TypeName::INT()])
             ):
                 $templateName = 'numeric_numeric';
                 break;
             case (
                 $firstType == TypeName::MONEY()
-                && in_array($secondType,[ TypeName::UNKNOWN(), TypeName::INT()])
+                && in_array($secondType,[ TypeName::UNKNOWN(),TypeName::FLOAT(), TypeName::INT()])
             ):
                 $templateName = 'money_numeric';
                 break;

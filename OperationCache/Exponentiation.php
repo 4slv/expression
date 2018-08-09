@@ -35,8 +35,8 @@ class Exponentiation extends ExponentiationOperation implements OperationCache
     protected function generatePhpValues(string $firstValue, string $secondValue, TypeName $firstType, TypeName $secondType)
     {
         if(
-            !in_array($firstType,[TypeName::INT(),TypeName::UNKNOWN()]) ||
-            !in_array($secondType,[TypeName::INT(),TypeName::UNKNOWN()])
+            !in_array($firstType,[TypeName::INT(),TypeName::FLOAT(),TypeName::UNKNOWN()]) ||
+            !in_array($secondType,[TypeName::INT(),TypeName::FLOAT(),TypeName::UNKNOWN()])
         )
             $this->throwOperationException();
         return $this->render(compact('firstValue', 'secondValue'));
@@ -47,6 +47,8 @@ class Exponentiation extends ExponentiationOperation implements OperationCache
      */
     public function resolveReturnTypeName()
     {
+        if(in_array(TypeName::FLOAT(),[$this->getSecondOperandType(),$this->getFirstOperandType()]))
+            return TypeName::FLOAT();
         return TypeName::INT();
     }
 

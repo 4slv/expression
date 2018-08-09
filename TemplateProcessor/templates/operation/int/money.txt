@@ -1,1 +1,1 @@
-(int)%secondValue%->getAmount()
+((int)%secondValue%->getAmount())

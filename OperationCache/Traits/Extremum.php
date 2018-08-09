@@ -45,6 +45,8 @@ trait Extremum
                 $this->typeList = TypeName::MONEY();
             elseif($cycleFor($this->getParameterList(),[TypeName::INT(),TypeName::FLOAT()]))
                 $this->typeList = TypeName::FLOAT();
+            elseif($cycleFor($this->getParameterList(),[TypeName::DATE_TIME()]))
+                $this->typeList = TypeName::DATE_TIME();
             else
                 $this->throwOperationException();
         }
