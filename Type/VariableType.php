@@ -2,7 +2,6 @@
 
 namespace Slov\Expression\Type;
 
-use PHPUnit\Runner\Exception;
 use Slov\Expression\Expression;
 use Slov\Expression\ExpressionCache;
 use Slov\Expression\TemplateProcessor\MultiplyTemplate;
@@ -115,13 +114,13 @@ class VariableType extends Type implements CacheVariable
             if($variable instanceof ExpressionCache) {
                 return
                 Config::getInstance()->isExpressionInSingleFile()
-                ? $variable->generatePhpCode()
-                : StringHelper::replacePatterns($this->getTemplate('expression'),['%function_name%' => $variable->createExpressionCacheFile()->getFunctionName()]);
+                ? $this->render('expression_closure',['code' => $variable->generatePhpCode()])
+                : $this->render('expression_file',['function_name' => $variable->createExpressionCacheFile()->getFunctionName()]);
             }
             $this->setType($variable->getType());
-            return StringHelper::replacePatterns($this->getTemplate('variable_list'),['%name%' => $this->getValue()]);
+            return $this->render('variable_list',['name' => $this->getValue()]);
         } else {
-            return StringHelper::replacePatterns($this->getTemplate('local_variable_list'),['%name%' => $this->getValue()]);
+            return $this->render('local_variable_list',['name' => $this->getValue()]);
         }
     }
 

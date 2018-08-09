@@ -10,203 +10,203 @@ class OperationCacheFactory extends OperationFactory
 {
 
     /**
-     * @return AddOperation
+     * @return Add
      */
     public function createAddOperation()
     {
-        return new AddOperation();
+        return new Add();
     }
 
     /**
-     * @return SubtractionOperation
+     * @return Subtraction
      */
     public function createSubtractionOperation()
     {
-        return new SubtractionOperation();
+        return new Subtraction();
     }
 
     /**
-     * @return DivisionOperation
+     * @return Division
      */
     public function createDivisionOperation()
     {
-        return new DivisionOperation();
+        return new Division();
     }
 
     /**
-     * @return  MultiplyOperation
+     * @return  Multiply
      */
     public function createMultiplyOperation()
     {
-        return new MultiplyOperation();
+        return new Multiply();
     }
 
     /**
-     * @return ExponentiationOperation
+     * @return Exponentiation
      */
     public function createExponentiationOperation()
     {
-        return new ExponentiationOperation();
+        return new Exponentiation();
     }
 
     /**
-     * @return RemainderOfDivisionOperation
+     * @return RemainderOfDivision
      */
     public function createRemainderOfDivisionOperation()
     {
-        return new RemainderOfDivisionOperation();
+        return new RemainderOfDivision();
     }
 
     /**
-     * @return DateOperation
+     * @return Date
      */
     public function createDateOperation()
     {
-        return new DateOperation();
+        return new Date();
     }
 
     /**
-     * @return DaysInYearOperation
+     * @return DaysInYear
      */
     public function createDaysInYearOperation()
     {
-        return new DaysInYearOperation();
+        return new DaysInYear();
     }
 
     /**
-     * @return DaysOperation
+     * @return Days
      */
     public function createDaysOperation()
     {
-        return new DaysOperation();
+        return new Days();
     }
 
     /**
-     * @return FirstYearDayOperation()
+     * @return FirstYearDay()
      */
     public function createFirstYearDayOperation()
     {
-        return new FirstYearDayOperation();
+        return new FirstYearDay();
     }
 
     /**
-     * @return FunctionOperation
+     * @return UserFunction
      */
     public function createFunctionOperation()
     {
-        return new FunctionOperation();
+        return new UserFunction();
     }
 
     /**
-     * @return IfElseOperation()
+     * @return IfElse()
      */
     public function createIfElseOperation()
     {
-        return new IfElseOperation();
+        return new IfElse();
     }
 
     /**
-     * @return EqualOperation
+     * @return Equal
      */
     public function createEqualOperation()
     {
-        return new EqualOperation();
+        return new Equal();
     }
 
     /**
-     * @return GreaterOperation()
+     * @return Greater()
      */
     public function createGreaterOperation()
     {
-        return new GreaterOperation();
+        return new Greater();
     }
 
     /**
-     * @return LessOperation()
+     * @return Less()
      */
     public function createLessOperation()
     {
-        return new LessOperation();
+        return new Less();
     }
 
     /**
-     * @return GreaterOrEqualOperation()
+     * @return GreaterOrEqual()
      */
     public function createGreaterOrEqualOperation()
     {
-        return new GreaterOrEqualOperation();
+        return new GreaterOrEqual();
     }
 
     /**
-     * @return LessOrEqualOperation()
+     * @return LessOrEqual()
      */
     public function createLessOrEqualOperation()
     {
-        return new LessOrEqualOperation();
+        return new LessOrEqual();
     }
 
     /**
-     * @return NotOperation()
+     * @return Not()
      */
     public function createNotOperation()
     {
-        return new NotOperation();
+        return new Not();
     }
 
     /**
-     * @return AndOperation()
+     * @return LogicalAnd()
      */
     public function createAndOperation()
     {
-        return new AndOperation();
+        return new LogicalAnd();
     }
 
     /**
-     * @return OrOperation()
+     * @return LogicalOr()
      */
     public function createOrOperation()
     {
-        return new OrOperation();
+        return new LogicalOr();
     }
 
     /**
-     * @return IntOperation()
+     * @return CastInt()
      */
     public function createIntOperation()
     {
-        return new IntOperation();
+        return new CastInt();
     }
 
     /**
-     * @return AssignOperation
+     * @return Assign
      */
     public function createAssignOperation()
     {
-        return new AssignOperation();
+        return new Assign();
     }
 
     /**
-     * @return ForOperation
+     * @return CycleFor
      */
     public function createForOperation()
     {
-        return new ForOperation();
+        return new CycleFor();
     }
 
     /**
-     * @return MinOperation
+     * @return Min
      */
     public function createMinOperation()
     {
-        return new MinOperation();
+        return new Min();
     }
 
     /**
-     * @return MaxOperation
+     * @return Max
      */
     public function createMaxOperation()
     {
-        return new MaxOperation();
+        return new Max();
     }
 
 

@@ -1,24 +1,14 @@
 <?php
 
 
-namespace Slov\Expression\OperationCache;
+namespace Slov\Expression\OperationCache\Traits;
 
 
 use Slov\Expression\CalculationException;
-use Slov\Expression\OperationCache\Interfaces\OperationCache;
-use Slov\Expression\OperationCache\Traits\PhpValues;
-use Slov\Expression\TemplateProcessor\MultiplyTemplate;
 use Slov\Expression\Type\TypeName;
 
-class LessOrEqualOperation extends \Slov\Expression\Operation\LessOrEqualOperation  implements OperationCache
+trait Comparison
 {
-    use PhpValues;
-
-    use MultiplyTemplate;
-
-    const subTemplateFolder = 'less_or_equal';
-
-    const templateFolder = 'operation';
 
     /**
      * @return TypeName
@@ -60,7 +50,7 @@ class LessOrEqualOperation extends \Slov\Expression\Operation\LessOrEqualOperati
                 $templateName = 'date_time_date_time';
                 break;
             default:
-                throw new CalculationException();
+                $this->throwOperationException();
 
         }
         return $this->render($templateName, compact('firstValue','secondValue'));

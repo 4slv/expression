@@ -4,18 +4,19 @@
 namespace Slov\Expression\OperationCache;
 
 
+use Slov\Expression\Operation\ForOperation;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
+use Slov\Expression\OperationCache\Traits\OperandCode;
 use Slov\Expression\OperationCache\Traits\PhpValues;
 use Slov\Expression\TemplateProcessor\SingleTemplate;
 use Slov\Expression\Type\TypeName;
-use Slov\Helper\StringHelper;
 
-class ForOperation extends \Slov\Expression\Operation\ForOperation implements OperationCache
+class CycleFor extends ForOperation implements OperationCache
 {
 
-    use PhpValues;
-
     use SingleTemplate;
+
+    use OperandCode;
 
     const template = 'for';
 
@@ -30,13 +31,9 @@ class ForOperation extends \Slov\Expression\Operation\ForOperation implements Op
     }
 
     /**
-     * @param string $firstOperandValue
-     * @param string $secondOperandValue
-     * @param TypeName $firstType
-     * @param TypeName $secondType
      * @return string
      */
-    protected function generatePhpValues(string $firstOperandValue,string $secondOperandValue, TypeName $firstType,TypeName $secondType)
+    public function generatePhpCode()
     {
         return $this->render(
             [

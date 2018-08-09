@@ -4,15 +4,16 @@
 namespace Slov\Expression\OperationCache;
 
 
+use Slov\Expression\Operation\FunctionOperation;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
-use Slov\Expression\OperationCache\Traits\PhpValues;
+use Slov\Expression\OperationCache\Traits\OperandCode;
 use Slov\Expression\TemplateProcessor\SingleTemplate;
 use Slov\Expression\Type\TypeName;
 
-class FunctionOperation extends \Slov\Expression\Operation\FunctionOperation implements OperationCache
+class UserFunction extends FunctionOperation implements OperationCache
 {
 
-    use PhpValues;
+    use OperandCode;
 
     use SingleTemplate;
 

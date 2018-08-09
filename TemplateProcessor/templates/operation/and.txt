@@ -1,1 +1,1 @@
-(%firstOperand% && %secondOperand%)
+(%firstValue% && %secondValue%)

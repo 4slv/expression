@@ -5,20 +5,22 @@ namespace Slov\Expression\OperationCache;
 
 
 use Slov\Expression\CalculationException;
+use Slov\Expression\Operation\MultiplyOperation;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
+use Slov\Expression\OperationCache\Traits\OperandCode;
 use Slov\Expression\OperationCache\Traits\PhpValues;
 use Slov\Expression\TemplateProcessor\MultiplyTemplate;
 use Slov\Expression\Type\TypeName;
-use Slov\Helper\StringHelper;
-use Slov\Money\Money;
 
-class MultiplyOperation extends \Slov\Expression\Operation\MultiplyOperation implements OperationCache
+class Multiply extends MultiplyOperation implements OperationCache
 {
 
 
     use PhpValues;
 
     use MultiplyTemplate;
+
+    use OperandCode;
 
     const subTemplateFolder = 'multiply';
 
@@ -61,7 +63,7 @@ class MultiplyOperation extends \Slov\Expression\Operation\MultiplyOperation imp
     {
         $templateName = implode('_',[$this->typeToTemplateName($firstType),$this->typeToTemplateName($secondType)]);
         if(!in_array($templateName,['numeric_numeric','numeric_money','money_numeric']))
-            throw new CalculationException();
+            $this->throwOperationException();
         return $this->render(
             $templateName,
             compact('firstValue','secondValue')
@@ -82,7 +84,7 @@ class MultiplyOperation extends \Slov\Expression\Operation\MultiplyOperation imp
             case TypeName::MONEY():
                 return 'money';
             default:
-                throw new CalculationException();
+                $this->throwOperationException();
 
         }
     }

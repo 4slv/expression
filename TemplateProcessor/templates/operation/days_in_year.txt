@@ -1,0 +1,1 @@
+(%secondValue%->format('L') == '1' ? 366 : 365 )

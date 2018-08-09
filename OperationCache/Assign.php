@@ -4,16 +4,17 @@
 namespace Slov\Expression\OperationCache;
 
 
+use Slov\Expression\Operation\AssignOperation;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
-use Slov\Expression\OperationCache\Traits\PhpValues;
+use Slov\Expression\OperationCache\Traits\OperandCode;
 use Slov\Expression\TemplateProcessor\SingleTemplate;
 use Slov\Expression\Type\TypeName;
 
-class AssignOperation extends \Slov\Expression\Operation\AssignOperation implements OperationCache
+class Assign extends AssignOperation implements OperationCache
 {
-    use PhpValues;
-
     use SingleTemplate;
+
+    use OperandCode;
 
     const template = 'assign';
 

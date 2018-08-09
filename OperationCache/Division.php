@@ -5,16 +5,20 @@ namespace Slov\Expression\OperationCache;
 
 
 use Slov\Expression\CalculationException;
+use Slov\Expression\Operation\DivisionOperation;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
+use Slov\Expression\OperationCache\Traits\OperandCode;
 use Slov\Expression\OperationCache\Traits\PhpValues;
 use Slov\Expression\TemplateProcessor\MultiplyTemplate;
 use Slov\Expression\Type\TypeName;
 
-class DivisionOperation extends \Slov\Expression\Operation\DivisionOperation implements OperationCache
+class Division extends DivisionOperation implements OperationCache
 {
     use PhpValues;
 
     use MultiplyTemplate;
+
+    use OperandCode;
 
 
     const subTemplateFolder = 'div';
@@ -69,7 +73,7 @@ class DivisionOperation extends \Slov\Expression\Operation\DivisionOperation imp
                 $templateName = 'money_numeric';
                 break;
             default:
-                throw new CalculationException();
+                $this->throwOperationException();
         }
         return $this->render(
             $templateName,

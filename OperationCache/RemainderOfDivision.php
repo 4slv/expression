@@ -6,19 +6,32 @@ namespace Slov\Expression\OperationCache;
 
 use Slov\Expression\CalculationException;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
+use Slov\Expression\OperationCache\Traits\OperandCode;
 use Slov\Expression\OperationCache\Traits\PhpValues;
 use Slov\Expression\TemplateProcessor\SingleTemplate;
 use Slov\Expression\Type\TypeName;
 
-class ExponentiationOperation extends \Slov\Expression\Operation\ExponentiationOperation implements OperationCache
+class RemainderOfDivision extends \Slov\Expression\Operation\RemainderOfDivisionOperation implements OperationCache
 {
+
     use PhpValues;
 
     use SingleTemplate;
 
-    const template = 'exponentiation';
+    use OperandCode;
+
+    const template = 'remainder_of_division';
 
     const templateFolder = 'operation';
+
+    /**
+     * @return TypeName
+     */
+    public function resolveReturnTypeName()
+    {
+        return TypeName::INT();
+    }
+
 
     /**
      * @param string $firstValue
@@ -30,20 +43,8 @@ class ExponentiationOperation extends \Slov\Expression\Operation\ExponentiationO
      */
     protected function generatePhpValues(string $firstValue, string $secondValue, TypeName $firstType, TypeName $secondType)
     {
-        if(
-            !in_array($firstType,[TypeName::INT(),TypeName::UNKNOWN()]) ||
-            !in_array($secondType,[TypeName::INT(),TypeName::UNKNOWN()])
-        )
-            throw new CalculationException();
-        return $this->render(compact('firstValue', 'secondValue'));
+        if(in_array($firstType, [TypeName::INT(),TypeName::UNKNOWN()]) && in_array($secondType, [TypeName::INT(),TypeName::UNKNOWN()]))
+            return $this->render(compact('firstValue', 'secondValue'));
+        $this->throwOperationException();
     }
-
-    /**
-     * @return TypeName
-     */
-    public function resolveReturnTypeName()
-    {
-        return TypeName::INT();
-    }
-
 }

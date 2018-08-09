@@ -5,18 +5,22 @@ namespace Slov\Expression\OperationCache;
 
 
 use Slov\Expression\CalculationException;
+use Slov\Expression\Operation\AddOperation;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
+use Slov\Expression\OperationCache\Traits\OperandCode;
 use Slov\Expression\OperationCache\Traits\PhpValues;
 use Slov\Expression\TemplateProcessor\MultiplyTemplate;
 use Slov\Expression\Type\TypeName;
 
-class SubtractionOperation extends \Slov\Expression\Operation\SubtractionOperation implements OperationCache
+class Add extends  AddOperation implements OperationCache
 {
     use PhpValues;
 
     use MultiplyTemplate;
 
-    const subTemplateFolder = 'sub';
+    use OperandCode;
+
+    const subTemplateFolder = 'add';
 
     const templateFolder = 'operation';
 
@@ -36,14 +40,14 @@ class SubtractionOperation extends \Slov\Expression\Operation\SubtractionOperati
             case ($firstType == TypeName::UNKNOWN() && $secondType  == TypeName::MONEY()):
             case ($firstType == TypeName::MONEY() && $secondType  == TypeName::MONEY()):
                 return TypeName::MONEY();
-            case ($firstType == TypeName::DATE_INTERVAL() && $secondType  == TypeName::UNKNOWN()):
-            case ($firstType == TypeName::DATE_INTERVAL() && $secondType  == TypeName::DATE_INTERVAL()):
+            case ($firstType == TypeName::DATE_INTERVAL() && $secondType == TypeName::DATE_INTERVAL()):
                 return TypeName::DATE_INTERVAL();
-            case ($firstType == TypeName::DATE_TIME() && $secondType == TypeName::DATE_INTERVAL()):
+            case ($firstType == TypeName::DATE_TIME() && $secondType  == TypeName::UNKNOWN()):
+            case ($firstType == TypeName::DATE_TIME() && $secondType  == TypeName::DATE_INTERVAL()):
                 return TypeName::DATE_TIME();
             case ($firstType == TypeName::UNKNOWN() && $secondType  == TypeName::DATE_TIME()):
-            case ($firstType == TypeName::DATE_TIME() && $secondType == TypeName::DATE_TIME()):
-                return TypeName::DATE_INTERVAL();
+            case ($firstType == TypeName::DATE_INTERVAL() && $secondType  == TypeName::DATE_TIME()):
+                return TypeName::DATE_TIME();
             default:
                 return TypeName::UNKNOWN();
         }
@@ -71,22 +75,21 @@ class SubtractionOperation extends \Slov\Expression\Operation\SubtractionOperati
             case ($firstType == TypeName::MONEY() && $secondType  == TypeName::MONEY()):
                 $templateName = 'money_money';
                 break;
-            case ($firstType == TypeName::DATE_INTERVAL() && $secondType  == TypeName::UNKNOWN()):
             case ($firstType == TypeName::DATE_INTERVAL() && $secondType  == TypeName::DATE_INTERVAL()):
                 $templateName = 'date_interval_date_interval';
                 break;
+            case ($firstType == TypeName::DATE_TIME() && $secondType  == TypeName::UNKNOWN()):
             case ($firstType == TypeName::DATE_TIME() && $secondType  == TypeName::DATE_INTERVAL()):
                 $templateName = 'date_time_date_interval';
                 break;
             case ($firstType == TypeName::UNKNOWN() && $secondType  == TypeName::DATE_TIME()):
-            case ($firstType == TypeName::DATE_TIME() && $secondType  == TypeName::DATE_TIME()):
-                $templateName = 'date_time_date_time';
+            case ($firstType == TypeName::DATE_INTERVAL() && $secondType  == TypeName::DATE_TIME()):
+                $templateName = 'date_interval_date_time';
                 break;
             default:
-                throw new CalculationException();
+                $this->throwOperationException();
 
         }
-        return $this->render($templateName, compact('firstValue','secondValue'));
+        return $this->render($templateName, compact('firstValue', 'secondValue'));
     }
-
 }

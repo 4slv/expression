@@ -4,21 +4,24 @@
 namespace Slov\Expression\OperationCache;
 
 
+use Slov\Expression\Operation\NotOperation;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
+use Slov\Expression\OperationCache\Traits\OperandCode;
 use Slov\Expression\OperationCache\Traits\PhpValues;
 use Slov\Expression\TemplateProcessor\SingleTemplate;
 use Slov\Expression\Type\TypeName;
 
-class AndOperation extends \Slov\Expression\Operation\AndOperation implements OperationCache
+class Not extends NotOperation implements OperationCache
 {
     use PhpValues;
 
     use SingleTemplate;
 
-    const template = 'and';
+    use OperandCode;
+
+    const template = 'not';
 
     const templateFolder = 'operation';
-
 
     /**
      * @return string
@@ -28,15 +31,14 @@ class AndOperation extends \Slov\Expression\Operation\AndOperation implements Op
     }
 
     /**
-     * @param string $firstOperand
-     * @param string $secondOperand
+     * @param string $firstValue
+     * @param string $secondValue
      * @param TypeName $firstType
      * @param TypeName $secondType
      * @return string
      */
-    protected function generatePhpValues(string $firstOperand, string $secondOperand, TypeName $firstType,TypeName $secondType)
+    protected function generatePhpValues(string $firstValue, string $secondValue, TypeName $firstType, TypeName $secondType)
     {
-        return $this->render(compact('firstOperand', 'secondOperand'));
+        return $this->render(compact('secondValue'));
     }
-
 }
