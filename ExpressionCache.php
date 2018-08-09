@@ -7,6 +7,7 @@ namespace Slov\Expression;
 use Slov\Expression\Interfaces\Operand;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
 use Slov\Expression\TemplateProcessor\TemplateProcessor;
+use Slov\Expression\TextExpression\Config;
 use Slov\Expression\TextExpression\FunctionList;
 use Slov\Expression\TextExpression\VariableList;
 
@@ -20,6 +21,9 @@ class ExpressionCache extends Expression implements Operand
     /** @var string */
     protected $functionName;
 
+    /** @var string */
+    protected $className;
+
     /** @var string результат рассчёта первого операнда */
     protected $firstOperandCodeResult;
 
@@ -31,6 +35,29 @@ class ExpressionCache extends Expression implements Operand
 
     /** @var VariableList */
     protected $variableList;
+
+    /** @var bool  */
+    protected static $isAutoloadRegister = false;
+
+    /**
+     * @return string|null
+     */
+    public function getClassName(): ?string
+    {
+        return $this->className;
+    }
+
+    /**
+     * @param string $className
+     * @return $this
+     */
+    public function setClassName(?string $className)
+    {
+        $this->className = $className;
+        return $this;
+    }
+
+
 
     /**
      * @return mixed|null
@@ -134,23 +161,57 @@ class ExpressionCache extends Expression implements Operand
         return TemplateProcessor::getInstance()->render(TemplateProcessor::getInstance()->getTemplateByName(static::template),$variables);
     }
 
+    /**
+     * @return bool|null
+     */
+    public static function isAutoloadRegister(): ?bool
+    {
+        return static::$isAutoloadRegister;
+    }
+
+    /**
+     * @param bool $isAutoloadRegister
+     */
+    public static function setIsAutoloadRegister(?bool $isAutoloadRegister)
+    {
+        static::$isAutoloadRegister = $isAutoloadRegister;
+    }
+
+    public static function  expressionAutoload($name)
+    {
+        require_once Config::getInstance()->getCacheFolder().DIRECTORY_SEPARATOR.str_replace(Config::getInstance()->getCacheClassPrefix(),'',$name).'.php';
+    }
+
+    public function expressionAutoloadRegister()
+    {
+        dump(!Config::getInstance()->isExpressionInSingleFile() && !static::isAutoloadRegister());
+        if(!Config::getInstance()->isExpressionInSingleFile() && !static::isAutoloadRegister()){
+            $a = spl_autoload_register([static::class,'expressionAutoload']);
+            dump($a);
+        }
+    }
 
 
     public function calculate()
     {
-        return $this->createExpressionCacheFile()
-            ->getFunctionName()($this->getFunctionList(),$this->getVariableList());
+        $this->expressionAutoloadRegister();
+        $this->createExpressionCacheFile();
+        $functionName = $this ->getFunctionName();
+        $className = $this ->getClassName();
+        return call_user_func([$className,$functionName],$this->getFunctionList(),$this->getVariableList());
     }
 
     public function createExpressionCacheFile()
     {
         $fileName = md5($this->getTextDescription());
-        $this->setFunctionName('expression'.$fileName);
-        $fileFullName = implode(DIRECTORY_SEPARATOR,[__DIR__,'tmp',$fileName.'.php']);
+        $this->setFunctionName(Config::getInstance()->getCacheFunctionPrefix().$fileName);
+        $this->setClassName(Config::getInstance()->getCacheClassPrefix().$fileName);
+        $fileFullName = implode(DIRECTORY_SEPARATOR,[Config::getInstance()->getCacheFolder(),$fileName.'.php']);
         if(!file_exists($fileFullName)) {
             $phpExpressionText =$this->render(
             [
-                'name' => $this->getFunctionName(),
+                'class_name' => $this->getClassName(),
+                'function_name' => $this->getFunctionName(),
                 'body' => $this->generatePhpCode()
             ]);
             file_put_contents($fileFullName, $phpExpressionText);

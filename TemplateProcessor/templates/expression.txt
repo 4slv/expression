@@ -1,6 +1,9 @@
 <?php
 
-function %name%($functionList,$variableList)
+class %class_name%
 {
-    return %body%;
+    public static function %function_name%($functionList,$variableList)
+    {
+        return %body%;
+    }
 }

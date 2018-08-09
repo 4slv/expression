@@ -115,7 +115,10 @@ class VariableType extends Type implements CacheVariable
                 return
                 Config::getInstance()->isExpressionInSingleFile()
                 ? $this->render('expression_closure',['code' => $variable->generatePhpCode()])
-                : $this->render('expression_file',['function_name' => $variable->createExpressionCacheFile()->getFunctionName()]);
+                : $this->render('expression_file',[
+                    'function_name' => $variable->createExpressionCacheFile()->getFunctionName(),
+                    'class_name' => $variable->createExpressionCacheFile()->getClassName(),
+                ]);
             }
             $this->setType($variable->getType());
             return $this->render('variable_list',['name' => $this->getValue()]);

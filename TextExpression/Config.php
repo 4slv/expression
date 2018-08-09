@@ -14,12 +14,16 @@ class Config
     /**
      * @var bool
      */
-    protected $expressionInSingleFile = true;
+    protected $expressionInSingleFile = false;
 
     /**
      * @var string
      */
     protected $cacheFolder = __DIR__.DIRECTORY_SEPARATOR.'../tmp';
+
+    protected $cacheFunctionPrefix = 'expressionFunction';
+
+    protected $cacheClassPrefix = 'expression';
 
     protected static $self;
 
@@ -74,7 +78,7 @@ class Config
     /**
      * @return bool|null
      */
-    public function isExpressionInSingleFile(): ?bool
+    public function isExpressionInSingleFile(): bool
     {
         return $this->expressionInSingleFile;
     }
@@ -83,9 +87,45 @@ class Config
      * @param bool $expressionInSingleFile
      * @return $this
      */
-    public function setExpressionInSingleFile(?bool $expressionInSingleFile)
+    public function setExpressionInSingleFile(bool $expressionInSingleFile)
     {
         $this->expressionInSingleFile = $expressionInSingleFile;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheFunctionPrefix(): string
+    {
+        return $this->cacheFunctionPrefix;
+    }
+
+    /**
+     * @param string $cacheFunctionPrefix
+     * @return $this
+     */
+    public function setCacheFunctionPrefix(string $cacheFunctionPrefix)
+    {
+        $this->cacheFunctionPrefix = $cacheFunctionPrefix;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheClassPrefix(): string
+    {
+        return $this->cacheClassPrefix;
+    }
+
+    /**
+     * @param string $cacheClassPrefix
+     * @return $this
+     */
+    public function setCacheClassPrefix(string $cacheClassPrefix)
+    {
+        $this->cacheClassPrefix = $cacheClassPrefix;
         return $this;
     }
 
