@@ -37,6 +37,7 @@ class Assign extends AssignOperation implements OperationCache
             [
                 'variable' => $this->getVariableName(),
                 'value'=>$this->secondOperand->generatePhpCode(),
+                'type' => $this->secondOperand->getType()->getValue()
             ]
         );
     }

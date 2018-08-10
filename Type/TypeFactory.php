@@ -123,6 +123,8 @@ class TypeFactory {
                 return $this->createBoolean();
             case TypeName::VARIABLE:
                 return $this->createVariable();
+            case TypeName::UNKNOWN():
+                return $this->createInt();
         }
         return null;
     }

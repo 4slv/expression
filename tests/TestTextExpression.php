@@ -16,6 +16,7 @@ use Slov\Expression\Type\IntType;
 use Slov\Expression\Type\MoneyType;
 use Slov\Expression\Type\StringType;
 use Slov\Expression\Type\TypeFactory;
+use Slov\Expression\Type\TypeName;
 use Slov\Money\Money;
 use DateInterval;
 use DateTime;
@@ -368,7 +369,7 @@ class TestTextExpression extends TestCase
         };
 
         $functionList = new FunctionList();
-        $functionList->append('annuityPayment', $annuityPayment);
+        $functionList->append('annuityPayment', $annuityPayment,TypeName::MONEY());
 
         $creditAmountVariable = TypeFactory::getInstance()->createMoney();
 
@@ -411,7 +412,7 @@ class TestTextExpression extends TestCase
         };
 
         $functionList = new FunctionList();
-        $functionList->append('concat', $concat);
+        $functionList->append('concat', $concat,TypeName::STRING());
 
         $variablesList = new VariableList();
         $variablesList
@@ -442,7 +443,7 @@ class TestTextExpression extends TestCase
         };
 
         $functionList = new FunctionList();
-        $functionList->append('func', $funcWithoutParams);
+        $functionList->append('func', $funcWithoutParams,TypeName::INT());
 
         $formula = '$func[]';
         $textExpression = new TextExpression();
@@ -518,7 +519,7 @@ class TestTextExpression extends TestCase
         };
 
         $functionList = new FunctionList();
-        $functionList->append('concat', $concat);
+        $functionList->append('concat', $concat,TypeName::STRING());
 
         $prefix = TypeFactory::getInstance()->createString()->setValue('');
 

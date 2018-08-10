@@ -2,6 +2,7 @@
 
 namespace Slov\Expression\TextExpression;
 
+use Slov\Expression\ExpressionCache;
 use Slov\Expression\ExpressionException;
 use Slov\Expression\Operation\OperationSignRegexp;
 use Slov\Expression\Type\Type;
@@ -146,6 +147,8 @@ class TextExpression
     {
         if(!isset(static::$expressionCache[$this->getExpressionText()] )) {
             static::$expressionCache[$this->getExpressionText()] = $this->createExpressionFromTextExpression($this->getExpressionText());
+            if(static::$expressionCache[$this->getExpressionText()] instanceof ExpressionCache)
+                static::$expressionCache[$this->getExpressionText()]->setExpressionText($this->getExpressionText());
         }
         return static::$expressionCache[$this->getExpressionText()];
     }

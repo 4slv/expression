@@ -37,8 +37,30 @@ class ExpressionCache extends Expression implements Operand
     /** @var VariableList */
     protected $variableList;
 
+    /** @var  string */
+    protected $expressionText;
+
     /** @var bool  */
     protected static $isAutoloadRegister = false;
+
+
+    /**
+     * @return string выражение в текстовом представлении
+     */
+    public function getExpressionText(): string
+    {
+        return $this->expressionText;
+    }
+
+    /**
+     * @param string $expressionText выражение в текстовом представлении
+     * @return $this
+     */
+    public function setExpressionText(string $expressionText)
+    {
+        $this->expressionText = $expressionText;
+        return $this;
+    }
 
     /**
      * @return string|null
@@ -179,17 +201,21 @@ class ExpressionCache extends Expression implements Operand
     }
 
     /**
-     * @param string $name
+     * @param $name
+     * @return bool
      */
     public static function  expressionAutoload($name)
     {
-        require_once Config::getInstance()->getCacheFolder().DIRECTORY_SEPARATOR.str_replace(Config::getInstance()->getCacheClassPrefix(),'',$name).'.php';
+        $fileName =  Config::getInstance()->getCacheFolder().DIRECTORY_SEPARATOR.str_replace(Config::getInstance()->getCacheClassPrefix(),'',$name).'.php';
+        if(is_file($fileName))
+            require_once $fileName;
+        return false;
     }
 
 
     public function expressionAutoloadRegister()
     {
-        if(!Config::getInstance()->isExpressionInSingleFile() && !static::isAutoloadRegister()){
+        if(!Config::getInstance()->isExpressionAsSingleMethod() && !static::isAutoloadRegister()){
             $a = spl_autoload_register([static::class,'expressionAutoload']);
         }
     }
@@ -212,7 +238,7 @@ class ExpressionCache extends Expression implements Operand
      */
     public function createExpressionCacheFile()
     {
-        $fileName = md5($this->getTextDescription());
+        $fileName = md5($this->getExpressionText());
         $this->setFunctionName(Config::getInstance()->getCacheFunctionPrefix().$fileName);
         $this->setClassName(Config::getInstance()->getCacheClassPrefix().$fileName);
         $fileFullName = implode(DIRECTORY_SEPARATOR,[Config::getInstance()->getCacheFolder(),$fileName.'.php']);
@@ -221,7 +247,8 @@ class ExpressionCache extends Expression implements Operand
             [
                 'class_name' => $this->getClassName(),
                 'function_name' => $this->getFunctionName(),
-                'body' => $this->generatePhpCode()
+                'body' => $this->generatePhpCode(),
+                'type' => $this->getType()->getValue()
             ]);
             file_put_contents($fileFullName, $phpExpressionText);
         }

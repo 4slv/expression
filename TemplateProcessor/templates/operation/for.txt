@@ -1,6 +1,7 @@
-(function($functionList,$variableList){
+((function($functionList,$variableList)use(&$for){
     for(%initialization%;%condition%;%step%){
         %action%;
     }
+    $for = get_defined_vars();
     return true;
-})($functionList,$variableList)
+})($functionList,$variableList) && is_int(extract($for)) && empty($for = []))

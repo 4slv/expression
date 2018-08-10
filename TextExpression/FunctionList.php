@@ -1,6 +1,7 @@
 <?php
 
 namespace Slov\Expression\TextExpression;
+use Slov\Expression\Type\TypeName;
 
 /** Список функций */
 class FunctionList
@@ -11,13 +12,15 @@ class FunctionList
     /** добавление функции в список
      * @param string $name название функции
      * @param callable $function функция
+     * @param TypeName $returnType  Тип возвращаймого значения.
      * @return $this */
-    public function append($name, $function)
+    public function append($name, $function, TypeName $returnType)
     {
         $functionStructure = new FunctionStructure();
         $this->list[$name] = $functionStructure
             ->setName($name)
-            ->setFunction($function);
+            ->setFunction($function)
+            ->setReturnType($returnType);
         return $this;
     }
 

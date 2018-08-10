@@ -5,6 +5,7 @@ namespace Slov\Expression\TextExpression;
 
 
 use Slov\Expression\ExpressionCache;
+use Slov\Expression\ExpressionException;
 use  Slov\Expression\OperationCache\AssignOperation;
 use Slov\Expression\Operation\OperationName;
 use Slov\Expression\TemplateProcessor\TemplateProcessor;

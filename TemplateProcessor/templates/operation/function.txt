@@ -1,1 +1,0 @@
-($functionList->get('%name%')->getFunction())(%params%)

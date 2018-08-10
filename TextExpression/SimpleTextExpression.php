@@ -376,12 +376,10 @@ class SimpleTextExpression extends TextExpression
                 return $this->getExpressionByText($operand);
             case TypeName::VARIABLE:
                 /* @var VariableType $variableType */
-                if(static::getInstanceLocalVariableList()->exists($operand)) {
-                    return static::getInstanceLocalVariableList()->get($operand);
-                }
+                if($this->getVariableList()->exists($operand))
+                    return $this->getVariableList()->get($operand);
                 $variableType = $this->getTypeFactory()->createFromString($operand);
-                if(!$this->getVariableList()->exists($operand))
-                    static::getInstanceLocalVariableList()->append($operand,$variableType);
+                $this->getVariableList()->append($operand,$variableType);
                 return $variableType->setVariableList($this->getVariableList());
             default:
                 return $this->getTypeFactory()->createFromString($operand);

@@ -14,7 +14,7 @@ class Config
     /**
      * @var bool
      */
-    protected $expressionInSingleFile = true;
+    protected $expressionAsSingleMethod = false;
 
     /**
      * @var string
@@ -78,18 +78,18 @@ class Config
     /**
      * @return bool|null
      */
-    public function isExpressionInSingleFile(): bool
+    public function isExpressionAsSingleMethod(): bool
     {
-        return $this->expressionInSingleFile;
+        return $this->expressionAsSingleMethod;
     }
 
     /**
-     * @param bool $expressionInSingleFile
+     * @param bool $expressionAsSingleMethod
      * @return $this
      */
-    public function setExpressionInSingleFile(bool $expressionInSingleFile)
+    public function setExpressionAsSingleMethod(bool $expressionAsSingleMethod)
     {
-        $this->expressionInSingleFile = $expressionInSingleFile;
+        $this->expressionAsSingleMethod = $expressionAsSingleMethod;
         return $this;
     }
 

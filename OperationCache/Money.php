@@ -28,7 +28,7 @@ class Money extends MoneyOperation implements OperationCache
      */
     public function generatePhpCode()
     {
-        return $this->render(['secondValue' => $this->getSecondOperandValue()]);
+        return $this->render(['secondValue' => $this->getSecondOperandCode()]);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Slov\Expression\Type;
 
 use Slov\Expression\Calculation;
 use Slov\Expression\Interfaces\Operand;
+use Slov\Expression\TextExpression\Config;
 use Slov\Expression\TextExpression\VariableStructure;
 use Slov\Money\Money;
 use DateTime;
@@ -20,7 +21,7 @@ abstract class Type implements \Slov\Expression\Type\Interfaces\Type, Calculatio
      */
     public function calculate()
     {
-        return $this;
+        return  $this;
     }
 
 }
