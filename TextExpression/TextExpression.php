@@ -29,9 +29,7 @@ class TextExpression
 
     /** @var string выражение в текстовом представлении */
     protected $expressionText;
-    
-    /** @var Expression[] Кэширование собранных текстовых представлений */
-    protected static $expressionCache;
+
 
     /** @var Config */
     private $config;
@@ -145,12 +143,10 @@ class TextExpression
      */
     public function toExpression()
     {
-        if(!isset(static::$expressionCache[$this->getExpressionText()] )) {
-            static::$expressionCache[$this->getExpressionText()] = $this->createExpressionFromTextExpression($this->getExpressionText());
-            if(static::$expressionCache[$this->getExpressionText()] instanceof ExpressionCache)
-                static::$expressionCache[$this->getExpressionText()]->setExpressionText($this->getExpressionText());
-        }
-        return static::$expressionCache[$this->getExpressionText()];
+        $expression =  $this->createExpressionFromTextExpression($this->getExpressionText());
+        if( $expression instanceof ExpressionCache)
+            $expression->setExpressionText($this->getExpressionText());
+        return  $expression;
     }
 
     /**

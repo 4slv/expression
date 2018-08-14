@@ -265,7 +265,7 @@ class ExpressionCache extends Expression implements Operand
     {
         $this->setFirstOperandCodeResult($this->getFirstOperand()->generatePhpCode());
         $this->setSecondOperandCodeResult($this->getSecondOperand()->generatePhpCode());
-        try {
+//        try {
             return $this
                     ->getOperation()
                     ->setFirstOperand($this->getFirstOperand())
@@ -273,14 +273,14 @@ class ExpressionCache extends Expression implements Operand
                     ->setFirstOperandCode($this->getFirstOperandCodeResult())
                     ->setSecondOperandCode($this->getSecondOperandCodeResult())
                     ->generatePhpCode();
-        } catch (CalculationException $exception)
-        {
-            throw new CalculationException(
-                $exception->getMessage().
-                "\n===\n".
-                $this->getTextDescription()
-            );
-        }
+//        } catch (CalculationException $exception)
+//        {
+//            throw new CalculationException(
+//                $exception->getMessage().
+//                "\n===\n".
+//                $this->getTextDescription()
+//            );
+//        }
     }
 
 
@@ -289,6 +289,7 @@ class ExpressionCache extends Expression implements Operand
      */
     public function getType()
     {
+
         /** @var OperationCache $operation */
         $operation = $this
             ->getOperation();
