@@ -58,5 +58,5 @@ class OperationSignRegexp extends Enum
 
     const OR = '\|\|';
 
-    const ASSIGN = '\$([a-zA-Z][\w\d]*)\s*\=(?!\=)';
+    const ASSIGN = '(?<!\=)\=(?!\=)';
 }

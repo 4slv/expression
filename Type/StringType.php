@@ -3,8 +3,21 @@
 namespace Slov\Expression\Type;
 
 
-class StringType extends Type
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+use Slov\Expression\Type\Interfaces\CacheVariable;
+use Slov\Helper\StringHelper;
+
+class StringType extends Type implements CacheVariable
 {
+
+
+    use SingleTemplate;
+
+    const template = 'string';
+
+    const templateFolder = 'type';
+
+
     /**
      * @return TypeName
      */
@@ -40,5 +53,13 @@ class StringType extends Type
         preg_match('/'.TypeRegExp::STRING.'/', $string,$out);
         return $out[1] ?? '';
     }
+
+    public function generatePhpCode(): string
+    {
+        return $this->render(
+            ['value' => $this->getValue()]
+        );
+    }
+
 
 }

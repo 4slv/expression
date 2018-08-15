@@ -2,6 +2,7 @@
 
 namespace Slov\Expression\TextExpression;
 
+use Slov\Expression\ExpressionCache;
 use Slov\Expression\ExpressionException;
 use Slov\Expression\Operation\OperationSignRegexp;
 use Slov\Expression\Type\Type;
@@ -28,6 +29,30 @@ class TextExpression
 
     /** @var string выражение в текстовом представлении */
     protected $expressionText;
+
+
+    /** @var Config */
+    private $config;
+
+    /**
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        if(is_null($this->config))
+            $this->config = Config::getInstance();
+        return $this->config;
+    }
+
+    /**
+     * @param Config $config
+     * @return $this
+     */
+    public function setConfig(Config $config)
+    {
+        $this->config = $config;
+        return $this;
+    }
 
     /**
      * @return ExpressionList список выражений
@@ -118,7 +143,10 @@ class TextExpression
      */
     public function toExpression()
     {
-        return $this->createExpressionFromTextExpression($this->getExpressionText());
+        $expression =  $this->createExpressionFromTextExpression($this->getExpressionText());
+        if( $expression instanceof ExpressionCache)
+            $expression->setExpressionText($this->getExpressionText());
+        return  $expression;
     }
 
     /**
@@ -127,7 +155,10 @@ class TextExpression
      */
     protected function createSimpleTextExpression($expressionText)
     {
-        $simpleTextExpression = new SimpleTextExpression();
+        $simpleTextExpression =
+            $this->getConfig()->isCache()
+                ? (new SimpleTextExpressionCache)->setFunctionList($this->getFunctionList())
+                : new SimpleTextExpression;
         return $simpleTextExpression
             ->setExpressionText($expressionText)
             ->setExpressionList($this->getExpressionList())

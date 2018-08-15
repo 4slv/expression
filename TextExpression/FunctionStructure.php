@@ -2,6 +2,8 @@
 
 namespace Slov\Expression\TextExpression;
 
+use Slov\Expression\Type\TypeName;
+
 /** Структура функции */
 class FunctionStructure
 {
@@ -10,6 +12,9 @@ class FunctionStructure
 
     /** @var callable функция */
     protected $function;
+
+    /** @var  TypeName */
+    protected $returnType;
 
     /**
      * @return string название функции
@@ -46,4 +51,26 @@ class FunctionStructure
         $this->function = $function;
         return $this;
     }
+
+    /**
+     * @return TypeName|null
+     */
+    public function getReturnType(): TypeName
+    {
+        if(is_null($this->returnType))
+            return TypeName::UNKNOWN();
+        return $this->returnType;
+    }
+
+    /**
+     * @param TypeName $returnType
+     * @return $this
+     */
+    public function setReturnType(TypeName $returnType)
+    {
+        $this->returnType = $returnType;
+        return $this;
+    }
+
+
 }

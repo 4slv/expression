@@ -1,0 +1,1 @@
+(new DateTime((%date_time%)->format('Y-m-d')))

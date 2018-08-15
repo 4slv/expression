@@ -1,0 +1,6 @@
+(function($functionList,$variableList){
+    $days = %secondValue%->format('%a');
+    if( $days == "(unknown)")
+        $days = (int)((new DateTime())->setTimeStamp(0)->add(%secondValue%)->getTimeStamp()/86400);
+    return $days;
+})($functionList,$variableList)

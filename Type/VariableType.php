@@ -3,13 +3,28 @@
 namespace Slov\Expression\Type;
 
 use Slov\Expression\Expression;
+use Slov\Expression\ExpressionCache;
+use Slov\Expression\TemplateProcessor\MultiplyTemplate;
+use Slov\Expression\TextExpression\Config;
 use Slov\Expression\TextExpression\VariableList;
+use Slov\Expression\Type\Interfaces\CacheVariable;
+use Slov\Helper\StringHelper;
 
 /** Тип переменной */
-class VariableType extends Type
+class VariableType extends Type implements CacheVariable
 {
+    use MultiplyTemplate;
     /** @var VariableList список переменных */
     private $variableList;
+
+    /** @var  TypeName */
+    private $typeName;
+
+    const subTemplateFolder = 'variable';
+
+    const templateFolder = 'type';
+
+
 
     /**
      * @return VariableList список переменных
@@ -32,9 +47,21 @@ class VariableType extends Type
     /**
      * @return TypeName
      */
-    function getType(): TypeName
+    public function getType(): TypeName
     {
-        return new TypeName(TypeName::VARIABLE);
+        if(is_null($this->typeName))
+            $this->typeName = new TypeName(TypeName::VARIABLE);
+        return $this->typeName;
+    }
+
+    /**
+     * @param TypeName $typeName
+     * @return $this
+     */
+    public function setType(TypeName $typeName)
+    {
+        $this->typeName = $typeName;
+        return $this;
     }
 
     /**
@@ -78,4 +105,43 @@ class VariableType extends Type
             return $this;
         }
     }
+
+    public function generatePhpCode(): string
+    {
+       return $this->generatePhpCodeByTemplates([
+            'expression_closure' => 'expression_closure',
+            'expression_file' => 'expression_file',
+            'variable_list' => 'variable_list'
+       ]);
+    }
+
+
+    public function generatePhpCodeForFunction(): string
+    {
+        return $this->generatePhpCodeByTemplates([
+            'expression_closure' => 'function_expression_closure',
+            'expression_file' => 'function_expression_file',
+            'variable_list' => 'function_variable_list'
+        ]);
+    }
+
+    protected function generatePhpCodeByTemplates ($templateList)
+    {
+        if(!$this->getVariableList()->exists($this->getValue()))
+            return $this->render($templateList['variable_list'],['name' => $this->getValue()]);
+        $variable = $this->getVariableList()->get($this->getValue());
+        $this->setType($variable->getType());
+        if($variable instanceof ExpressionCache) {
+            return
+                Config::getInstance()->isExpressionAsSingleMethod()
+                    ? $this->render($templateList['expression_closure'],['code' => $variable->generatePhpCode()])
+                    : $this->render($templateList['expression_file'],[
+                    'function_name' => $variable->createExpressionCacheFile()->getFunctionName(),
+                    'class_name' => $variable->createExpressionCacheFile()->getClassName(),
+                ]);
+        }
+        return $this->render($templateList['variable_list'],['name' => $this->getValue()]);
+    }
+
+
 }

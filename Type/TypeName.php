@@ -4,7 +4,23 @@ namespace Slov\Expression\Type;
 
 use MyCLabs\Enum\Enum;
 
-/** Название типа */
+/** Название типа
+ * @method static $this DATE_TIME();
+ * @method static $this DATE_INTERVAL();
+ * @method static $this INT();
+ * @method static $this FLOAT();
+ * @method static $this NULL();
+ * @method static $this MONEY();
+ * @method static $this STRING();
+ * @method static $this EXPRESSION();
+ * @method static $this VARIABLE();
+ * @method static $this FUNCTION();
+ * @method static $this IF_ELSE();
+ * @method static $this BOOLEAN();
+ * @method static $this ASSIGN();
+ * @method static $this EXPRESSION_CACHE();
+ * @method static $this UNKNOWN();
+ */
 class TypeName extends Enum
 {
     const DATE_TIME = 'date_time';
@@ -20,6 +36,8 @@ class TypeName extends Enum
     const IF_ELSE = 'if_else';
     const BOOLEAN = 'boolean';
     const ASSIGN = 'assign';
+    const EXPRESSION_CACHE = 'expression_cache';
+    const UNKNOWN = 'unknown';
 
     /**
      * @return bool тип является цифровым

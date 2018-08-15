@@ -18,6 +18,32 @@ class TextExpressionList
     private $list = [];
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        if(is_null($this->config))
+            $this->config = Config::getInstance();
+        return $this->config;
+    }
+
+    /**
+     * @param Config $config
+     * @return $this
+     */
+    public function setConfig(Config $config)
+    {
+        $this->config = $config;
+        return $this;
+    }
+
+
+    /**
      * @return TextExpression[] ассоциативный массив с текстовыми выражениями
      */
     protected function getList(): array
@@ -55,7 +81,6 @@ class TextExpressionList
     {
         $textExpression->setVariableList($this->getVariableList());
         $this->list[$name] = $textExpression;
-        $this->fillVariableList($textExpression);
         $this->getVariableList()->append($name, $textExpression->toExpression());
         return $this;
     }
@@ -94,16 +119,5 @@ class TextExpressionList
             ->toExpression()->calculate();
         $this->remove($name);
         return $returned;
-    }
-
-    /**
-     * Заполнение списка переменных из текстового выражения
-     * @param TextExpression $textExpression текстовое выражение
-     */
-    private function fillVariableList(TextExpression $textExpression)
-    {
-        foreach ($textExpression->getVariableList()->getAll() as $variableName => $variableExpression){
-            $this->getVariableList()->append($variableName, $variableExpression);
-        }
     }
 }

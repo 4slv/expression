@@ -3,8 +3,17 @@
 namespace Slov\Expression\Type;
 
 
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+use Slov\Helper\StringHelper;
+
 class NullType extends Type
 {
+
+    use SingleTemplate;
+
+    const template = 'null';
+
+    const templateFolder = 'type';
     /**
      * @return TypeName
      */
@@ -38,6 +47,14 @@ class NullType extends Type
     public function stringToValue($string)
     {
         return null;
+    }
+
+    public function generatePhpCode(): string
+    {
+        return StringHelper::replacePatterns(
+            $this->getTemplate(),
+            []
+        );
     }
 
 }

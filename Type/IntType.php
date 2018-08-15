@@ -2,9 +2,17 @@
 
 namespace Slov\Expression\Type;
 
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+use Slov\Helper\StringHelper;
+
 /** Тип целое число */
 class IntType extends Type{
 
+    use SingleTemplate;
+
+    const template = 'int';
+
+    const templateFolder = 'type';
     /**
      * @return TypeName
      */
@@ -38,6 +46,14 @@ class IntType extends Type{
     public function stringToValue($string)
     {
         return (int)$string;
+    }
+
+    public function generatePhpCode(): string
+    {
+        return StringHelper::replacePatterns(
+            $this->getTemplate(),
+            ['%value%' => $this->getValue()]
+        );
     }
 
 }

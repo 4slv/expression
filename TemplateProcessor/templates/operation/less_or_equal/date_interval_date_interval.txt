@@ -1,0 +1,1 @@
+Slov\Expression\Type\DateIntervalType::lessOrEqual(%firstValue%,%secondValue%)

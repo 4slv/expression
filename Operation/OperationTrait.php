@@ -3,54 +3,52 @@
 namespace Slov\Expression\Operation;
 
 use Slov\Expression\CalculationException;
-use Slov\Expression\Expression;
 use Slov\Expression\FactoryRepository;
-use Slov\Expression\TextExpression\VariableList;
-use Slov\Expression\Type\Type;
-use Slov\Expression\Type\TypeInterface;
+use Slov\Expression\Interfaces\Operand;
+use Slov\Expression\Type\Interfaces\Type;
 use Slov\Expression\Type\TypeName;
 
 trait OperationTrait
 {
     use FactoryRepository;
 
-    /** @var TypeInterface первый операнд */
+    /** @var Type первый операнд */
     protected $firstOperand;
 
-    /** @var TypeInterface второй операнд */
+    /** @var Type второй операнд */
     protected $secondOperand;
 
     /**
-     * @return TypeInterface первый операнд
+     * @return Operand первый операнд
      */
-    public function getFirstOperand(): TypeInterface
+    public function getFirstOperand(): Operand
     {
         return $this->firstOperand;
     }
 
     /**
-     * @param TypeInterface $firstOperand первый операнд
+     * @param Operand $firstOperand первый операнд
      * @return $this
      */
-    public function setFirstOperand(TypeInterface $firstOperand)
+    public function setFirstOperand(Operand $firstOperand)
     {
         $this->firstOperand = $firstOperand;
         return $this;
     }
 
     /**
-     * @return TypeInterface второй операнд
+     * @return Operand второй операнд
      */
-    public function getSecondOperand(): TypeInterface
+    public function getSecondOperand(): Operand
     {
         return $this->secondOperand;
     }
 
     /**
-     * @param TypeInterface $secondOperand второй операнд
+     * @param Operand $secondOperand второй операнд
      * @return $this
      */
-    public function setSecondOperand(TypeInterface $secondOperand)
+    public function setSecondOperand(Operand $secondOperand)
     {
         $this->secondOperand = $secondOperand;
         return $this;

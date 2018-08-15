@@ -1,0 +1,3 @@
+(function($functionList,$variableList){
+    return %code%;
+})($functionList,$variableList)

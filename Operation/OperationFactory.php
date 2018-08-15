@@ -2,6 +2,8 @@
 
 namespace Slov\Expression\Operation;
 
+use Slov\Expression\TemplateProcessor\TemplateProcessor;
+
 /** Фабрика операций */
 class OperationFactory
 {
@@ -11,17 +13,39 @@ class OperationFactory
      */
     protected static $instance;
 
+    /** @var TemplateProcessor */
+    protected $templateProcessor;
+
     protected function __construct(){}
+
+    /**
+     * @return TemplateProcessor|null
+     */
+    public function getTemplateProcessor(): ?TemplateProcessor
+    {
+        return $this->templateProcessor;
+    }
+
+    /**
+     * @param TemplateProcessor $templateProcessor
+     * @return $this
+     */
+    public function setTemplateProcessor(?TemplateProcessor $templateProcessor)
+    {
+        $this->templateProcessor = $templateProcessor;
+        return $this;
+    }
+
 
     /**
      * @return OperationFactory
      */
     public static function getInstance()
     {
-        if(is_null(self::$instance)){
-            self::$instance = new self();
+        if(is_null(static::$instance)){
+            static::$instance = new static();
         }
-        return self::$instance;
+        return static::$instance;
     }
 
     /**

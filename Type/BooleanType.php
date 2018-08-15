@@ -2,8 +2,17 @@
 
 namespace Slov\Expression\Type;
 
+use Slov\Expression\TemplateProcessor\SingleTemplate;
+
 /** Булев тип */
-class BooleanType extends Type{
+class BooleanType extends Type
+{
+
+    use SingleTemplate;
+
+    const template = 'bool';
+
+    const templateFolder = 'type';
 
     /**
      * @return TypeName
@@ -38,6 +47,11 @@ class BooleanType extends Type{
     public function stringToValue($string) : bool
     {
         return $string === 'true' ? true : false;
+    }
+
+    public function generatePhpCode(): string
+    {
+        return $this->render( ['value' => $this->getValue() ? 'true':'false']);
     }
 
 }
