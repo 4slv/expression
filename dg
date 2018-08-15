@@ -1,0 +1,16 @@
+{"errors":["Operation is not supported: unknown equal unknown
+===
+$periodBeginDate == $creditDayStartDate
+===
+ {_Expression30 && _Expression32 ?
+ $createCreditPartTransaction[
+ $issueDateTime, $creditDayStartDate, $dailyInterestCurrentPeriodBalance,
+ 'creditInterestOverdue', 'creditInterestCurrentPeriod', 'issue', false]
+ } 
+===
+ for{
+ $creditDay=1;
+ $creditDay<=$creditPeriodDays+2;
+ $creditDay=$creditDay+1;
+
+ _Expression28&&_Expression40&&_Expression45} "]}

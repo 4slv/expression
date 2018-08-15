@@ -34,8 +34,9 @@ class Division extends DivisionOperation implements OperationCache
         $secondType = $this->getSecondOperandType();
         switch (true){
             case (
-                in_array($firstType ,[ TypeName::INT(),TypeName::FLOAT()])
+                in_array($firstType ,[TypeName::UNKNOWN(), TypeName::INT(),TypeName::FLOAT()])
                 && in_array($secondType,[ TypeName::UNKNOWN(),TypeName::FLOAT(), TypeName::INT()])
+                && !($secondType == TypeName::UNKNOWN() && $firstType == TypeName::UNKNOWN())
             ):
                 return TypeName::FLOAT();
             case (
@@ -61,8 +62,9 @@ class Division extends DivisionOperation implements OperationCache
     {
         switch (true){
             case (
-                in_array($firstType ,[ TypeName::INT(),TypeName::FLOAT()])
+                in_array($firstType ,[TypeName::UNKNOWN(), TypeName::INT(),TypeName::FLOAT()])
                 && in_array($secondType,[ TypeName::UNKNOWN(),TypeName::FLOAT(), TypeName::INT()])
+                && !($secondType == TypeName::UNKNOWN() && $firstType == TypeName::UNKNOWN())
             ):
                 $templateName = 'numeric_numeric';
                 break;

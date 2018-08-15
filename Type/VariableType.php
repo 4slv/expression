@@ -108,24 +108,39 @@ class VariableType extends Type implements CacheVariable
 
     public function generatePhpCode(): string
     {
-        if($this->getVariableList()->exists($this->getValue()))
-        {
-            $variable = $this->getVariableList()->get($this->getValue());
-            $this->setType($variable->getType());
-            if($variable instanceof ExpressionCache) {
-                return
+       return $this->generatePhpCodeByTemplates([
+            'expression_closure' => 'expression_closure',
+            'expression_file' => 'expression_file',
+            'variable_list' => 'variable_list'
+       ]);
+    }
+
+
+    public function generatePhpCodeForFunction(): string
+    {
+        return $this->generatePhpCodeByTemplates([
+            'expression_closure' => 'function_expression_closure',
+            'expression_file' => 'function_expression_file',
+            'variable_list' => 'function_variable_list'
+        ]);
+    }
+
+    protected function generatePhpCodeByTemplates ($templateList)
+    {
+        if(!$this->getVariableList()->exists($this->getValue()))
+            return $this->render($templateList['variable_list'],['name' => $this->getValue()]);
+        $variable = $this->getVariableList()->get($this->getValue());
+        $this->setType($variable->getType());
+        if($variable instanceof ExpressionCache) {
+            return
                 Config::getInstance()->isExpressionAsSingleMethod()
-                ? $this->render('expression_closure',['code' => $variable->generatePhpCode()])
-                : $this->render('expression_file',[
+                    ? $this->render($templateList['expression_closure'],['code' => $variable->generatePhpCode()])
+                    : $this->render($templateList['expression_file'],[
                     'function_name' => $variable->createExpressionCacheFile()->getFunctionName(),
                     'class_name' => $variable->createExpressionCacheFile()->getClassName(),
                 ]);
-            }
-            return $this->render('variable_list',['name' => $this->getValue()]);
-        } else {
-           // dump( $this);exit;
-            return $this->render('variable_list',['name' => $this->getValue()]);
         }
+        return $this->render($templateList['variable_list'],['name' => $this->getValue()]);
     }
 
 

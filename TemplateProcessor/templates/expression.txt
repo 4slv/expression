@@ -5,6 +5,12 @@ class %class_name%
     public static function %function_name%($functionList,$variableList)
     {
         $for = [];
-        return Slov\Expression\Type\TypeFactory::getInstance()->create(new Slov\Expression\Type\TypeName('%type%'))->setValue(%body%);
+        return Helper\Cast\CastExpressionType::leadTypeByStructure(%body%);
+    }
+
+    public static function getType()
+    {
+     //   return %class_name%::%function_name%()->getType();
+        return new Slov\Expression\Type\TypeName('%type%');
     }
 }

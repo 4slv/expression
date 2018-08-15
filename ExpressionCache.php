@@ -243,19 +243,33 @@ class ExpressionCache extends Expression implements Operand
         $this->setClassName(Config::getInstance()->getCacheClassPrefix().$fileName);
         $fileFullName = implode(DIRECTORY_SEPARATOR,[Config::getInstance()->getCacheFolder(),$fileName.'.php']);
         if(!file_exists($fileFullName)) {
-            $phpExpressionText =$this->render(
-            [
-                'class_name' => $this->getClassName(),
-                'function_name' => $this->getFunctionName(),
-                'body' => $this->generatePhpCode(),
-                'type' => $this->getType()->getValue()
-            ]);
-            file_put_contents($fileFullName, $phpExpressionText);
+            $type = $this->getType();
+            $code = $this->generatePhpCode();
+            $this->saveFile($fileFullName,$code,$type);
+            if($type == TypeName::UNKNOWN()) {
+                $type =  $this->calculate()->getType();
+                if($type == TypeName::UNKNOWN()) {
+                    dump($this->calculate());unlink($fileFullName);exit;
+                }
+                $this->saveFile($fileFullName, $code,$type);
+            }
         }
-        require_once $fileFullName;
         return $this;
 
     }
+
+    protected function saveFile($fileFullName,$code,TypeName $type)
+    {
+        $phpExpressionText =$this->render(
+            [
+                'class_name' => $this->getClassName(),
+                'function_name' => $this->getFunctionName(),
+                'body' => $code,
+                'type' => $type->getValue()
+            ]);
+        file_put_contents($fileFullName, $phpExpressionText);
+    }
+
 
     /**
      * @return string
@@ -265,7 +279,7 @@ class ExpressionCache extends Expression implements Operand
     {
         $this->setFirstOperandCodeResult($this->getFirstOperand()->generatePhpCode());
         $this->setSecondOperandCodeResult($this->getSecondOperand()->generatePhpCode());
-//        try {
+        try {
             return $this
                     ->getOperation()
                     ->setFirstOperand($this->getFirstOperand())
@@ -273,14 +287,14 @@ class ExpressionCache extends Expression implements Operand
                     ->setFirstOperandCode($this->getFirstOperandCodeResult())
                     ->setSecondOperandCode($this->getSecondOperandCodeResult())
                     ->generatePhpCode();
-//        } catch (CalculationException $exception)
-//        {
-//            throw new CalculationException(
-//                $exception->getMessage().
-//                "\n===\n".
-//                $this->getTextDescription()
-//            );
-//        }
+        } catch (CalculationException $exception)
+        {
+            throw new CalculationException(
+                $exception->getMessage().
+                "\n===\n".
+                $this->getTextDescription()
+            );
+        }
     }
 
 
@@ -289,14 +303,17 @@ class ExpressionCache extends Expression implements Operand
      */
     public function getType()
     {
-
-        /** @var OperationCache $operation */
-        $operation = $this
-            ->getOperation();
-        return $operation
-            ->setFirstOperand($this->getFirstOperand())
-            ->setSecondOperand($this->getSecondOperand())
-            ->resolveReturnTypeName();
+        if(!method_exists($this->getClassName(),'getType')) {
+            $operation = $this
+                ->getOperation();
+            /** @var OperationCache $operation */
+            return $operation
+                ->setFirstOperand($this->getFirstOperand())
+                ->setSecondOperand($this->getSecondOperand())
+                ->resolveReturnTypeName();
+        }else{
+            return call_user_func([$this->getClassName(),'getType']);
+        }
     }
 
 

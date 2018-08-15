@@ -1,1 +1,1 @@
-$variableList->get('%variable%')
+%variable%

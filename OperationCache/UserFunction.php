@@ -4,6 +4,7 @@
 namespace Slov\Expression\OperationCache;
 
 
+use Slov\Expression\ExpressionCache;
 use Slov\Expression\Operation\FunctionOperation;
 use Slov\Expression\OperationCache\Interfaces\OperationCache;
 use Slov\Expression\OperationCache\Traits\OperandCode;
@@ -39,7 +40,7 @@ class UserFunction extends FunctionOperation implements OperationCache
         $functionStructure = $this->getFunctionStructure();
         $functionParameterList = array_map(function($functionParameter){
             if($functionParameter instanceof VariableType)
-                return $this->render('variable_param',['variable' => $functionParameter->getValue()] );
+                return $this->render('variable_param', ['variable' => $functionParameter->generatePhpCodeForFunction()]);
             return $this->render('param',[
                 'param' => $functionParameter->generatePhpCode(),
                 'type' => $functionParameter->getType()->getValue()

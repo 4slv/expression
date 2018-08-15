@@ -41,7 +41,7 @@ class IfElse extends IfElseOperation implements OperationCache
     public function resolveReturnTypeName()
     {
         $ifElseStructure = $this->getIfElseStructure();
-        if($ifElseStructure->getTrueResult()->getType() == $ifElseStructure->getFalseResult()->getType())
+        if($ifElseStructure->getTrueResult()->getType() == $ifElseStructure->getFalseResult()->getType() || $ifElseStructure->getFalseResult()->getType() == TypeName::NULL())
             return $ifElseStructure->getTrueResult()->getType();
         return TypeName::UNKNOWN();
     }
