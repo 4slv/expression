@@ -17,7 +17,7 @@ class LessOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::LESS);
+        return OperationName::byValue(OperationName::LESS);
     }
 
     /**

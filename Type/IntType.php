@@ -10,7 +10,7 @@ class IntType extends Type{
      */
     function getType()
     {
-        return new TypeName(TypeName::INT);
+        return TypeName::byValue(TypeName::INT);
     }
 
     /**

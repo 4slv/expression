@@ -32,7 +32,7 @@ class MoneyOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::INT);
+        return OperationName::byValue(OperationName::INT);
     }
 
     /**

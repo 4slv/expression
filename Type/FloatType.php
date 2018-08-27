@@ -10,7 +10,7 @@ class FloatType extends Type {
      */
     function getType()
     {
-        return new TypeName(TypeName::FLOAT);
+        return TypeName::byValue(TypeName::FLOAT);
     }
 
     /**

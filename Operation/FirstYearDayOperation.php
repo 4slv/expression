@@ -11,7 +11,7 @@ class FirstYearDayOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::FIRST_YEAR_DAY);
+        return OperationName::byValue(OperationName::FIRST_YEAR_DAY);
     }
 
     protected function resolveReturnTypeName()

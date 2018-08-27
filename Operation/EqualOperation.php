@@ -17,7 +17,7 @@ class EqualOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::EQUAL);
+        return OperationName::byValue(OperationName::EQUAL);
     }
 
     /**

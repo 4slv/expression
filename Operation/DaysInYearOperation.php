@@ -11,7 +11,7 @@ class DaysInYearOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::DAYS_IN_YEAR);
+        return OperationName::byValue(OperationName::DAYS_IN_YEAR);
     }
 
     protected function resolveReturnTypeName()

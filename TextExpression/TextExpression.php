@@ -214,7 +214,7 @@ class TextExpression
      */
     protected function getRegexpSignList()
     {
-        $signRegexpList = OperationSignRegexp::toArray();
+        $signRegexpList = OperationSignRegexp::getConstants();
         /* @var string[] $signRegexpList */
         return $signRegexpList;
     }
@@ -267,7 +267,7 @@ class TextExpression
      */
     protected function getTypeRegexpList()
     {
-        $regexpList = TypeRegExp::values();
+        $regexpList = TypeRegExp::getValues();
         /* @var string[] $regexpList */
         return $regexpList;
     }

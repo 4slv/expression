@@ -2,7 +2,7 @@
 
 namespace Slov\Expression\Operation;
 
-use MyCLabs\Enum\Enum;
+use MabeEnum\Enum;
 
 class OperationName extends Enum
 {

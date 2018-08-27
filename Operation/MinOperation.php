@@ -11,7 +11,7 @@ class MinOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::MIN);
+        return OperationName::byValue(OperationName::MIN);
     }
 
     protected function getListElement(array $list)

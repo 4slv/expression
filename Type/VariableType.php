@@ -34,7 +34,7 @@ class VariableType extends Type
      */
     function getType(): TypeName
     {
-        return new TypeName(TypeName::VARIABLE);
+        return TypeName::byValue(TypeName::VARIABLE);
     }
 
     /**

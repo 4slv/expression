@@ -28,7 +28,7 @@ class TypeNameFactory
      */
     public function createInt()
     {
-        return new TypeName(TypeName::INT);
+        return TypeName::byValue(TypeName::INT);
     }
 
     /**
@@ -36,7 +36,7 @@ class TypeNameFactory
      */
     public function createFloat()
     {
-        return new TypeName(TypeName::FLOAT);
+        return TypeName::byValue(TypeName::FLOAT);
     }
 
     /**
@@ -44,7 +44,7 @@ class TypeNameFactory
      */
     public function createMoney()
     {
-        return new TypeName(TypeName::MONEY);
+        return TypeName::byValue(TypeName::MONEY);
     }
 
     /**
@@ -52,7 +52,7 @@ class TypeNameFactory
      */
     public function createDateTime()
     {
-        return new TypeName(TypeName::DATE_TIME);
+        return TypeName::byValue(TypeName::DATE_TIME);
     }
 
     /**
@@ -60,7 +60,7 @@ class TypeNameFactory
      */
     public function createDateInterval()
     {
-        return new TypeName(TypeName::DATE_INTERVAL);
+        return TypeName::byValue(TypeName::DATE_INTERVAL);
     }
 
     /**
@@ -68,7 +68,7 @@ class TypeNameFactory
      */
     public function createString()
     {
-        return new TypeName(TypeName::STRING);
+        return TypeName::byValue(TypeName::STRING);
     }
 
     /**
@@ -76,6 +76,6 @@ class TypeNameFactory
      */
     public function createBoolean()
     {
-        return new TypeName(TypeName::BOOLEAN);
+        return TypeName::byValue(TypeName::BOOLEAN);
     }
 }

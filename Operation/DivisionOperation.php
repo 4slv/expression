@@ -13,7 +13,7 @@ class DivisionOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::DIVISION);
+        return OperationName::byValue(OperationName::DIVISION);
     }
 
     protected function resolveReturnTypeName()

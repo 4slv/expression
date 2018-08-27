@@ -10,7 +10,7 @@ class NullType extends Type
      */
     public function getType()
     {
-        return new TypeName(TypeName::NULL);
+        return TypeName::byValue(TypeName::NULL);
     }
 
     /**

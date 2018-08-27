@@ -2,7 +2,7 @@
 
 namespace Slov\Expression\Type;
 
-use MyCLabs\Enum\Enum;
+use MabeEnum\Enum;
 
 /** Название типа */
 class TypeName extends Enum

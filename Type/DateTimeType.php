@@ -9,7 +9,7 @@ class DateTimeType extends Type
 {
     public function getType()
     {
-        return new TypeName(TypeName::DATE_TIME);
+        return TypeName::byValue(TypeName::DATE_TIME);
     }
 
     /**
