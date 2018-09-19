@@ -103,6 +103,19 @@ class TextExpression
     }
 
     /**
+     * @return string выражение в текстовом представлении без комментариев
+     */
+    protected function getExpressionTextWithoutComments(): string
+    {
+        $expressionWithoutComments = preg_replace(
+            '/\/\*.*?\*\//',
+            '',
+            $this->expressionText
+        );
+        return $expressionWithoutComments;
+    }
+
+    /**
      * @param string $expressionText выражение в текстовом представлении
      * @return $this
      */
@@ -118,7 +131,7 @@ class TextExpression
      */
     public function toExpression()
     {
-        return $this->createExpressionFromTextExpression($this->getExpressionText());
+        return $this->createExpressionFromTextExpression($this->getExpressionTextWithoutComments());
     }
 
     /**

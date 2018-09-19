@@ -65,7 +65,7 @@ class SimpleTextExpression extends TextExpression
      */
     public function toExpression()
     {
-        return $this->createExpressionFromTextExpression($this->getExpressionText());
+        return $this->createExpressionFromTextExpression($this->getExpressionTextWithoutComments());
     }
 
     /**
