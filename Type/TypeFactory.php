@@ -2,7 +2,6 @@
 
 namespace Slov\Expression\Type;
 
-use Slov\Expression\ExpressionException;
 
 /** Фабрика типов */
 class TypeFactory {
@@ -33,69 +32,6 @@ class TypeFactory {
         return new IntType();
     }
 
-    /**
-     * @return FloatType
-     */
-    public function createFloat()
-    {
-        return new FloatType();
-    }
-
-    /**
-     * @return NullType
-     */
-    public function createNull()
-    {
-        return new NullType();
-    }
-
-    /**
-     * @return MoneyType
-     */
-    public function createMoney()
-    {
-        return new MoneyType();
-    }
-
-    /**
-     * @return DateTimeType
-     */
-    public function createDateTime()
-    {
-        return new DateTimeType();
-    }
-
-    /**
-     * @return DateIntervalType
-     */
-    public function createDateInterval()
-    {
-        return new DateIntervalType();
-    }
-
-    /**
-     * @return BooleanType()
-     */
-    public function createBoolean()
-    {
-        return new BooleanType();
-    }
-
-    /**
-     * @return StringType
-     */
-    public function createString()
-    {
-        return new StringType();
-    }
-
-    /**
-     * @return VariableType
-     */
-    public function createVariable()
-    {
-        return new VariableType();
-    }
 
     /**
      * @param TypeName $typeName название типа
@@ -107,39 +43,7 @@ class TypeFactory {
         {
             case TypeName::INT:
                 return $this->createInt();
-            case TypeName::FLOAT:
-                return $this->createFloat();
-            case TypeName::NULL:
-                return $this->createNull();
-            case TypeName::MONEY:
-                return $this->createMoney();
-            case TypeName::DATE_TIME:
-                return $this->createDateTime();
-            case TypeName::DATE_INTERVAL:
-                return $this->createDateInterval();
-            case TypeName::STRING:
-                return $this->createString();
-            case TypeName::BOOLEAN:
-                return $this->createBoolean();
-            case TypeName::VARIABLE:
-                return $this->createVariable();
         }
         return null;
-    }
-
-    /**
-     * @param string $typeStringValue строковое представление типа
-     * @return Type
-     * @throws ExpressionException
-     */
-    public function createFromString($typeStringValue)
-    {
-        $typeName = TypeRegExp::getTypeNameByStringValue($typeStringValue);
-        $type = $this->create($typeName);
-        if(isset($type))
-        {
-            $type->setValue($type->stringToValue($typeStringValue));
-        }
-        return $type;
     }
 }

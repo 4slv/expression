@@ -14,8 +14,8 @@ class AddOperation extends Operation
 
     protected function resolveReturnTypeName()
     {
-        $firstOperandType = $this->getFirstOperandType();
-        $secondOperandType = $this->getSecondOperandType();
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
 
         if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
             return $this->getTypeNameFactory()->createMoney();

@@ -2,24 +2,15 @@
 
 namespace Slov\Expression\Type;
 
-use Slov\Expression\Calculation;
-use Slov\Expression\TextExpression\VariableStructure;
-use Slov\Money\Money;
-use DateTime;
-use DateInterval;
 
+use Slov\Expression\StringToPhp;
 
-abstract class Type implements TypeInterface, Calculation {
+/** Тип операнда */
+abstract class Type implements StringToPhp {
 
-    /** @var int|float|Money|DateTime|DateInterval|VariableStructure */
-    protected $value;
-
-    /**
-     * @return $this
-     */
-    public function calculate()
+    public function toPhp($code)
     {
-        return $this;
+        return $code;
     }
 
 }

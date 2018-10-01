@@ -3,16 +3,12 @@
 namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\Operation\OperationName;
-use Slov\Expression\Operation\OperationSign;
 
 /** Операция выражения в текстовом представлении */
 class TextOperation
 {
-    /** @var string тестовое представление операции */
+    /** @var string текстовое представление операции */
     protected $operationValue;
-
-    /** @var OperationSign знак операции */
-    protected $operationSign;
 
     /** @var OperationName название операции */
     protected $operationName;
@@ -35,24 +31,6 @@ class TextOperation
     public function setOperationValue(string $operationValue)
     {
         $this->operationValue = $operationValue;
-        return $this;
-    }
-
-    /**
-     * @return OperationSign знак операции
-     */
-    public function getOperationSign(): OperationSign
-    {
-        return $this->operationSign;
-    }
-
-    /**
-     * @param OperationSign $operationSign знак операции
-     * @return $this
-     */
-    public function setOperationSign(OperationSign $operationSign)
-    {
-        $this->operationSign = $operationSign;
         return $this;
     }
 
@@ -90,5 +68,26 @@ class TextOperation
     {
         $this->position = $position;
         return $this;
+    }
+
+    /**
+     * @param TextOperation $textOperation текстовая операция
+     * @return bool true - текущая операция больше чем сравниваемая
+     */
+    public function grater($textOperation)
+    {
+        $thisOperationPriority = $this->getOperationName()->getPriority();
+        $operationPriority = $textOperation->getOperationName()->getPriority();
+        $thisOperationPosition = $this->getPosition();
+        $operationPosition = $textOperation->getPosition();
+        if($thisOperationPriority === $operationPriority)
+        {
+            if($thisOperationPosition === $operationPosition)
+            {
+                return false;
+            }
+            return $thisOperationPosition > $operationPosition;
+        }
+        return $thisOperationPriority > $operationPriority;
     }
 }

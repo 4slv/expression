@@ -2,31 +2,60 @@
 
 namespace Slov\Expression\Operation;
 
-use Slov\Expression\Calculation;
-use Slov\Expression\Type\Type;
+use Slov\Expression\CodeAccessor;
+use Slov\Expression\StringToPhp;
 use Slov\Expression\Type\TypeName;
-use Slov\Money\Money;
 
 /** Операция с типами */
-abstract class Operation implements Calculation {
+abstract class Operation implements StringToPhp {
 
-    use OperationTrait;
+    use CodeAccessor;
 
-    /** @return OperationName название операции */
-    abstract public function getOperationName();
+    /** @var TypeName тип первого операнда */
+    protected $firstOperandTypeName;
+
+    /** @var TypeName тип второго операнда */
+    protected $secondOperandTypeName;
+
+    /**
+     * @return TypeName тип первого операнда
+     */
+    public function getFirstOperandTypeName(): TypeName
+    {
+        return $this->firstOperandTypeName;
+    }
+
+    /**
+     * @param TypeName $firstOperandTypeName тип первого операнда
+     * @return $this;
+     */
+    public function setFirstOperandTypeName(TypeName $firstOperandTypeName)
+    {
+        $this->firstOperandTypeName = $firstOperandTypeName;
+        return $this;
+    }
+
+    /**
+     * @return TypeName тип второго операнда
+     */
+    public function getSecondOperandTypeName(): TypeName
+    {
+        return $this->secondOperandTypeName;
+    }
+
+    /**
+     * @param TypeName $secondOperandTypeName тип второго операнда
+     * @return $this
+     */
+    public function setSecondOperandTypeName(TypeName $secondOperandTypeName)
+    {
+        $this->secondOperandTypeName = $secondOperandTypeName;
+        return $this;
+    }
+
+    /** @return string шаблон выражения на php */
+    abstract public function getPhpTemplate(): string;
 
     /** @return TypeName название типа */
     abstract protected function resolveReturnTypeName();
-
-    /** @return Type тип заменяющий отсутствующее значение */
-    abstract protected function createZero();
-
-    /**
-     * @param int|float|Money $firstOperandValue значение первого операнда
-     * @param int|float|Money $secondOperandValue значение второго операнда
-     * @return int|float|Money рассчётное значение результата операции
-     */
-    abstract protected function calculateValues($firstOperandValue, $secondOperandValue);
-
-
 }

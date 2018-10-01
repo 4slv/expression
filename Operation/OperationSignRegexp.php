@@ -3,7 +3,7 @@
 namespace Slov\Expression\Operation;
 
 use MabeEnum\Enum;
-use Slov\Expression\Type\TypeRegExp;
+use Slov\Expression\ExpressionException;
 
 /** Регулярное выражение операции */
 class OperationSignRegexp extends Enum
@@ -59,4 +59,22 @@ class OperationSignRegexp extends Enum
     const OR = '\|\|';
 
     const ASSIGN = '\$([a-zA-Z][\w\d]*)\s*\=(?!\=)';
+
+    /**
+     * @param string $operationStringValue строковое представление операции
+     * @return OperationName название операции
+     * @throws ExpressionException
+     */
+    public static function getOperationName($operationStringValue)
+    {
+        foreach(self::getConstants() as $operationKey => $operationRegExp)
+        {
+            if(preg_match('/^'. $operationRegExp. '$/', $operationStringValue))
+            {
+                $operationName = constant(OperationName::class. '::'. $operationKey);
+                return OperationName::byValue($operationName);
+            }
+        }
+        throw new ExpressionException('Unknown operation: "'. $operationStringValue. '"');
+    }
 }

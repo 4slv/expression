@@ -6,57 +6,56 @@ use Slov\Expression\Operation\Operation;
 use Slov\Expression\Type\Type;
 
 /** Выражение */
-class Expression implements Calculation
+class Expression implements StringToPhp
 {
-    /** @var Calculation первый операнд */
+    use CodeAccessor;
+
+    const FIRST_OPERAND = '%first_operand%';
+
+    const SECOND_OPERAND = '%second_operand%';
+
+    const OPERATION = '%operation%';
+
+    /** @var Operand|null первый операнд */
     private $firstOperand;
 
-    /** @var Calculation второй операнд */
+    /** @var Operand|null второй операнд */
     private $secondOperand;
 
     /** @var Operation операция */
     private $operation;
 
-    /** @var Type результат рассчёта первого операнда */
-    private $firstOperandResult;
-
-    /** @var Type результат рассчёта второго операнда */
-    private $secondOperandResult;
-
-    /** @var string текстовое описание выражения */
-    private $textDescription;
-
     /**
-     * @return Calculation первый операнд
+     * @return Operand|null первый операнд
      */
-    public function getFirstOperand(): Calculation
+    public function getFirstOperand(): ?Operand
     {
         return $this->firstOperand;
     }
 
     /**
-     * @param Calculation $firstOperand первый операнд
+     * @param Operand|null $firstOperand первый операнд
      * @return $this
      */
-    public function setFirstOperand(Calculation $firstOperand)
+    public function setFirstOperand(?Operand $firstOperand)
     {
         $this->firstOperand = $firstOperand;
         return $this;
     }
 
     /**
-     * @return Calculation второй операнд
+     * @return Operand|null второй операнд
      */
-    public function getSecondOperand(): Calculation
+    public function getSecondOperand(): ?Operand
     {
         return $this->secondOperand;
     }
 
     /**
-     * @param Calculation $secondOperand второй операнд
+     * @param Operand|null $secondOperand второй операнд
      * @return $this
      */
-    public function setSecondOperand(Calculation $secondOperand)
+    public function setSecondOperand(?Operand $secondOperand)
     {
         $this->secondOperand = $secondOperand;
         return $this;
@@ -80,74 +79,24 @@ class Expression implements Calculation
         return $this;
     }
 
-    /**
-     * @return Type результат рассчёта первого операнда
-     */
-    protected function getFirstOperandResult(): Type
+    public function toPhp($code)
     {
-        return $this->firstOperandResult;
-    }
+        $this->setCode($code);
+        $firstOperand = $this->getFirstOperand();
+        $secondOperand = $this->getSecondOperand();
+        $operation = $this->getOperation();
+        return str_replace(
+            [
+                self::FIRST_OPERAND,
+                self::OPERATION,
+                self::SECOND_OPERAND
+            ],
+            [
+                $firstOperand->toPhp($firstOperand->getCode()),
+                $operation->toPhp($operation->getCode()),
+                $secondOperand->toPhp($secondOperand->getCode())
+            ],
 
-    /**
-     * @param Type $firstOperandResult результат рассчёта первого операнда
-     */
-    protected function setFirstOperandResult(Type $firstOperandResult)
-    {
-        $this->firstOperandResult = $firstOperandResult;
-    }
-
-    /**
-     * @return Type результат рассчёта второго операнда
-     */
-    protected function getSecondOperandResult(): Type
-    {
-        return $this->secondOperandResult;
-    }
-
-    /**
-     * @param Type $secondOperandResult результат рассчёта второго операнда
-     */
-    protected function setSecondOperandResult(Type $secondOperandResult)
-    {
-        $this->secondOperandResult = $secondOperandResult;
-    }
-
-    /**
-     * @return string текстовое описание выражения
-     */
-    public function getTextDescription(): ?string
-    {
-        return $this->textDescription;
-    }
-
-    /**
-     * @param string $textDescription текстовое описание выражения
-     * @return $this
-     */
-    public function setTextDescription(?string $textDescription)
-    {
-        $this->textDescription = $textDescription;
-        return $this;
-    }
-
-    public function calculate()
-    {
-        $this->setFirstOperandResult($this->getFirstOperand()->calculate());
-        $this->setSecondOperandResult($this->getSecondOperand()->calculate());
-
-        try {
-            return $this
-                ->getOperation()
-                ->setFirstOperand($this->getFirstOperandResult())
-                ->setSecondOperand($this->getSecondOperandResult())
-                ->calculate();
-        } catch (CalculationException $exception)
-        {
-            throw new CalculationException(
-                $exception->getMessage().
-                "\n===\n".
-                $this->getTextDescription()
-            );
-        }
+        );
     }
 }

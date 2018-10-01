@@ -145,4 +145,23 @@ class OperationName extends Enum
                 return true;
         }
     }
+
+    /**
+     * @return string тип операции
+     */
+    public function getOperationType(){
+        switch ($this->getValue())
+        {
+            case self::FUNCTION:
+            case self::IF_ELSE:
+            case self::FOR:
+            case self::MIN:
+            case self::MAX:
+            case self::ASSIGN:
+                return OperationType::COMPLEX;
+            default:
+                return OperationType::SIMPLE;
+
+        }
+    }
 }
