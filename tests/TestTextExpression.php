@@ -26,6 +26,14 @@ class TestTextExpression extends TestCase
             ['12.25 / 12', 12.25 / 12],
             ['5.1 % 3.9', 2],
             ['2.1 ** 2' , 4.41],
+            # операции с деньгами
+            ['2$ + 1$', Money::create(300)],
+            ['2$ - 1$', Money::create(100)],
+            ['2$ * 3', Money::create(600)],
+            ['4$ / 2', Money::create(200)],
+            ['2$10 + 1$', Money::create(310)],
+            ['2$ - $90', Money::create(110)],
+            ['1$10 * 2.2', Money::create(242)],
         ];
     }
 
