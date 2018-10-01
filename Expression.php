@@ -3,7 +3,6 @@
 namespace Slov\Expression;
 
 use Slov\Expression\Operation\Operation;
-use Slov\Expression\Type\Type;
 
 /** Выражение */
 class Expression implements StringToPhp
@@ -24,6 +23,9 @@ class Expression implements StringToPhp
 
     /** @var Operation операция */
     private $operation;
+
+    /** @var string php код */
+    private $phpCode;
 
     /**
      * @return Operand|null первый операнд
@@ -79,24 +81,36 @@ class Expression implements StringToPhp
         return $this;
     }
 
-    public function toPhp($code)
+    /**
+     * @param string|null $code псевдо код
+     * @return string php код
+     * @throws ExpressionException
+     */
+    public function toPhp($code = null)
     {
-        $this->setCode($code);
-        $firstOperand = $this->getFirstOperand();
-        $secondOperand = $this->getSecondOperand();
-        $operation = $this->getOperation();
-        return str_replace(
-            [
-                self::FIRST_OPERAND,
-                self::OPERATION,
-                self::SECOND_OPERAND
-            ],
-            [
-                $firstOperand->toPhp($firstOperand->getCode()),
-                $operation->toPhp($operation->getCode()),
-                $secondOperand->toPhp($secondOperand->getCode())
-            ],
-
-        );
+        if(isset($code) || is_null($this->phpCode))
+        {
+            $this->setCode($code);
+            $firstOperand = $this->getFirstOperand();
+            $secondOperand = $this->getSecondOperand();
+            $operation = $this
+                ->getOperation()
+                ->setFirstOperandTypeName($firstOperand->getTypeName())
+                ->setSecondOperandTypeName($secondOperand->getTypeName());
+            $this->phpCode = str_replace(
+                [
+                    self::FIRST_OPERAND,
+                    self::OPERATION,
+                    self::SECOND_OPERAND
+                ],
+                [
+                    $firstOperand->toPhp($firstOperand->getCode()),
+                    $operation->toPhp($operation->getCode()),
+                    $secondOperand->toPhp($secondOperand->getCode())
+                ],
+                $operation->getPhpTemplate()
+            );
+        }
+        return $this->phpCode;
     }
 }

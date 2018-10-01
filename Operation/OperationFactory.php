@@ -2,6 +2,8 @@
 
 namespace Slov\Expression\Operation;
 
+use Slov\Expression\TextExpression\TextOperation;
+
 /** Фабрика операций */
 class OperationFactory
 {
@@ -32,17 +34,65 @@ class OperationFactory
         return new AddOperation();
     }
 
+    /**
+     * @return SubtractionOperation
+     */
+    public function createSubtractionOperation()
+    {
+        return new SubtractionOperation();
+    }
 
     /**
-     * @param OperationName $operationName
+     * @return DivisionOperation
+     */
+    public function createDivisionOperation()
+    {
+        return new DivisionOperation();
+    }
+
+    /**
+     * @return  MultiplyOperation
+     */
+    public function createMultiplyOperation()
+    {
+        return new MultiplyOperation();
+    }
+
+    /**
+     * @return ExponentiationOperation
+     */
+    public function createExponentiationOperation()
+    {
+        return new ExponentiationOperation();
+    }
+
+    /**
+     * @return RemainderOfDivisionOperation
+     */
+    public function createRemainderOfDivisionOperation()
+    {
+        return new RemainderOfDivisionOperation();
+    }
+
+    /**
+     * @param TextOperation $operationName
      * @return Operation
      */
-    public function create(OperationName $operationName)
+    public function create(TextOperation $operationName)
     {
-        switch($operationName->getValue()){
+        switch($operationName->getOperationName()->getValue()){
             case OperationName::ADD:
                 return $this->createAddOperation();
-
+            case OperationName::SUBTRACTION:
+                return $this->createSubtractionOperation();
+            case OperationName::MULTIPLY:
+                return $this->createMultiplyOperation();
+            case OperationName::DIVISION:
+                return $this->createDivisionOperation();
+            case OperationName::EXPONENTIATION:
+                return $this->createExponentiationOperation();
+            case OperationName::REMAINDER_OF_DIVISION:
+                return $this->createRemainderOfDivisionOperation();
         }
         return null;
     }

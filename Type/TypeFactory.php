@@ -32,6 +32,14 @@ class TypeFactory {
         return new IntType();
     }
 
+    /**
+     * @return FloatType
+     */
+    public function createFloat()
+    {
+        return new FloatType();
+    }
+
 
     /**
      * @param TypeName $typeName название типа
@@ -43,6 +51,8 @@ class TypeFactory {
         {
             case TypeName::INT:
                 return $this->createInt();
+            case TypeName::FLOAT:
+                return $this->createFloat();
         }
         return null;
     }

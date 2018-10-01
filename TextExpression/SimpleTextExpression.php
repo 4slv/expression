@@ -26,9 +26,6 @@ class SimpleTextExpression implements StringToPhp
         $this->phpCode = $this
             ->createSimpleTextExpressionToPhp()
             ->toPhp($code);
-        var_dump($this->phpCode);
-        die();
-
         return eval('return '. $this->phpCode. ';');
     }
 }

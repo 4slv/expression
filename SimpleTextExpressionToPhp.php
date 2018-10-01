@@ -3,12 +3,41 @@
 namespace Slov\Expression;
 
 use Slov\Expression\Operation\OperationSignRegexp;
+use Slov\Expression\TextExpression\ExpressionList;
 use Slov\Expression\TextExpression\TextOperation;
 use Slov\Expression\Operation\Operation;
+use Slov\Expression\Type\TypeName;
 
 /** Преобразователь псевдо-кода в php код */
 class SimpleTextExpressionToPhp
 {
+    use FactoryRepository;
+
+    /** @var ExpressionList список выражений */
+    protected $expressionList;
+
+    /**
+     * @return ExpressionList список выражений
+     */
+    public function getExpressionList()
+    {
+        if(is_null($this->expressionList))
+        {
+            $this->expressionList = new ExpressionList();
+        }
+        return $this->expressionList;
+    }
+
+    /**
+     * @param ExpressionList $expressionList список выражений
+     * @return $this
+     */
+    public function setExpressionList($expressionList)
+    {
+        $this->expressionList = $expressionList;
+        return $this;
+    }
+
 
     /**
      * @param string $code псевдо код
@@ -26,14 +55,14 @@ class SimpleTextExpressionToPhp
             );
             return $this->toPhp($replacedExpressionText);
         } else {
-            return $this
-                ->createOperandToPhp()
-                ->toPhp($code);
+            return $this->getExpressionList()->exists($code)
+                ? $this->getExpressionList()->get($code)->toPhp($code)
+                : $this->createOperandToPhp()->toPhp($code);
         }
     }
 
     /**
-     * @return Operand преобразователь операнда в php код
+     * @return Operand операнд
      */
     private function createOperandToPhp(): Operand
     {
@@ -179,23 +208,25 @@ class SimpleTextExpressionToPhp
      * @return Expression выражение
      * @throws ExpressionException
      */
-    protected function createExpressionFromOperationAndOperands(TextOperation $textOperation, $operandList)
+    private function createExpressionFromOperationAndOperands(TextOperation $textOperation, $operandList)
     {
         $operationPosition = $textOperation->getPosition();
         $operation = $textOperation->getOperationName();
         $firstOperandValue = $operation->leftOperandUsed() ? $operandList[$operationPosition] : '';
         $secondOperandValue = $operation->rightOperandUsed() ? $operandList[$operationPosition + 1] : '';
         $firstOperand = $this->createOperand()->setCode($firstOperandValue);
-        $secondOperand= $this->createOperand()->setCode($secondOperandValue);
-
-        $operation = $this->createOperation($textOperation);
+        $secondOperand = $this->createOperand()->setCode($secondOperandValue);
+        $operation = $this
+            ->createOperation($textOperation)
+            ->setFirstOperandTypeName($firstOperand->getTypeName())
+            ->setSecondOperandTypeName($secondOperand->getTypeName())
+            ->setCode($textOperation->getOperationValue());
 
         return $this
             ->createExpression()
             ->setOperation($operation)
             ->setFirstOperand($firstOperand)
-            ->setSecondOperand($secondOperand)
-            ->setTextDescription($firstOperandValue. " ". $textOperation->getOperationValue(). " ". $secondOperandValue);
+            ->setSecondOperand($secondOperand);
     }
 
     /**
@@ -206,4 +237,32 @@ class SimpleTextExpressionToPhp
         return new Operand();
     }
 
+    /**
+     * @param TextOperation $textOperation
+     * @return Operation
+     */
+    private function createOperation(TextOperation $textOperation)
+    {
+        return $this->getOperationFactory()->create($textOperation);
+    }
+
+    /**
+     * @return Expression выражение
+     */
+    protected function createExpression()
+    {
+        return new Expression();
+    }
+
+    /** Добавление выражения в список
+     * @param Expression $expression выражение
+     * @return string текстовая метка выражения
+     */
+    protected function appendExpression(Expression $expression)
+    {
+        $expressionNumber = $this->getExpressionList()->size();
+        $expressionName = TypeName::EXPRESSION . $expressionNumber;
+        $this->getExpressionList()->append($expressionName, $expression);
+        return $expressionName;
+    }
 }

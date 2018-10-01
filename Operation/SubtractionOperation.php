@@ -2,13 +2,9 @@
 
 namespace Slov\Expression\Operation;
 
-use Slov\Expression\Type\DateIntervalType;
-use Slov\Money\Money;
-use DateInterval;
-use DateTime;
 
-/** Операция сложения */
-class AddOperation extends Operation
+/** Операция вычитания */
+class SubtractionOperation extends Operation
 {
     use DigitOperationTrait;
 
@@ -21,15 +17,15 @@ class AddOperation extends Operation
             return $this->getTypeNameFactory()->createMoney();
         }
 
-        if($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval()){
+        if(
+            ($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval())
+            ||
+            ($firstOperandType->isDateTime() && $secondOperandType->isDateTime())
+        ){
             return $this->getTypeNameFactory()->createDateInterval();
         }
 
-        if(
-            ($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())
-            ||
-            ($firstOperandType->isDateInterval() && $secondOperandType->isDateTime())
-        ){
+        if($firstOperandType->isDateTime() && $secondOperandType->isDateInterval()){
             return $this->getTypeNameFactory()->createDateTime();
         }
 
@@ -50,5 +46,4 @@ class AddOperation extends Operation
             return $code;
         }
     }
-
 }

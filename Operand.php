@@ -6,11 +6,19 @@ use Slov\Expression\Type\TypeFactory;
 use Slov\Expression\Type\TypeRegExp;
 use Slov\Expression\Type\TypeName;
 
-/** Преобразование операнда к php коду */
+/** Операнд */
 class Operand implements StringToPhp
 {
     use CodeAccessor;
 
+    /** @var TypeName  */
+    protected $typeName;
+
+    /**
+     * @param string $code псевдо код
+     * @return string php код
+     * @throws ExpressionException
+     */
     public function toPhp($code)
     {
         $typeName = $this->getTypeName($code);
@@ -20,12 +28,12 @@ class Operand implements StringToPhp
     }
 
     /**
-     * @param string $code псевдо-код операнда
+     * @param string|null $code псевдо-код операнда
      * @return TypeName
      * @throws ExpressionException
      */
-    public function getTypeName($code)
+    public function getTypeName($code = null)
     {
-        return TypeRegExp::getTypeNameByStringValue($code);
+        return $this->typeName ?? TypeRegExp::getTypeNameByStringValue($code ?? $this->getCode());
     }
 }
