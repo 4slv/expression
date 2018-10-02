@@ -6,6 +6,8 @@ namespace Slov\Expression\tests;
 use PHPUnit\Framework\TestCase;
 use Slov\Expression\TextExpression\SimpleTextExpression;
 use Slov\Money\Money;
+use DateInterval;
+use DateTime;
 
 class TestTextExpression extends TestCase
 {
@@ -34,6 +36,36 @@ class TestTextExpression extends TestCase
             ['2$10 + 1$', Money::create(310)],
             ['2$ - $90', Money::create(110)],
             ['1$10 * 2.2', Money::create(242)],
+            # операции с датами
+            [
+                '2018.02.05.033333',
+                DateTime::createFromFormat('Y.m.d H:i:s.u', '2018.02.05 00:00:00.033333')
+            ],
+            [
+                '2018.02.05 22:30:23.033333',
+                DateTime::createFromFormat('Y.m.d H:i:s.u', '2018.02.05 22:30:23.033333')
+            ],
+            [
+                '2018.02.05 + 1 day',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2018.02.06 00:00:00')
+            ],
+            [
+                '2018.02.05 - 1 day',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2018.02.04 00:00:00')
+            ],
+            [
+                '2018.02.05 - 2018.02.04',
+                DateTime::createFromFormat('Y.m.d', '2018.02.04')
+                    ->diff(DateTime::createFromFormat('Y.m.d', '2018.02.05'))
+            ]/*,
+            ['3 days - 1 day', DateInterval::createFromDateString('+2 day')],
+            ['{days} (3 days - 1 day)', 2],
+            [
+                '{date} 2018.03.21 23:09:33',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2018.03.21 00:00:00')
+            ],
+            ['{days in year} 2018.03.21', 365],
+            ['{days in year} 2020.03.21', 366],*/
         ];
     }
 

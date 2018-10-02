@@ -5,7 +5,6 @@ namespace Slov\Expression\Operation;
 /** Операция возведения в степень */
 class ExponentiationOperation extends DigitOperation
 {
-
     public function resolveReturnTypeName()
     {
         return $this->resolveDigitReturnTypeName();
@@ -28,6 +27,6 @@ class ExponentiationOperation extends DigitOperation
 
     public function getPhpTemplate(): string
     {
-        return parent::getPhpTemplateDigit();
+        return parent::getPhpTemplatePrimitive();
     }
 }

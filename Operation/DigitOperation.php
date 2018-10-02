@@ -2,12 +2,10 @@
 
 namespace Slov\Expression\Operation;
 
-use Slov\Expression\Expression;
-
 /** Цифровая операция */
 abstract class DigitOperation extends Operation
 {
-    protected function resolveDigitReturnTypeName()
+    public function resolveDigitReturnTypeName()
     {
         if(
             $this->getFirstOperandTypeName()->isInt()
@@ -30,17 +28,5 @@ abstract class DigitOperation extends Operation
     public function toPhpDigit($code): string
     {
         return $code;
-    }
-
-    public function getPhpTemplateDigit(): string
-    {
-        return implode(
-            ' ',
-            [
-                Expression::FIRST_OPERAND,
-                Expression::OPERATION,
-                Expression::SECOND_OPERAND
-            ]
-        );
     }
 }

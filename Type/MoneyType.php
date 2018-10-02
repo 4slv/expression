@@ -8,14 +8,12 @@ use Slov\Money\Money;
 class MoneyType extends Type
 {
     const MONEY_CLASS = Money::class;
+    const MONEY_CREATE_FUNCTION = 'create';
 
     public function toPhp($code)
     {
-        preg_match('#'. TypeRegExp::MONEY. '#', $code, $match);
-        $moneyAmount =
-            (int)$match[1] * Money::getMajorCurrencyParts()
-            +
-            (int)$match[2];
-        return self::MONEY_CLASS. '('. $moneyAmount. ')';
+        list($major, $minor) = explode('$', $code);
+        $moneyAmount = (int)$major * Money::getMajorCurrencyParts() + (int)$minor;
+        return self::MONEY_CLASS. '::'. self::MONEY_CREATE_FUNCTION. '('. $moneyAmount. ')';
     }
 }

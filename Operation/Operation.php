@@ -3,6 +3,7 @@
 namespace Slov\Expression\Operation;
 
 use Slov\Expression\CodeAccessor;
+use Slov\Expression\Expression;
 use Slov\Expression\FactoryRepository;
 use Slov\Expression\StringToPhp;
 use Slov\Expression\Type\TypeName;
@@ -18,6 +19,49 @@ abstract class Operation implements StringToPhp {
 
     /** @var TypeName тип второго операнда */
     protected $secondOperandTypeName;
+
+    /**
+     * @return TypeName возвращаемый тип
+     */
+    abstract public function resolveReturnTypeName();
+
+    /**
+     * @return string шаблон выражения с операцией
+     */
+    abstract public function getPhpTemplate(): string;
+
+    protected function getPhpTemplatePrimitive(): string
+    {
+        return implode(
+            ' ',
+            [
+                Expression::FIRST_OPERAND,
+                Expression::OPERATION,
+                Expression::SECOND_OPERAND
+            ]
+        );
+    }
+
+    /**
+     * @return string шаблон операции с объектами
+     */
+    protected function getPhpTemplateObject()
+    {
+        return
+            Expression::FIRST_OPERAND.
+            '->'. Expression::OPERATION.
+            '('. Expression::SECOND_OPERAND. ')';
+    }
+
+    /**
+     * @return string инвертированный шаблон операции с объектами
+     */
+    protected function getPhpTemplateObjectInverse(): string
+    {
+        return Expression::SECOND_OPERAND.
+            '->'. Expression::OPERATION.
+            '('.Expression::FIRST_OPERAND . ')';
+    }
 
     /**
      * @return TypeName тип первого операнда

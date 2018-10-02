@@ -10,8 +10,7 @@ class DivisionOperation extends DigitOperation
 
     const MONEY_OPERATION = 'div';
 
-
-    protected function resolveReturnTypeName()
+    public function resolveReturnTypeName()
     {
         if(
             $this->getFirstOperandTypeName()->isMoney()
@@ -43,6 +42,11 @@ class DivisionOperation extends DigitOperation
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
             return $this->toPhpDigit($code);
         }
+        if(
+            $firstOperandType->isMoney() && $secondOperandType->isDigit()
+        ){
+            return $this->toPhpMoney($code);
+        }
     }
 
     public function getPhpTemplate(): string
@@ -51,10 +55,10 @@ class DivisionOperation extends DigitOperation
         $secondOperandType = $this->getSecondOperandTypeName();
 
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
-            return $this->getPhpTemplateDigit();
+            return $this->getPhpTemplatePrimitive();
         }
         if($firstOperandType->isMoney() && $secondOperandType->isDigit()){
-            return $this->getPhpTemplateMoney();
+            return $this->getPhpTemplateObject();
         }
     }
 }

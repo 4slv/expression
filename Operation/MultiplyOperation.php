@@ -9,7 +9,7 @@ class MultiplyOperation extends DigitOperation
 
     const MONEY_OPERATION = 'mul';
 
-    protected function resolveReturnTypeName()
+    public function resolveReturnTypeName()
     {
         if(
             ($this->getFirstOperandTypeName()->isMoney() && $this->getSecondOperandTypeName()->isDigit())
@@ -34,7 +34,11 @@ class MultiplyOperation extends DigitOperation
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
             return $this->toPhpDigit($code);
         }
-        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
+        if(
+            $firstOperandType->isMoney() && $secondOperandType->isDigit()
+            ||
+            $firstOperandType->isDigit() && $secondOperandType->isMoney()
+        ){
             return $this->toPhpMoney($code);
         }
     }
@@ -45,13 +49,13 @@ class MultiplyOperation extends DigitOperation
         $secondOperandType = $this->getSecondOperandTypeName();
 
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
-            return $this->getPhpTemplateDigit();
+            return $this->getPhpTemplatePrimitive();
         }
         if($firstOperandType->isMoney() && $secondOperandType->isDigit()){
-            return $this->getPhpTemplateMoney();
+            return $this->getPhpTemplateObject();
         }
         if($firstOperandType->isDigit() && $secondOperandType->isMoney()){
-            return $this->getPhpTemplateMoneyInverse();
+            return $this->getPhpTemplateObjectInverse();
         }
     }
 }

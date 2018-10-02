@@ -6,11 +6,17 @@ namespace Slov\Expression\Operation;
 /** Операция вычитания */
 class SubtractionOperation extends DigitOperation
 {
-    use MoneyOperationTrait;
+    use MoneyOperationTrait,
+        DateIntervalOperationTrait,
+        DatetimeOperationTrait;
 
     const MONEY_OPERATION = 'sub';
 
-    protected function resolveReturnTypeName()
+    const DATE_INTERVAL_OPERATION = 'sub';
+
+    const DATETIME_OPERATION = 'diff';
+
+    public function resolveReturnTypeName()
     {
         $firstOperandType = $this->getFirstOperandTypeName();
         $secondOperandType = $this->getSecondOperandTypeName();
@@ -49,6 +55,12 @@ class SubtractionOperation extends DigitOperation
         if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
             return $this->toPhpMoney($code);
         }
+        if($firstOperandType->isDateTime() && $secondOperandType->isDateInterval()){
+            return $this->toPhpDateInterval($code);
+        }
+        if($firstOperandType->isDateTime() && $secondOperandType->isDateTime()){
+            return $this->toPhpDatetime($code);
+        }
     }
 
     public function getPhpTemplate(): string
@@ -57,10 +69,18 @@ class SubtractionOperation extends DigitOperation
         $secondOperandType = $this->getSecondOperandTypeName();
 
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
-            return $this->getPhpTemplateDigit();
+            return $this->getPhpTemplatePrimitive();
         }
-        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
-            return $this->getPhpTemplateMoney();
+        if(
+            ($firstOperandType->isMoney() && $secondOperandType->isMoney())
+            ||
+            ($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())
+        ){
+            return $this->getPhpTemplateObject();
+        }
+        if($firstOperandType->isDateTime() && $firstOperandType->isDateTime())
+        {
+            return $this->getPhpTemplateObjectInverse();
         }
     }
 }

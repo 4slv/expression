@@ -6,11 +6,14 @@ namespace Slov\Expression\Operation;
 /** Операция сложения */
 class AddOperation extends DigitOperation
 {
-    use MoneyOperationTrait;
+    use MoneyOperationTrait,
+        DateIntervalOperationTrait;
 
     const MONEY_OPERATION = 'add';
 
-    protected function resolveReturnTypeName()
+    const DATE_INTERVAL_OPERATION = 'add';
+
+    public function resolveReturnTypeName()
     {
         $firstOperandType = $this->getFirstOperandTypeName();
         $secondOperandType = $this->getSecondOperandTypeName();
@@ -23,11 +26,7 @@ class AddOperation extends DigitOperation
             return $this->getTypeNameFactory()->createDateInterval();
         }
 
-        if(
-            ($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())
-            ||
-            ($firstOperandType->isDateInterval() && $secondOperandType->isDateTime())
-        ){
+        if(($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())){
             return $this->getTypeNameFactory()->createDateTime();
         }
 
@@ -45,6 +44,9 @@ class AddOperation extends DigitOperation
         if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
             return $this->toPhpMoney($code);
         }
+        if(($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())){
+            return $this->toPhpDateInterval($code);
+        }
     }
 
     public function getPhpTemplate(): string
@@ -53,10 +55,13 @@ class AddOperation extends DigitOperation
         $secondOperandType = $this->getSecondOperandTypeName();
 
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
-            return $this->getPhpTemplateDigit();
+            return $this->getPhpTemplatePrimitive();
         }
         if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
-            return $this->getPhpTemplateMoney();
+            return $this->getPhpTemplateObject();
+        }
+        if(($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())){
+            return $this->getPhpTemplateObject();
         }
     }
 
