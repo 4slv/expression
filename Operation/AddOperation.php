@@ -2,15 +2,13 @@
 
 namespace Slov\Expression\Operation;
 
-use Slov\Expression\Type\DateIntervalType;
-use Slov\Money\Money;
-use DateInterval;
-use DateTime;
 
 /** Операция сложения */
-class AddOperation extends Operation
+class AddOperation extends DigitOperation
 {
-    use DigitOperationTrait;
+    use MoneyOperationTrait;
+
+    const MONEY_OPERATION = 'add';
 
     protected function resolveReturnTypeName()
     {
@@ -36,18 +34,29 @@ class AddOperation extends Operation
         return $this->resolveDigitReturnTypeName();
     }
 
-    /**
-     * @param string $code псевдо-код операции
-     * @return string php-код операции
-     */
-    public function toPhp($code)
+    public function toPhp($code): string
     {
-        if(
-            $this->getFirstOperandTypeName()->isDigit()
-            &&
-            $this->getSecondOperandTypeName()->isDigit()
-        ){
-            return $code;
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+
+        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
+            return $this->toPhpDigit($code);
+        }
+        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
+            return $this->toPhpMoney($code);
+        }
+    }
+
+    public function getPhpTemplate(): string
+    {
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+
+        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
+            return $this->getPhpTemplateDigit();
+        }
+        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
+            return $this->getPhpTemplateMoney();
         }
     }
 

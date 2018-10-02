@@ -3,11 +3,12 @@
 namespace Slov\Expression\Operation;
 
 /** Операция возведения в степень */
-class ExponentiationOperation extends Operation
+class ExponentiationOperation extends DigitOperation
 {
-    use DigitOperationTrait
+
+    public function resolveReturnTypeName()
     {
-        DigitOperationTrait::resolveDigitReturnTypeName as resolveReturnTypeName;
+        return $this->resolveDigitReturnTypeName();
     }
 
     /**
@@ -21,7 +22,12 @@ class ExponentiationOperation extends Operation
             &&
             $this->getSecondOperandTypeName()->isDigit()
         ){
-            return $code;
+            return $this->toPhpDigit($code);
         }
+    }
+
+    public function getPhpTemplate(): string
+    {
+        return parent::getPhpTemplateDigit();
     }
 }

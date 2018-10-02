@@ -3,17 +3,11 @@
 namespace Slov\Expression\Operation;
 
 /** Операция умножения */
-class MultiplyOperation extends Operation
+class MultiplyOperation extends DigitOperation
 {
-    use DigitOperationTrait;
+    use MoneyOperationTrait;
 
-    /**
-     * @return OperationName
-     */
-    public function getOperationName()
-    {
-        return OperationName::byValue(OperationName::MULTIPLY);
-    }
+    const MONEY_OPERATION = 'mul';
 
     protected function resolveReturnTypeName()
     {
@@ -30,16 +24,34 @@ class MultiplyOperation extends Operation
 
     /**
      * @param string $code псевдо-код операции
-     * @return string php-код операции
+     * @return string|null php-код операции
      */
-    public function toPhp($code)
+    public function toPhp($code): string
     {
-        if(
-            $this->getFirstOperandTypeName()->isDigit()
-            &&
-            $this->getSecondOperandTypeName()->isDigit()
-        ){
-            return $code;
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+
+        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
+            return $this->toPhpDigit($code);
+        }
+        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
+            return $this->toPhpMoney($code);
+        }
+    }
+
+    public function getPhpTemplate(): string
+    {
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+
+        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
+            return $this->getPhpTemplateDigit();
+        }
+        if($firstOperandType->isMoney() && $secondOperandType->isDigit()){
+            return $this->getPhpTemplateMoney();
+        }
+        if($firstOperandType->isDigit() && $secondOperandType->isMoney()){
+            return $this->getPhpTemplateMoneyInverse();
         }
     }
 }

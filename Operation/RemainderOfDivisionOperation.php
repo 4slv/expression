@@ -4,9 +4,8 @@ namespace Slov\Expression\Operation;
 
 
 /** Остаток от деления */
-class RemainderOfDivisionOperation extends Operation
+class RemainderOfDivisionOperation extends DigitOperation
 {
-    use DigitOperationTrait;
 
     protected function resolveReturnTypeName()
     {
@@ -31,7 +30,12 @@ class RemainderOfDivisionOperation extends Operation
             &&
             $this->getSecondOperandTypeName()->isDigit()
         ){
-            return $code;
+            return $this->toPhpDigit($code);
         }
+    }
+
+    public function getPhpTemplate(): string
+    {
+        return parent::getPhpTemplateDigit();
     }
 }

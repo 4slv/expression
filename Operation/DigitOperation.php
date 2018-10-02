@@ -4,11 +4,9 @@ namespace Slov\Expression\Operation;
 
 use Slov\Expression\Expression;
 
-/** Операция с числами */
-trait DigitOperationTrait
+/** Цифровая операция */
+abstract class DigitOperation extends Operation
 {
-    use OperationTrait;
-
     protected function resolveDigitReturnTypeName()
     {
         if(
@@ -29,24 +27,20 @@ trait DigitOperationTrait
         return null;
     }
 
-    public function getPhpTemplate(): string
+    public function toPhpDigit($code): string
     {
-        if(
-            $this->getFirstOperandTypeName()->isDigit()
-            &&
-            $this->getSecondOperandTypeName()->isDigit()
-        ){
-
-                return implode(
-                    ' ',
-                    [
-                        Expression::FIRST_OPERAND,
-                        Expression::OPERATION,
-                        Expression::SECOND_OPERAND
-                    ]
-                );
-        }
-        return null;
+        return $code;
     }
 
+    public function getPhpTemplateDigit(): string
+    {
+        return implode(
+            ' ',
+            [
+                Expression::FIRST_OPERAND,
+                Expression::OPERATION,
+                Expression::SECOND_OPERAND
+            ]
+        );
+    }
 }

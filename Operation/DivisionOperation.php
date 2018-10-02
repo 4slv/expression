@@ -2,18 +2,14 @@
 
 namespace Slov\Expression\Operation;
 
-use Slov\Expression\CalculationException;
 
 /** Операция деления */
-class DivisionOperation extends Operation
+class DivisionOperation extends DigitOperation
 {
+    use MoneyOperationTrait;
 
-    use DigitOperationTrait;
+    const MONEY_OPERATION = 'div';
 
-    public function getOperationName()
-    {
-        return OperationName::byValue(OperationName::DIVISION);
-    }
 
     protected function resolveReturnTypeName()
     {
@@ -35,19 +31,30 @@ class DivisionOperation extends Operation
         return null;
     }
 
-
     /**
      * @param string $code псевдо-код операции
      * @return string php-код операции
      */
     public function toPhp($code)
     {
-        if(
-            $this->getFirstOperandTypeName()->isDigit()
-            &&
-            $this->getSecondOperandTypeName()->isDigit()
-        ){
-            return $code;
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+
+        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
+            return $this->toPhpDigit($code);
+        }
+    }
+
+    public function getPhpTemplate(): string
+    {
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+
+        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
+            return $this->getPhpTemplateDigit();
+        }
+        if($firstOperandType->isMoney() && $secondOperandType->isDigit()){
+            return $this->getPhpTemplateMoney();
         }
     }
 }

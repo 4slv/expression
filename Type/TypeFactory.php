@@ -40,6 +40,13 @@ class TypeFactory {
         return new FloatType();
     }
 
+    /**
+     * @return MoneyType
+     */
+    public function createMoney()
+    {
+        return new MoneyType();
+    }
 
     /**
      * @param TypeName $typeName название типа
@@ -53,6 +60,8 @@ class TypeFactory {
                 return $this->createInt();
             case TypeName::FLOAT:
                 return $this->createFloat();
+            case TypeName::MONEY:
+                return $this->createMoney();
         }
         return null;
     }

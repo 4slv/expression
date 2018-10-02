@@ -4,9 +4,11 @@ namespace Slov\Expression\Operation;
 
 
 /** Операция вычитания */
-class SubtractionOperation extends Operation
+class SubtractionOperation extends DigitOperation
 {
-    use DigitOperationTrait;
+    use MoneyOperationTrait;
+
+    const MONEY_OPERATION = 'sub';
 
     protected function resolveReturnTypeName()
     {
@@ -34,16 +36,31 @@ class SubtractionOperation extends Operation
 
     /**
      * @param string $code псевдо-код операции
-     * @return string php-код операции
+     * @return string|null php-код операции
      */
-    public function toPhp($code)
+    public function toPhp($code): string
     {
-        if(
-            $this->getFirstOperandTypeName()->isDigit()
-            &&
-            $this->getSecondOperandTypeName()->isDigit()
-        ){
-            return $code;
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+
+        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
+            return $this->toPhpDigit($code);
+        }
+        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
+            return $this->toPhpMoney($code);
+        }
+    }
+
+    public function getPhpTemplate(): string
+    {
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+
+        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
+            return $this->getPhpTemplateDigit();
+        }
+        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
+            return $this->getPhpTemplateMoney();
         }
     }
 }
