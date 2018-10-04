@@ -99,5 +99,13 @@ class TypeName extends Enum
     {
         return $this->getValue() === self::VARIABLE;
     }
+
+    /**
+     * @return bool true - тип выражение
+     */
+    public function isExpression()
+    {
+        return $this->getValue() === self::EXPRESSION;
+    }
 }
 

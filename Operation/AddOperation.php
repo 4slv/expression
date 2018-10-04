@@ -6,9 +6,7 @@ namespace Slov\Expression\Operation;
 /** Операция сложения */
 class AddOperation extends DigitOperation
 {
-    use MoneyOperationTrait,
-        DateIntervalOperationTrait,
-        DateOperationTrait;
+    use DateOperationTrait;
 
     const MONEY_OPERATION = 'add';
 
@@ -44,7 +42,7 @@ class AddOperation extends DigitOperation
             ||
             ($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval())
         ){
-            return $code;
+            return $this->toPhpSameCode($code);
         }
         if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
             return $this->toPhpMoney($code);

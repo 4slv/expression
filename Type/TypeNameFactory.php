@@ -78,4 +78,12 @@ class TypeNameFactory
     {
         return TypeName::byValue(TypeName::BOOLEAN);
     }
+
+    /**
+     * @return TypeName название типа: нулевой тип
+     */
+    public function createNull()
+    {
+        return TypeName::byValue(TypeName::NULL);
+    }
 }

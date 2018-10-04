@@ -21,8 +21,9 @@ class ExponentiationOperation extends DigitOperation
             &&
             $this->getSecondOperandTypeName()->isDigit()
         ){
-            return $code;
+            return $this->toPhpSameCode($code);
         }
+        return null;
     }
 
     public function getPhpTemplate(): string

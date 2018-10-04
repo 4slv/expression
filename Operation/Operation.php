@@ -3,22 +3,25 @@
 namespace Slov\Expression\Operation;
 
 use Slov\Expression\CodeAccessor;
-use Slov\Expression\Expression;
 use Slov\Expression\FactoryRepository;
+use Slov\Expression\Operand;
 use Slov\Expression\StringToPhp;
 use Slov\Expression\Type\TypeName;
+use Slov\Expression\ExpressionException;
 
 /** Операция с типами */
 abstract class Operation implements StringToPhp {
 
-    use CodeAccessor;
-    use FactoryRepository;
+    use CodeAccessor,
+        FactoryRepository,
+        OperationPhpTemplateTrait,
+        OperationToPhpTrait;
 
-    /** @var TypeName тип первого операнда */
-    protected $firstOperandTypeName;
+    /** @var Operand первый операнд */
+    protected $firstOperand;
 
-    /** @var TypeName тип второго операнда */
-    protected $secondOperandTypeName;
+    /** @var Operand второй операнд */
+    protected $secondOperand;
 
     /**
      * @return TypeName возвращаемый тип
@@ -30,42 +33,20 @@ abstract class Operation implements StringToPhp {
      */
     abstract public function getPhpTemplate(): string;
 
-    public function toCode($code): string
+    /**
+     * @return Operand первый операнд
+     */
+    public function getFirstOperand(): Operand
     {
-        return $code;
-    }
-
-    protected function getPhpTemplatePrimitive(): string
-    {
-        return implode(
-            ' ',
-            [
-                Expression::FIRST_OPERAND,
-                Expression::OPERATION,
-                Expression::SECOND_OPERAND
-            ]
-        );
+        return $this->firstOperand;
     }
 
     /**
-     * @return string шаблон операции с объектами
+     * @return Operand второй операнд
      */
-    protected function getPhpTemplateObject()
+    public function getSecondOperand(): Operand
     {
-        return
-            Expression::FIRST_OPERAND.
-            '->'. Expression::OPERATION.
-            '('. Expression::SECOND_OPERAND. ')';
-    }
-
-    /**
-     * @return string инвертированный шаблон операции с объектами
-     */
-    protected function getPhpTemplateObjectInverse(): string
-    {
-        return Expression::SECOND_OPERAND.
-            '->'. Expression::OPERATION.
-            '('.Expression::FIRST_OPERAND . ')';
+        return $this->secondOperand;
     }
 
     /**
@@ -73,16 +54,16 @@ abstract class Operation implements StringToPhp {
      */
     public function getFirstOperandTypeName(): TypeName
     {
-        return $this->firstOperandTypeName;
+        return $this->getFirstOperand()->getTypeName();
     }
 
     /**
-     * @param TypeName $firstOperandTypeName тип первого операнда
+     * @param Operand $firstOperand первый операнд
      * @return $this;
      */
-    public function setFirstOperandTypeName(TypeName $firstOperandTypeName)
+    public function setFirstOperand(Operand $firstOperand)
     {
-        $this->firstOperandTypeName = $firstOperandTypeName;
+        $this->firstOperand = $firstOperand;
         return $this;
     }
 
@@ -91,16 +72,16 @@ abstract class Operation implements StringToPhp {
      */
     public function getSecondOperandTypeName(): TypeName
     {
-        return $this->secondOperandTypeName;
+        return $this->getSecondOperand()->getTypeName();
     }
 
     /**
-     * @param TypeName $secondOperandTypeName тип второго операнда
+     * @param Operand $secondOperand второй операнд
      * @return $this
      */
-    public function setSecondOperandTypeName(TypeName $secondOperandTypeName)
+    public function setSecondOperand(Operand $secondOperand)
     {
-        $this->secondOperandTypeName = $secondOperandTypeName;
+        $this->secondOperand = $secondOperand;
         return $this;
     }
 }

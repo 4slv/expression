@@ -5,8 +5,6 @@ namespace Slov\Expression\Operation;
 /** Операция умножения */
 class MultiplyOperation extends DigitOperation
 {
-    use MoneyOperationTrait;
-
     const MONEY_OPERATION = 'mul';
 
     public function resolveReturnTypeName()
@@ -32,7 +30,7 @@ class MultiplyOperation extends DigitOperation
         $secondOperandType = $this->getSecondOperandTypeName();
 
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
-            return $code;
+            return $this->toPhpSameCode($code);
         }
         if(
             $firstOperandType->isMoney() && $secondOperandType->isDigit()

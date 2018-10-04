@@ -6,8 +6,6 @@ namespace Slov\Expression\Operation;
 /** Операция деления */
 class DivisionOperation extends DigitOperation
 {
-    use MoneyOperationTrait;
-
     const MONEY_OPERATION = 'div';
 
     public function resolveReturnTypeName()
@@ -40,7 +38,7 @@ class DivisionOperation extends DigitOperation
         $secondOperandType = $this->getSecondOperandTypeName();
 
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
-            return $code;
+            return $this->toPhpSameCode($code);
         }
         if(
             $firstOperandType->isMoney() && $secondOperandType->isDigit()

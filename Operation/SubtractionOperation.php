@@ -6,10 +6,7 @@ namespace Slov\Expression\Operation;
 /** Операция вычитания */
 class SubtractionOperation extends DigitOperation
 {
-    use MoneyOperationTrait,
-        DateIntervalOperationTrait,
-        DatetimeOperationTrait,
-        DateOperationTrait;
+    use DateOperationTrait;
 
     const MONEY_OPERATION = 'sub';
 
@@ -55,7 +52,7 @@ class SubtractionOperation extends DigitOperation
             ||
             ($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval())
         ){
-            return $code;
+            return $this->toPhpSameCode($code);
         }
         if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
             return $this->toPhpMoney($code);

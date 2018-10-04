@@ -75,6 +75,22 @@ class OperationFactory
     }
 
     /**
+     * @return DateOperation
+     */
+    public function createDateOperation()
+    {
+        return new DateOperation();
+    }
+
+    /**
+     * @return DaysInYearOperation
+     */
+    public function createDaysInYearOperation()
+    {
+        return new DaysInYearOperation();
+    }
+
+    /**
      * @param TextOperation $operationName
      * @return Operation
      */
@@ -93,6 +109,10 @@ class OperationFactory
                 return $this->createExponentiationOperation();
             case OperationName::REMAINDER_OF_DIVISION:
                 return $this->createRemainderOfDivisionOperation();
+            case OperationName::DATE:
+                return $this->createDateOperation();
+            case OperationName::DAYS_IN_YEAR:
+                return $this->createDaysInYearOperation();
         }
         return null;
     }

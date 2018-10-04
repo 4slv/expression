@@ -95,8 +95,8 @@ class Expression implements StringToPhp
             $secondOperand = $this->getSecondOperand();
             $operation = $this
                 ->getOperation()
-                ->setFirstOperandTypeName($firstOperand->getTypeName())
-                ->setSecondOperandTypeName($secondOperand->getTypeName());
+                ->setFirstOperand($firstOperand)
+                ->setSecondOperand($secondOperand);
             $this->phpCode = str_replace(
                 [
                     self::FIRST_OPERAND,

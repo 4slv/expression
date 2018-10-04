@@ -41,6 +41,14 @@ class TypeFactory {
     }
 
     /**
+     * @return NullType
+     */
+    public function createNull()
+    {
+        return new NullType();
+    }
+
+    /**
      * @return MoneyType
      */
     public function createMoney()
@@ -65,6 +73,14 @@ class TypeFactory {
     }
 
     /**
+     * @return ExpressionType
+     */
+    public function createExpression()
+    {
+        return new ExpressionType();
+    }
+
+    /**
      * @param TypeName $typeName название типа
      * @return Type
      */
@@ -76,12 +92,16 @@ class TypeFactory {
                 return $this->createInt();
             case TypeName::FLOAT:
                 return $this->createFloat();
+            case TypeName::NULL:
+                return $this->createNull();
             case TypeName::MONEY:
                 return $this->createMoney();
             case TypeName::DATE_TIME:
                 return $this->createDateTime();
             case TypeName::DATE_INTERVAL:
                 return $this->createDateInterval();
+            case TypeName::EXPRESSION:
+                return $this->createExpression();
         }
         return null;
     }

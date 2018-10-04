@@ -38,7 +38,6 @@ class SimpleTextExpressionToPhp
         return $this;
     }
 
-
     /**
      * @param string $code псевдо код
      * @return string php-код
@@ -214,8 +213,14 @@ class SimpleTextExpressionToPhp
         $operation = $textOperation->getOperationName();
         $firstOperandValue = $operation->leftOperandUsed() ? $operandList[$operationPosition] : '';
         $secondOperandValue = $operation->rightOperandUsed() ? $operandList[$operationPosition + 1] : '';
-        $firstOperand = $this->createOperand()->setCode($firstOperandValue);
-        $secondOperand = $this->createOperand()->setCode($secondOperandValue);
+        $firstOperand = $this
+            ->createOperand()
+            ->setCode($firstOperandValue)
+            ->setExpressionList($this->getExpressionList());
+        $secondOperand = $this
+            ->createOperand()
+            ->setCode($secondOperandValue)
+            ->setExpressionList($this->getExpressionList());
         $operation = $this
             ->createOperation($textOperation)
             ->setFirstOperandTypeName($firstOperand->getTypeName())
