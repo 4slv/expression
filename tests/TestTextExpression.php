@@ -57,15 +57,15 @@ class TestTextExpression extends TestCase
                 '2018.02.05 - 2018.02.04',
                 DateTime::createFromFormat('Y.m.d', '2018.02.04')
                     ->diff(DateTime::createFromFormat('Y.m.d', '2018.02.05'))
-            ]/*,
+            ],
             ['3 days - 1 day', DateInterval::createFromDateString('+2 day')],
-            ['{days} (3 days - 1 day)', 2],
+            //['{days} (3 days - 1 day)', 2],
             [
                 '{date} 2018.03.21 23:09:33',
                 DateTime::createFromFormat('Y.m.d H:i:s', '2018.03.21 00:00:00')
             ],
             ['{days in year} 2018.03.21', 365],
-            ['{days in year} 2020.03.21', 366],*/
+            ['{days in year} 2020.03.21', 366],
         ];
     }
 

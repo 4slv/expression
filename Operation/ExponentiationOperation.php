@@ -21,7 +21,7 @@ class ExponentiationOperation extends DigitOperation
             &&
             $this->getSecondOperandTypeName()->isDigit()
         ){
-            return $this->toPhpDigit($code);
+            return $code;
         }
     }
 

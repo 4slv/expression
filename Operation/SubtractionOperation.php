@@ -8,7 +8,8 @@ class SubtractionOperation extends DigitOperation
 {
     use MoneyOperationTrait,
         DateIntervalOperationTrait,
-        DatetimeOperationTrait;
+        DatetimeOperationTrait,
+        DateOperationTrait;
 
     const MONEY_OPERATION = 'sub';
 
@@ -49,8 +50,12 @@ class SubtractionOperation extends DigitOperation
         $firstOperandType = $this->getFirstOperandTypeName();
         $secondOperandType = $this->getSecondOperandTypeName();
 
-        if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
-            return $this->toPhpDigit($code);
+        if(
+            ($firstOperandType->isDigit() && $secondOperandType->isDigit())
+            ||
+            ($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval())
+        ){
+            return $code;
         }
         if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
             return $this->toPhpMoney($code);
@@ -71,16 +76,18 @@ class SubtractionOperation extends DigitOperation
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
             return $this->getPhpTemplatePrimitive();
         }
-        if(
-            ($firstOperandType->isMoney() && $secondOperandType->isMoney())
-            ||
-            ($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())
-        ){
+        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
             return $this->getPhpTemplateObject();
         }
-        if($firstOperandType->isDateTime() && $firstOperandType->isDateTime())
+        if($firstOperandType->isDateTime() && $secondOperandType->isDateTime())
         {
             return $this->getPhpTemplateObjectInverse();
+        }
+        if(($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())){
+            return $this->getPhpTemplateDateOperationInterval();
+        }
+        if($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval()){
+            return $this->getPhpTemplateIntervalOperationInterval();
         }
     }
 }

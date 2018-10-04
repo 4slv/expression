@@ -30,6 +30,11 @@ abstract class Operation implements StringToPhp {
      */
     abstract public function getPhpTemplate(): string;
 
+    public function toCode($code): string
+    {
+        return $code;
+    }
+
     protected function getPhpTemplatePrimitive(): string
     {
         return implode(

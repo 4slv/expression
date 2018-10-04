@@ -32,7 +32,7 @@ class MultiplyOperation extends DigitOperation
         $secondOperandType = $this->getSecondOperandTypeName();
 
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
-            return $this->toPhpDigit($code);
+            return $code;
         }
         if(
             $firstOperandType->isMoney() && $secondOperandType->isDigit()

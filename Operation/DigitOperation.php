@@ -24,9 +24,4 @@ abstract class DigitOperation extends Operation
         }
         return null;
     }
-
-    public function toPhpDigit($code): string
-    {
-        return $code;
-    }
 }

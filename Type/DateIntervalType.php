@@ -27,10 +27,7 @@ class DateIntervalType extends Type
             'days' => 'day'
         ];
         $periodName = $periodTypeToName[$periodType];
-        return self::DATE_INTERVAL_CLASS.
-            '::'.
-            self::DATE_INTERVAL_CREATE_FUNCTION.
-            "('$periodQuantity $periodName')";
+        return "$periodQuantity $periodName";
     }
 
 }
