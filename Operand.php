@@ -10,7 +10,7 @@ use Slov\Expression\Type\TypeRegExp;
 use Slov\Expression\Type\TypeName;
 
 /** Операнд */
-class Operand implements StringToPhp
+class Operand implements CodeToPhp
 {
     use CodeAccessor;
 
@@ -62,7 +62,7 @@ class Operand implements StringToPhp
     public function getTypeName($code = null)
     {
         try{
-        return $this->typeName ?? TypeRegExp::getTypeNameByStringValue($code ?? $this->getCode());
+            return $this->typeName ?? TypeRegExp::getTypeNameByStringValue($code ?? $this->getCode());
         } catch (ExpressionException $exception){
             return TypeNameFactory::getInstance()->createNull();
         }

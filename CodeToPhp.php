@@ -3,7 +3,7 @@
 namespace Slov\Expression;
 
 /** Преобразователь псевдо-кода в php код */
-interface StringToPhp
+interface CodeToPhp
 {
     /**
      * @param string $code пседо-код

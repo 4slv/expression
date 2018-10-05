@@ -4,7 +4,8 @@ namespace Slov\Expression\tests;
 
 
 use PHPUnit\Framework\TestCase;
-use Slov\Expression\TextExpression\SimpleTextExpression;
+use Slov\Expression\TextExpression\TextExpression;
+use Slov\Expression\ExpressionException;
 use Slov\Money\Money;
 use DateInterval;
 use DateTime;
@@ -68,6 +69,8 @@ class TestTextExpression extends TestCase
             ['{days in year} 2020.03.21', 366],
             # выражение с несколькими операциями
             ['33 - 2 * 4 ** 2', 1],
+            # выражения со скобками
+            ['33 - 2 * (3 + 1) ** 2', 1],
         ];
     }
 
@@ -75,13 +78,13 @@ class TestTextExpression extends TestCase
      * @param string $code
      * @param float|int|Money $expectedResult
      * @dataProvider expressionsDataProvider
+     * @throws ExpressionException
      */
     public function testExpressions($code, $expectedResult)
     {
-        $textExpression = new SimpleTextExpression();
-        $actualResult = $textExpression->toPhp($code);
+        $textExpression = new TextExpression();
+        $actualResult = $textExpression
+            ->setCode($code)->execute();
         $this->assertEquals($expectedResult, $actualResult);
     }
-
-
 }

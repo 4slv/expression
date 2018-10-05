@@ -3,10 +3,10 @@
 namespace Slov\Expression\Type;
 
 
-use Slov\Expression\StringToPhp;
+use Slov\Expression\CodeToPhp;
 
 /** Тип операнда */
-abstract class Type implements StringToPhp {
+abstract class Type implements CodeToPhp {
 
     public function toPhp($code)
     {

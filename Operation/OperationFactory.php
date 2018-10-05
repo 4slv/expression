@@ -91,6 +91,14 @@ class OperationFactory
     }
 
     /**
+     * @return GetFirstOperandOperation
+     */
+    public function createGetFirstOperandOperation()
+    {
+        return new GetFirstOperandOperation();
+    }
+
+    /**
      * @param TextOperation $operationName
      * @return Operation
      */

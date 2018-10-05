@@ -2,19 +2,21 @@
 
 namespace Slov\Expression\TextExpression;
 
+use Slov\Expression\CodeAccessor;
 use Slov\Expression\Operation\OperationSignRegexp;
 use Slov\Expression\Operation\Operation;
 use Slov\Expression\Type\TypeName;
-use Slov\Expression\StringToPhp;
+use Slov\Expression\CodeToPhp;
 use Slov\Expression\Expression;
 use Slov\Expression\FactoryRepository;
 use Slov\Expression\ExpressionException;
 use Slov\Expression\Operand;
 
 /** Выражение в текстовом представлении без скобок */
-class SimpleTextExpression implements StringToPhp
+class SimpleTextExpression implements CodeToPhp
 {
     use FactoryRepository;
+    use CodeAccessor;
 
     /** @var ExpressionList список выражений */
     protected $expressionList;
@@ -42,11 +44,31 @@ class SimpleTextExpression implements StringToPhp
     }
 
     /**
+     * @return mixed
+     * @throws ExpressionException
+     */
+    public function execute()
+    {
+        $phpCode = $this->toPhp($this->getCode());
+        return eval('return '. $phpCode. ';');
+    }
+
+    /**
      * @param string $code псевдо код
      * @return string php-код
      * @throws ExpressionException
      */
     public function toPhp($code)
+    {
+        return $this->toExpression($code)->toPhp($code);
+    }
+
+    /**
+     * @param string $code псевдо код
+     * @return Expression
+     * @throws ExpressionException
+     */
+    public function toExpression($code): Expression
     {
         $operationList = $this->getOperationList($code);
         if(count($operationList) > 0){
@@ -55,20 +77,12 @@ class SimpleTextExpression implements StringToPhp
             $replacedExpressionText = $this->replaceExpressionText(
                 $maxTextOperation, $operationList, $operandList
             );
-            return $this->toPhp($replacedExpressionText);
+            return $this->toExpression($replacedExpressionText);
         } else {
             return $this->getExpressionList()->exists($code)
-                ? $this->getExpressionList()->get($code)->toPhp($code)
-                : $this->createOperandToPhp()->toPhp($code);
+                ? $this->getExpressionList()->get($code)
+                : $this->createExpressionFromSingleOperand($code);
         }
-    }
-
-    /**
-     * @return Operand операнд
-     */
-    private function createOperandToPhp(): Operand
-    {
-        return new Operand();
     }
 
     /**
@@ -232,7 +246,34 @@ class SimpleTextExpression implements StringToPhp
             ->createExpression()
             ->setOperation($operation)
             ->setFirstOperand($firstOperand)
-            ->setSecondOperand($secondOperand);
+            ->setSecondOperand($secondOperand)
+            ->setUseBrackets(false);
+    }
+
+    /** Получение выражения из одиночного операнда
+     * @param string $code псевдо код
+     * @return Expression выражение */
+    private function createExpressionFromSingleOperand($code)
+    {
+        $firstOperand = $this
+            ->createOperand()
+            ->setCode($code)
+            ->setExpressionList(
+                $this->getExpressionList()
+            );
+
+        $operation = $this
+            ->getOperationFactory()
+            ->createGetFirstOperandOperation()
+            ->setCode($code)
+            ->setFirstOperand($firstOperand);
+
+        return $this
+            ->createExpression()
+            ->setFirstOperand($firstOperand)
+            ->setSecondOperand($firstOperand)
+            ->setOperation($operation)
+            ->setUseBrackets(false);
     }
 
     /**

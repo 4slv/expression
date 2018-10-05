@@ -5,12 +5,11 @@ namespace Slov\Expression\Operation;
 use Slov\Expression\CodeAccessor;
 use Slov\Expression\FactoryRepository;
 use Slov\Expression\Operand;
-use Slov\Expression\StringToPhp;
+use Slov\Expression\CodeToPhp;
 use Slov\Expression\Type\TypeName;
-use Slov\Expression\ExpressionException;
 
 /** Операция с типами */
-abstract class Operation implements StringToPhp {
+abstract class Operation implements CodeToPhp {
 
     use CodeAccessor,
         FactoryRepository,

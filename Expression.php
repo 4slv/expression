@@ -5,7 +5,7 @@ namespace Slov\Expression;
 use Slov\Expression\Operation\Operation;
 
 /** Выражение */
-class Expression implements StringToPhp
+class Expression implements CodeToPhp
 {
     use CodeAccessor;
 
@@ -26,6 +26,9 @@ class Expression implements StringToPhp
 
     /** @var string php код */
     private $phpCode;
+
+    /** @var bool флаг использования скобок */
+    private $useBrackets = false;
 
     /**
      * @return Operand|null первый операнд
@@ -82,6 +85,24 @@ class Expression implements StringToPhp
     }
 
     /**
+     * @return bool
+     */
+    public function getUseBrackets(): bool
+    {
+        return $this->useBrackets;
+    }
+
+    /**
+     * @param bool $useBrackets
+     * @return $this
+     */
+    public function setUseBrackets(bool $useBrackets)
+    {
+        $this->useBrackets = $useBrackets;
+        return $this;
+    }
+
+    /**
      * @param string|null $code псевдо код
      * @return string php код
      */
@@ -110,6 +131,8 @@ class Expression implements StringToPhp
                 $operation->getPhpTemplate()
             );
         }
-        return $this->phpCode;
+        return $this->getUseBrackets()
+            ? '('. $this->phpCode. ')'
+            : $this->phpCode;
     }
 }
