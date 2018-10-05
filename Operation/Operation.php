@@ -54,7 +54,10 @@ abstract class Operation implements StringToPhp {
      */
     public function getFirstOperandTypeName(): TypeName
     {
-        return $this->getFirstOperand()->getTypeName();
+        return
+            $this->getOperandTypeName(
+                $this->getFirstOperand()
+            );
     }
 
     /**
@@ -72,7 +75,28 @@ abstract class Operation implements StringToPhp {
      */
     public function getSecondOperandTypeName(): TypeName
     {
-        return $this->getSecondOperand()->getTypeName();
+        return
+            $this->getOperandTypeName(
+                $this->getSecondOperand()
+            );
+    }
+
+    /** Определение типа операнда
+     * @param Operand $operand операнд
+     * @return TypeName тип
+     */
+    private function getOperandTypeName(Operand $operand): TypeName
+    {
+        $typeName = $operand->getTypeName();
+        return $typeName->getValue() === TypeName::EXPRESSION
+            ? $operand
+                ->getExpressionList()
+                ->get(
+                    $operand->getCode()
+                )
+                ->getOperation()
+                ->resolveReturnTypeName()
+            : $typeName;
     }
 
     /**

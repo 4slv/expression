@@ -205,7 +205,6 @@ class SimpleTextExpressionToPhp
      * @param TextOperation $textOperation текстовая операция
      * @param string[] $operandList список операндов
      * @return Expression выражение
-     * @throws ExpressionException
      */
     private function createExpressionFromOperationAndOperands(TextOperation $textOperation, $operandList)
     {
@@ -223,8 +222,8 @@ class SimpleTextExpressionToPhp
             ->setExpressionList($this->getExpressionList());
         $operation = $this
             ->createOperation($textOperation)
-            ->setFirstOperandTypeName($firstOperand->getTypeName())
-            ->setSecondOperandTypeName($secondOperand->getTypeName())
+            ->setFirstOperand($firstOperand)
+            ->setSecondOperand($secondOperand)
             ->setCode($textOperation->getOperationValue());
 
         return $this

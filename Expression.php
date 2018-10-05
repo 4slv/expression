@@ -84,7 +84,6 @@ class Expression implements StringToPhp
     /**
      * @param string|null $code псевдо код
      * @return string php код
-     * @throws ExpressionException
      */
     public function toPhp($code = null)
     {

@@ -30,6 +30,9 @@ class ExpressionType extends Type
 
     public function toPhp($code)
     {
-        return $this->getExpressionList()->get($code)->toPhp();
+        return $this
+            ->getExpressionList()
+            ->get($code)
+            ->toPhp($code);
     }
 }
