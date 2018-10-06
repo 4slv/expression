@@ -63,4 +63,15 @@ class Functions
             return DateInterval::createFromDateString($days . " day");
         }
     }
+
+    /** Получение первой даты года
+     * @param DateTime $date дата
+     * @return DateTime
+     */
+    public static function firstYearDay(DateTime $date)
+    {
+        return (new DateTime())
+            ->setDate($date->format('Y'), 1, 1)
+            ->setTime(0,0,0);
+    }
 }
