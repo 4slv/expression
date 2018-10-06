@@ -53,12 +53,20 @@ class SimpleTextExpression implements CodeToPhp
         return eval('return '. $phpCode. ';');
     }
 
+    public function toPhp($code)
+    {
+        $codeWithoutComments = preg_replace(
+            '/\/\*.*?\*\//', '', $code
+        );
+        return $this->toPhpWithoutComments($codeWithoutComments);
+    }
+
     /**
      * @param string $code псевдо код
      * @return string php-код
      * @throws ExpressionException
      */
-    public function toPhp($code)
+    protected function toPhpWithoutComments($code)
     {
         return $this->toExpression($code)->toPhp($code);
     }

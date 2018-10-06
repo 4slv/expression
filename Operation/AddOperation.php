@@ -39,15 +39,17 @@ class AddOperation extends DigitOperation
 
         if(
             ($firstOperandType->isDigit() && $secondOperandType->isDigit())
-            ||
-            ($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval())
         ){
             return $this->toPhpSameCode($code);
         }
         if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
             return $this->toPhpMoney($code);
         }
-        if($firstOperandType->isDateTime() && $secondOperandType->isDateInterval()){
+        if(
+            ($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())
+            ||
+            ($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval())
+        ){
             return $this->toPhpDateInterval($code);
         }
     }
@@ -60,11 +62,12 @@ class AddOperation extends DigitOperation
         if($firstOperandType->isDigit() && $secondOperandType->isDigit()){
             return $this->getPhpTemplatePrimitive();
         }
-        if($firstOperandType->isMoney() && $secondOperandType->isMoney()){
+        if(
+            ($firstOperandType->isMoney() && $secondOperandType->isMoney())
+            ||
+            ($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())
+        ){
             return $this->getPhpTemplateObject();
-        }
-        if(($firstOperandType->isDateTime() && $secondOperandType->isDateInterval())){
-            return $this->getPhpTemplateDateOperationInterval();
         }
         if($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval()){
             return $this->getPhpTemplateIntervalOperationInterval();

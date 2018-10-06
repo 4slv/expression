@@ -99,6 +99,14 @@ class OperationFactory
     }
 
     /**
+     * @return DaysOperation
+     */
+    public function createDaysOperation()
+    {
+        return new DaysOperation();
+    }
+
+    /**
      * @param TextOperation $operationName
      * @return Operation
      */
@@ -121,6 +129,8 @@ class OperationFactory
                 return $this->createDateOperation();
             case OperationName::DAYS_IN_YEAR:
                 return $this->createDaysInYearOperation();
+            case OperationName::DAYS:
+                return $this->createDaysOperation();
         }
         return null;
     }

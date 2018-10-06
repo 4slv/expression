@@ -14,7 +14,14 @@ class TestTextExpression extends TestCase
 {
     public function expressionsDataProvider()
     {
+        $creditAmount = '3500000$';
+        $ratePerMonth = 12.25 / 12 / 100;
+        $creditMonths = 12 * 15;
         return [
+            # комментарии в текстовом выражениии
+            ['/* Пример */
+                1 + 1
+              /* комментария */', 2],
             # операции с целыми числами
             ['2 + 1', 3],
             ['2 - 1', 1],
@@ -60,7 +67,7 @@ class TestTextExpression extends TestCase
                     ->diff(DateTime::createFromFormat('Y.m.d', '2018.02.05'))
             ],
             ['3 days - 1 day', DateInterval::createFromDateString('+2 day')],
-            //['{days} (3 days - 1 day)', 2],
+            ['{days} (3 days - 1 day)', 2],
             [
                 '{date} 2018.03.21 23:09:33',
                 DateTime::createFromFormat('Y.m.d H:i:s', '2018.03.21 00:00:00')
@@ -71,6 +78,17 @@ class TestTextExpression extends TestCase
             ['33 - 2 * 4 ** 2', 1],
             # выражения со скобками
             ['33 - 2 * (3 + 1) ** 2', 1],
+            [
+                "$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))",
+                Money::create(4257045)
+            ],
+            //daysOpearion
+            ['{days} 0', DateInterval::createFromDateString('0 day')],
+            ['{days} 1', DateInterval::createFromDateString('1 day')],
+            ['{days} 365', DateInterval::createFromDateString('365 day')],
+            ['{days} 365 days', 365],
+            ['{days} (2018.01.01 - 2017.01.01)', 365],
+            ['{days} (2016.09.13 - 2016.07.13) - 1', 61],
         ];
     }
 

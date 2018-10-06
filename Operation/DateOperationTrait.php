@@ -4,6 +4,7 @@ namespace Slov\Expression\Operation;
 
 
 use Slov\Expression\Expression;
+use Slov\Expression\Interval;
 use Slov\Expression\Type\DateIntervalType;
 
 trait DateOperationTrait
@@ -14,16 +15,14 @@ trait DateOperationTrait
     public function getPhpTemplateIntervalOperationInterval()
     {
         return
-            DateIntervalType::DATE_INTERVAL_CLASS.
+            Interval::class.
             '::'.
-            DateIntervalType::DATE_INTERVAL_CREATE_FUNCTION.
-            '(\''.
-            Expression::FIRST_OPERAND.
-            ' '.
             Expression::OPERATION.
-            ' '.
+            '('.
+            Expression::FIRST_OPERAND.
+            ', '.
             Expression::SECOND_OPERAND.
-            '\')';
+            ')';
     }
 
     /**

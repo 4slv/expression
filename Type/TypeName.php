@@ -8,7 +8,7 @@ use MabeEnum\Enum;
 class TypeName extends Enum
 {
     const DATE_TIME = 'date_time';
-    const DATE_INTERVAL = 'date_interval';
+    const DATE_INTERVAL = 'interval';
     const INT = 'int';
     const FLOAT = 'float';
     const NULL = 'null';

@@ -8,7 +8,7 @@ class TextExpression extends SimpleTextExpression
 {
     const SUB_EXPRESSION_REGEXP = '/\(([^\(\)]+)\)/';
 
-    public function toPhp($code)
+    protected function toPhpWithoutComments($code)
     {
         $simpleTextExpressionList = $this->getSimpleTextExpressionList($code);
         $simpleTextExpressionBracketedList = $this->getSimpleTextExpressionBracketedList($code);
@@ -20,7 +20,7 @@ class TextExpression extends SimpleTextExpression
                 $expressionTextWithLabel = $this->replaceExpressionText(
                     $code, $simpleTextExpressionBracketed
                 );
-                return $this->toPhp($expressionTextWithLabel);
+                return $this->toPhpWithoutComments($expressionTextWithLabel);
             }
         }
     }

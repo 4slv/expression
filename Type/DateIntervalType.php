@@ -14,7 +14,7 @@ class DateIntervalType extends Type
 
     /**
      * @param $code
-     * @return DateInterval|string
+     * @return string
      * @throws \Exception
      */
     public function toPhp($code)
@@ -27,7 +27,13 @@ class DateIntervalType extends Type
             'days' => 'day'
         ];
         $periodName = $periodTypeToName[$periodType];
-        return "$periodQuantity $periodName";
+        return
+            self::DATE_INTERVAL_CLASS.
+            '::'.
+            self::DATE_INTERVAL_CREATE_FUNCTION.
+            '(\''.
+            "$periodQuantity $periodName".
+            '\')';
     }
 
 }

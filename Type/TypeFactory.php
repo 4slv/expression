@@ -67,7 +67,7 @@ class TypeFactory {
     /**
      * @return DateIntervalType
      */
-    public function createDateInterval()
+    public function createInterval()
     {
         return new DateIntervalType();
     }
@@ -99,7 +99,7 @@ class TypeFactory {
             case TypeName::DATE_TIME:
                 return $this->createDateTime();
             case TypeName::DATE_INTERVAL:
-                return $this->createDateInterval();
+                return $this->createInterval();
             case TypeName::EXPRESSION:
                 return $this->createExpression();
         }
