@@ -115,6 +115,14 @@ class OperationFactory
     }
 
     /**
+     * @return IntOperation()
+     */
+    public function createIntOperation()
+    {
+        return new IntOperation();
+    }
+
+    /**
      * @param TextOperation $operationName
      * @return Operation
      */
@@ -141,6 +149,8 @@ class OperationFactory
                 return $this->createDaysOperation();
             case OperationName::FIRST_YEAR_DAY:
                 return $this->createFirstYearDayOperation();
+            case OperationName::INT:
+                return $this->createIntOperation();
         }
         return null;
     }

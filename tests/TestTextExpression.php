@@ -95,6 +95,11 @@ class TestTextExpression extends TestCase
             ['{first year day} 2018.05.10', DateTime::createFromFormat('Y.m.d H:i:s', '2018.01.01 00:00:00')],
             ['{first year day} 2022.06.12 08:56:10', DateTime::createFromFormat('Y.m.d H:i:s', '2022.01.01 00:00:00')],
 
+            //IntOperation
+            ['{int} 1.1', 1],
+            ['{int} 2.195896', 2],
+            ['{int} 3.9', 3],
+
         ];
     }
 

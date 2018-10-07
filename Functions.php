@@ -5,6 +5,7 @@ namespace Slov\Expression;
 use DateInterval;
 use DateTime;
 use Exception;
+use Slov\Money\Money;
 
 /** Встроенные функции */
 class Functions
@@ -73,5 +74,16 @@ class Functions
         return (new DateTime())
             ->setDate($date->format('Y'), 1, 1)
             ->setTime(0,0,0);
+    }
+
+    /** Приведение к целому числу
+     * @param float|Money $number
+     * @return int */
+    public static function int($number)
+    {
+        if(is_object($number) && $number instanceof Money){
+            return $number->getAmount();
+        }
+        return (int) $number;
     }
 }
