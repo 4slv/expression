@@ -6,8 +6,6 @@ namespace Slov\Expression\Operation;
 /** Операция вычитания */
 class SubtractionOperation extends DigitOperation
 {
-    use DateOperationTrait;
-
     const MONEY_OPERATION = 'sub';
 
     const DATE_INTERVAL_OPERATION = 'sub';

@@ -5,6 +5,7 @@ namespace Slov\Expression\Operation;
 
 use Slov\Expression\Expression;
 use Slov\Expression\Functions;
+use Slov\Expression\Interval;
 use Slov\Expression\Type\DateIntervalType;
 
 /** Хранилище шаблонов */
@@ -58,20 +59,18 @@ trait OperationPhpTemplateTrait
     }
 
     /**
-     * @return string шаблон операции со встроенной функцией и интервалом в качестве параметра
+     * @return string шаблон операций с интервалами
      */
-    protected function getPhpTemplateInlineFunctionWithIntervalParameter(): string
+    public function getPhpTemplateIntervalOperationInterval()
     {
-        return Functions::class.
+        return
+            Interval::class.
             '::'.
             Expression::OPERATION.
             '('.
-            DateIntervalType::DATE_INTERVAL_CLASS.
-            '::'.
-            DateIntervalType::DATE_INTERVAL_CREATE_FUNCTION.
-            '(\''.
+            Expression::FIRST_OPERAND.
+            ', '.
             Expression::SECOND_OPERAND.
-            '\')'.
             ')';
     }
 }

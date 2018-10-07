@@ -123,6 +123,14 @@ class OperationFactory
     }
 
     /**
+     * @return EqualOperation
+     */
+    public function createEqualOperation()
+    {
+        return new EqualOperation();
+    }
+
+    /**
      * @param TextOperation $operationName
      * @return Operation
      */
@@ -151,6 +159,8 @@ class OperationFactory
                 return $this->createFirstYearDayOperation();
             case OperationName::INT:
                 return $this->createIntOperation();
+            case OperationName::EQUAL:
+                return $this->createEqualOperation();
         }
         return null;
     }

@@ -37,7 +37,7 @@ class Interval
      * @param DateInterval $rightInterval
      * @return DateInterval
      */
-    public function sub(DateInterval $leftInterval, DateInterval $rightInterval)
+    public static function sub(DateInterval $leftInterval, DateInterval $rightInterval)
     {
         $result = clone $leftInterval;
         foreach (self::PROPERTY_LIST as $name => $value)
@@ -45,6 +45,21 @@ class Interval
             $result->{$name} = $leftInterval->{$name} - $rightInterval->{$name};
         }
         return $result;
+    }
+
+    /**
+     * @param DateInterval $leftInterval
+     * @param DateInterval $rightInterval
+     * @return bool
+     */
+    public static function equal(DateInterval $leftInterval, DateInterval $rightInterval)
+    {
+        foreach (self::PROPERTY_LIST as $intervalType => $typeName){
+            if($leftInterval->$intervalType !== $rightInterval->$intervalType)
+                return false;
+        }
+
+        return true;
     }
 
 }

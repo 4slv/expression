@@ -100,6 +100,22 @@ class TestTextExpression extends TestCase
             ['{int} 2.195896', 2],
             ['{int} 3.9', 3],
 
+            //equal, int
+            ['3 == 3', true],
+            ['1 == 3', false],
+            //equal, float
+            ['3.14 == 3.14', true],
+            ['3.14 == 2.14', false],
+            //equal, DateTime
+            ['2018.06.19 15:06:00 == 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 == 2018.06.19 15:06:01', false],
+            //equal, DateInterval
+            ['6 day == 6 day', true],
+            ['6 day == 5 day', false],
+            //equal, Money
+            ['300$ == 300$', true],
+            ['300$ == 301$', false],
+
         ];
     }
 
