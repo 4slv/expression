@@ -139,6 +139,30 @@ class OperationFactory
     }
 
     /**
+     * @return LessOperation()
+     */
+    public function createLessOperation()
+    {
+        return new LessOperation();
+    }
+
+    /**
+     * @return GreaterOrEqualOperation()
+     */
+    public function createGreaterOrEqualOperation()
+    {
+        return new GreaterOrEqualOperation();
+    }
+
+    /**
+     * @return LessOrEqualOperation()
+     */
+    public function createLessOrEqualOperation()
+    {
+        return new LessOrEqualOperation();
+    }
+
+    /**
      * @param TextOperation $operationName
      * @return Operation
      */
@@ -171,6 +195,12 @@ class OperationFactory
                 return $this->createEqualOperation();
             case OperationName::GREATER:
                 return $this->createGreaterOperation();
+            case OperationName::LESS:
+                return $this->createLessOperation();
+            case OperationName::GREATER_OR_EQUALS:
+                return $this->createGreaterOrEqualOperation();
+            case OperationName::LESS_OR_EQUALS:
+                return $this->createLessOrEqualOperation();
         }
         return null;
     }

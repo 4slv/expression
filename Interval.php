@@ -75,4 +75,49 @@ class Interval
         }
         return false;
     }
+
+    /**
+     * @param DateInterval $leftInterval интервал слеав
+     * @param DateInterval $rightInterval интервал справа
+     * @return bool результат сравнения: true - если интервал справа меньше
+     */
+    public static function less(DateInterval $leftInterval, DateInterval $rightInterval) : bool
+    {
+        foreach (self::PROPERTY_LIST as $intervalType => $typeName){
+            if($leftInterval->$intervalType < $rightInterval->$intervalType)
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param DateInterval $leftInterval интервал слеав
+     * @param DateInterval $rightInterval интервал справа
+     * @return bool результат сравнения: true - если интервал справа больше или равен
+     */
+    public static function greaterOrEqual(DateInterval $leftInterval, DateInterval $rightInterval) : bool
+    {
+        foreach (self::PROPERTY_LIST as $intervalType => $typeName){
+            if($leftInterval->$intervalType < $rightInterval->$intervalType)
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param DateInterval $leftInterval интервал слеав
+     * @param DateInterval $rightInterval интервал справа
+     * @return bool результат сравнения: true - если интервал справа меньше или равен
+     */
+    public static function lessOrEqual(DateInterval $leftInterval, DateInterval $rightInterval) : bool
+    {
+        foreach (self::PROPERTY_LIST as $intervalType => $typeName){
+            if($leftInterval->$intervalType > $rightInterval->$intervalType)
+                return false;
+        }
+
+        return true;
+    }
 }
