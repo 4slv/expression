@@ -25,6 +25,14 @@ class TypeFactory {
     }
 
     /**
+     * @return BooleanType()
+     */
+    public function createBoolean()
+    {
+        return new BooleanType();
+    }
+
+    /**
      * @return IntType
      */
     public function createInt()
@@ -88,6 +96,8 @@ class TypeFactory {
     {
         switch ($typeName->getValue())
         {
+            case TypeName::BOOLEAN:
+                return $this->createBoolean();
             case TypeName::INT:
                 return $this->createInt();
             case TypeName::FLOAT:

@@ -7,7 +7,20 @@ abstract class CompareOperation extends Operation
 {
     public function resolveReturnTypeName()
     {
-        return $this->getTypeNameFactory()->createBoolean();
+        $firstOperandType = $this->getFirstOperandTypeName();
+        $secondOperandType = $this->getSecondOperandTypeName();
+        if(
+            ($firstOperandType->isDigit() && $secondOperandType->isDigit())
+            ||
+            ($firstOperandType->isDateTime() && $secondOperandType->isDateTime())
+            ||
+            ($firstOperandType->isMoney() && $secondOperandType->isMoney())
+            ||
+            ($firstOperandType->isDateInterval() && $secondOperandType->isDateInterval())
+        ){
+            return $this->getTypeNameFactory()->createBoolean();
+        }
+        return null;
     }
 
     public function getPhpTemplate(): string

@@ -199,6 +199,22 @@ class TestTextExpression extends TestCase
             ['300$ <= 301$', true],
             ['300$ <= 300$', true],
             ['301$ <= 300$', false],
+
+            //not
+            ['!true', false],
+            ['!false', true],
+
+            //and
+            ['false && false', false],
+            ['false && true', false],
+            ['true && false', false],
+            ['true && true', true],
+
+            //or
+            ['false || false', false],
+            ['false || true', true],
+            ['true || false', true],
+            ['true || true', true],
         ];
     }
 
