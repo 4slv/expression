@@ -116,6 +116,26 @@ class TestTextExpression extends TestCase
             ['300$ == 300$', true],
             ['300$ == 301$', false],
 
+            //greater, int
+            ['3 > 2', true],
+            ['3 > 3', false],
+            ['3 > 4', false],
+            //greater, float
+            ['3.14 > 3.13', true],
+            ['3.14 > 3.14', false],
+            ['3.14 > 3.15', false],
+            //greater, DateTime
+            ['2018.06.19 15:06:00 > 2018.06.19 15:05:59', true],
+            ['2018.06.19 15:06:00 > 2018.06.19 15:06:00', false],
+            ['2018.06.19 15:06:00 > 2018.06.19 15:06:01', false],
+            //greater, DateInterval
+            ['6 day > 5 day', true],
+            ['6 day > 6 day', false],
+            ['6 day > 7 day', false],
+            //greater, Money
+            ['301$ > 300$', true],
+            ['300$ > 300$', false],
+            ['300$ > 301$', false],
         ];
     }
 

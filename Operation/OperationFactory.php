@@ -131,6 +131,14 @@ class OperationFactory
     }
 
     /**
+     * @return GreaterOperation()
+     */
+    public function createGreaterOperation()
+    {
+        return new GreaterOperation();
+    }
+
+    /**
      * @param TextOperation $operationName
      * @return Operation
      */
@@ -161,6 +169,8 @@ class OperationFactory
                 return $this->createIntOperation();
             case OperationName::EQUAL:
                 return $this->createEqualOperation();
+            case OperationName::GREATER:
+                return $this->createGreaterOperation();
         }
         return null;
     }

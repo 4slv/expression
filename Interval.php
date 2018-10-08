@@ -48,8 +48,8 @@ class Interval
     }
 
     /**
-     * @param DateInterval $leftInterval
-     * @param DateInterval $rightInterval
+     * @param DateInterval $leftInterval интервал слеав
+     * @param DateInterval $rightInterval интервал справа
      * @return bool
      */
     public static function equal(DateInterval $leftInterval, DateInterval $rightInterval)
@@ -62,4 +62,17 @@ class Interval
         return true;
     }
 
+    /**
+     * @param DateInterval $leftInterval интервал слеав
+     * @param DateInterval $rightInterval интервал справа
+     * @return bool результат сравнения: true - если интервал  слева больше
+     */
+    public static function greater(DateInterval $leftInterval, DateInterval $rightInterval) : bool
+    {
+        foreach (self::PROPERTY_LIST as $intervalType => $typeName){
+            if($leftInterval->$intervalType > $rightInterval->$intervalType)
+                return true;
+        }
+        return false;
+    }
 }
