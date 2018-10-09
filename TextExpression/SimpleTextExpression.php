@@ -3,6 +3,8 @@
 namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\CodeAccessor;
+use Slov\Expression\Operation\IfElseOperation;
+use Slov\Expression\Operation\OperationName;
 use Slov\Expression\Operation\OperationSignRegexp;
 use Slov\Expression\Operation\Operation;
 use Slov\Expression\Type\TypeName;
@@ -238,14 +240,15 @@ class SimpleTextExpression implements CodeToPhp
         $secondOperandValue = $operation->rightOperandUsed() ? $operandList[$operationPosition + 1] : '';
         $firstOperand = $this
             ->createOperand()
-            ->setCode($firstOperandValue)
-            ->setExpressionList($this->getExpressionList());
+            ->setExpressionList($this->getExpressionList())
+            ->setCode($firstOperandValue);
         $secondOperand = $this
             ->createOperand()
-            ->setCode($secondOperandValue)
-            ->setExpressionList($this->getExpressionList());
+            ->setExpressionList($this->getExpressionList())
+            ->setCode($secondOperandValue);
         $operation = $this
             ->createOperation($textOperation)
+            ->setExpressionList($this->getExpressionList())
             ->setFirstOperand($firstOperand)
             ->setSecondOperand($secondOperand)
             ->setCode($textOperation->getOperationValue());
@@ -265,14 +268,13 @@ class SimpleTextExpression implements CodeToPhp
     {
         $firstOperand = $this
             ->createOperand()
-            ->setCode($code)
-            ->setExpressionList(
-                $this->getExpressionList()
-            );
+            ->setExpressionList($this->getExpressionList())
+            ->setCode($code);
 
         $operation = $this
             ->getOperationFactory()
             ->createGetFirstOperandOperation()
+            ->setExpressionList($this->getExpressionList())
             ->setCode($code)
             ->setFirstOperand($firstOperand);
 
@@ -298,7 +300,74 @@ class SimpleTextExpression implements CodeToPhp
      */
     private function createOperation(TextOperation $textOperation)
     {
-        return $this->getOperationFactory()->create($textOperation);
+        $operation = $this
+            ->getOperationFactory()
+            ->create($textOperation);
+
+        $operationCode = $textOperation->getOperationValue();
+
+        switch($textOperation->getOperationName()->getValue())
+        {
+            case OperationName::IF_ELSE:
+                /* @var IfElseOperation $operation */
+                $this->initIfElseOperation($operation, $operationCode);
+                break;
+        }
+
+        return $operation;
+    }
+
+    /**
+     * @param IfElseOperation $operation операция
+     * @param string $operationCode псевдо-код операции
+     * @throws ExpressionException
+     */
+    private function initIfElseOperation($operation, $operationCode)
+    {
+        if(preg_match('/^'. OperationSignRegexp::IF_ELSE. '$/', $operationCode, $match))
+        {
+            $condition = $this
+                ->createTextExpression()
+                ->toExpression(trim($match[1]));
+
+            $trueResult = $this
+                ->createTextExpression()
+                ->toExpression(trim($match[2]));
+
+            $falseResult = $this
+                ->createTextExpression()
+                ->toExpression(trim($match[3]));
+
+            $ifElseStructure = $this
+                ->createIfElseStructure($condition, $trueResult, $falseResult);
+
+            $operation->setIfElseStructure($ifElseStructure);
+        }
+    }
+
+    /**
+     * @return TextExpression преобразователь псевдо-кода в php код
+     */
+    protected function createTextExpression()
+    {
+        $textExpression = new TextExpression();
+        return $textExpression
+            ->setExpressionList($this->getExpressionList());
+    }
+
+    /**
+     * @param Expression $condition логическое условие
+     * @param Expression $trueResult результат в случае если условие истина
+     * @param Expression $falseResult результат в случае если условие ложь
+     * @return IfElseStructure
+     */
+    private function createIfElseStructure($condition, $trueResult, $falseResult): IfElseStructure
+    {
+        $ifElseStructure = new IfElseStructure();
+        return $ifElseStructure
+            ->setCondition($condition)
+            ->setTrueResult($trueResult)
+            ->setFalseResult($falseResult);
     }
 
     /**

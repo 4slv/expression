@@ -6,6 +6,7 @@ use Slov\Expression\CodeAccessor;
 use Slov\Expression\FactoryRepository;
 use Slov\Expression\Operand;
 use Slov\Expression\CodeToPhp;
+use Slov\Expression\TextExpression\ExpressionList;
 use Slov\Expression\Type\TypeName;
 
 /** Операция с типами */
@@ -21,6 +22,9 @@ abstract class Operation implements CodeToPhp {
 
     /** @var Operand второй операнд */
     protected $secondOperand;
+
+    /** @var ExpressionList список выражений */
+    protected $expressionList;
 
     /**
      * @return TypeName возвращаемый тип
@@ -66,6 +70,24 @@ abstract class Operation implements CodeToPhp {
     public function setFirstOperand(Operand $firstOperand)
     {
         $this->firstOperand = $firstOperand;
+        return $this;
+    }
+
+    /**
+     * @return ExpressionList список выражений
+     */
+    public function getExpressionList(): ExpressionList
+    {
+        return $this->expressionList;
+    }
+
+    /**
+     * @param ExpressionList $expressionList список выражений
+     * @return $this
+     */
+    public function setExpressionList(ExpressionList $expressionList)
+    {
+        $this->expressionList = $expressionList;
         return $this;
     }
 
