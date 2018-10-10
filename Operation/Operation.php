@@ -6,7 +6,7 @@ use Slov\Expression\CodeAccessor;
 use Slov\Expression\FactoryRepository;
 use Slov\Expression\Operand;
 use Slov\Expression\CodeToPhp;
-use Slov\Expression\TextExpression\ExpressionList;
+use Slov\Expression\TextExpression\ExpressionContextAccessor;
 use Slov\Expression\Type\TypeName;
 
 /** Операция с типами */
@@ -15,16 +15,14 @@ abstract class Operation implements CodeToPhp {
     use CodeAccessor,
         FactoryRepository,
         OperationPhpTemplateTrait,
-        OperationToPhpTrait;
+        OperationToPhpTrait,
+        ExpressionContextAccessor;
 
     /** @var Operand первый операнд */
     protected $firstOperand;
 
     /** @var Operand второй операнд */
     protected $secondOperand;
-
-    /** @var ExpressionList список выражений */
-    protected $expressionList;
 
     /**
      * @return TypeName возвращаемый тип
@@ -74,24 +72,6 @@ abstract class Operation implements CodeToPhp {
     }
 
     /**
-     * @return ExpressionList список выражений
-     */
-    public function getExpressionList(): ExpressionList
-    {
-        return $this->expressionList;
-    }
-
-    /**
-     * @param ExpressionList $expressionList список выражений
-     * @return $this
-     */
-    public function setExpressionList(ExpressionList $expressionList)
-    {
-        $this->expressionList = $expressionList;
-        return $this;
-    }
-
-    /**
      * @return TypeName тип второго операнда
      */
     public function getSecondOperandTypeName(): TypeName
@@ -109,15 +89,25 @@ abstract class Operation implements CodeToPhp {
     private function getOperandTypeName(Operand $operand): TypeName
     {
         $typeName = $operand->getTypeName();
-        return $typeName->getValue() === TypeName::EXPRESSION
-            ? $operand
-                ->getExpressionList()
-                ->get(
-                    $operand->getCode()
-                )
-                ->getOperation()
-                ->resolveReturnTypeName()
-            : $typeName;
+        switch ($typeName->getValue()){
+            case TypeName::EXPRESSION:
+                return $operand
+                    ->getExpressionList()
+                    ->get(
+                        $operand->getCode()
+                    )
+                    ->getOperation()
+                    ->resolveReturnTypeName();
+            case TypeName::VARIABLE:
+                return $operand
+                    ->getVariableList()
+                    ->get(
+                        $operand->getVariableName($operand->getCode())
+                    )
+                    ->getTypeName();
+            default:
+                return $operand->getSimpleTypeName();
+        }
     }
 
     /**

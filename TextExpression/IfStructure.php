@@ -4,17 +4,14 @@ namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\Expression;
 
-/** Структура тернарного оператора if-else */
-class IfElseStructure
+/** Структура условного оператора if */
+class IfStructure
 {
     /** @var Expression логическое условие */
     protected $condition;
 
     /** @var Expression выражение в случае если условие истина */
     protected $trueExpression;
-
-    /** @var Expression выражение в случае если условие ложь */
-    protected $falseExpression;
 
     /**
      * @return Expression логическое условие
@@ -49,24 +46,6 @@ class IfElseStructure
     public function setTrueExpression($trueExpression)
     {
         $this->trueExpression = $trueExpression;
-        return $this;
-    }
-
-    /**
-     * @return Expression выражение в случае если условие ложь
-     */
-    public function getFalseExpression()
-    {
-        return $this->falseExpression;
-    }
-
-    /**
-     * @param Expression $falseExpression выражение в случае если условие ложь
-     * @return $this
-     */
-    public function setFalseExpression($falseExpression)
-    {
-        $this->falseExpression = $falseExpression;
         return $this;
     }
 }

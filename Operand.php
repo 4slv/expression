@@ -2,7 +2,7 @@
 
 namespace Slov\Expression;
 
-use Slov\Expression\TextExpression\ExpressionList;
+use Slov\Expression\TextExpression\ExpressionContextAccessor;
 use Slov\Expression\Type\ExpressionType;
 use Slov\Expression\Type\TypeFactory;
 use Slov\Expression\Type\TypeNameFactory;
@@ -12,30 +12,46 @@ use Slov\Expression\Type\TypeName;
 /** Операнд */
 class Operand implements CodeToPhp
 {
-    use CodeAccessor;
-
-    /** @var TypeName  */
-    protected $typeName;
-
-    /** @var ExpressionList список выражений */
-    protected $expressionList;
+    use CodeAccessor,
+        ExpressionContextAccessor;
 
     /**
-     * @return ExpressionList список выражений
+     * @param string $code псевдо-код операнда
+     * @return TypeName тип операнда
      */
-    public function getExpressionList(): ExpressionList
+    public function getTypeName($code = null)
     {
-        return $this->expressionList;
+        try {
+            $operandCode = $code ?? $this->getCode();
+            $operandTypeName = TypeRegExp::getTypeNameByStringValue($operandCode);
+            return $operandTypeName;
+        } catch (ExpressionException $exception){
+            return TypeNameFactory::getInstance()->createNull();
+        }
     }
 
     /**
-     * @param ExpressionList $expressionList список выражений
-     * @return $this
+     * @param string|null $code псевдо-код операнда
+     * @return TypeName
      */
-    public function setExpressionList(ExpressionList $expressionList)
+    public function getSimpleTypeName($code = null)
     {
-        $this->expressionList = $expressionList;
-        return $this;
+        $operandCode = $code ?? $this->getCode();
+        $typeName = $this->getTypeName($code);
+        if($typeName->isVariable())
+        {
+            return $this
+                ->getVariableList()
+                ->get($this->getVariableName($operandCode))
+                ->getTypeName();
+        } elseif ($typeName->isExpression()) {
+            return $this
+                ->getExpressionList()
+                ->get($operandCode)
+                ->getTypeName();
+        } else {
+            return $typeName;
+        }
     }
 
     /**
@@ -50,21 +66,19 @@ class Operand implements CodeToPhp
         if($typeName->isExpression())
         {
             /** @var ExpressionType $type */
-            $type->setExpressionList($this->getExpressionList());
+            $type->setExpressionContext($this->getExpressionContext());
+            $operandExpression = $this->getExpressionList()->get($code);
+            $type->setTypeName($operandExpression->getTypeName());
         }
         return $type->toPhp($code);
     }
 
     /**
-     * @param string|null $code псевдо-код операнда
-     * @return TypeName
+     * @param string $code псевдо-код операнда
+     * @return string на
      */
-    public function getTypeName($code = null)
+    public function getVariableName($code)
     {
-        try{
-            return $this->typeName ?? TypeRegExp::getTypeNameByStringValue($code ?? $this->getCode());
-        } catch (ExpressionException $exception){
-            return TypeNameFactory::getInstance()->createNull();
-        }
+        return trim($code, '$= ');
     }
 }

@@ -3,6 +3,7 @@
 namespace Slov\Expression;
 
 use Slov\Expression\Operation\Operation;
+use Slov\Expression\Type\TypeName;
 
 /** Выражение */
 class Expression implements CodeToPhp
@@ -29,6 +30,9 @@ class Expression implements CodeToPhp
 
     /** @var bool флаг использования скобок */
     private $useBrackets = false;
+
+    /** @var TypeName тип результата выражения */
+    private $typeName;
 
     /**
      * @return Operand|null первый операнд
@@ -103,6 +107,22 @@ class Expression implements CodeToPhp
     }
 
     /**
+     * @return TypeName тип результата выражения
+     */
+    public function getTypeName(): TypeName
+    {
+        return $this->typeName;
+    }
+
+    /** Инициализация выражения
+     * @return $this */
+    public function init()
+    {
+        $this->typeName = $this->resolveReturnTypeName();
+        return $this;
+    }
+
+    /**
      * @param string|null $code псевдо код
      * @return string php код
      */
@@ -134,5 +154,13 @@ class Expression implements CodeToPhp
         return $this->getUseBrackets()
             ? '('. $this->phpCode. ')'
             : $this->phpCode;
+    }
+
+    /**
+     * @return TypeName возвращаемый тип
+     */
+    private function resolveReturnTypeName()
+    {
+        return $this->getOperation()->resolveReturnTypeName();
     }
 }

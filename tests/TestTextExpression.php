@@ -217,7 +217,7 @@ class TestTextExpression extends TestCase
             ['true || true', true],
 
             //if operation
-            //['{1 > 2 ? 1}', true],
+            ['{1 > 2 ? 1}', true],
 
             //if-else operation
             ['{1 > 2 ? 1 : 2}', 2],
@@ -226,8 +226,16 @@ class TestTextExpression extends TestCase
             ['{1 < 2 && 2 > 3 ? 1 : 2}', 2],
             ['{1 < 2 ? 1 + 1 : 2 + 2}', 2],
             ['{1 > 2 ? 1 + 1 : 2 + 2}', 4],
-            ['{1 > 0 ? 1} + {1 > 2 ? 1 : 2} * {2 > 1 ? 3 : 2}', 7],
             ['{ 2 > 1 ? {int} ({days} (2018.01.02 - 2018.01.01) / 14 ) + 1 : 1}', 1],
+
+            // if and if-else operations
+            ['{{1 > 0 ? 1} ? 1 + {1 > 2 ? 1 : 2} * {2 > 1 ? 3 : 2} : 0}', 7],
+
+            // assign
+            ['$i = 1', true],
+            ['{ $i = 1 ? $i : 2}', 1],
+            ['{ $i = 1 ? $i : 2} + $i', 2],
+            [' { ($i = 1) && ($i = $i + 1) ? $i : 3} ', 2],
         ];
     }
 

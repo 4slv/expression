@@ -3,28 +3,30 @@
 namespace Slov\Expression\Type;
 
 
-use Slov\Expression\TextExpression\ExpressionList;
+use Slov\Expression\TextExpression\ExpressionContextAccessor;
 
 class ExpressionType extends Type
 {
-    /** @var ExpressionList список выражений */
-    protected $expressionList;
+    use ExpressionContextAccessor;
+
+    /** @var TypeName тип переменной */
+    private $typeName;
 
     /**
-     * @return ExpressionList список выражений
+     * @return TypeName тип переменной
      */
-    public function getExpressionList(): ExpressionList
+    public function getTypeName(): TypeName
     {
-        return $this->expressionList;
+        return $this->typeName;
     }
 
     /**
-     * @param ExpressionList $expressionList список выражений
+     * @param TypeName $typeName тип переменной
      * @return $this
      */
-    public function setExpressionList(ExpressionList $expressionList)
+    public function setTypeName(TypeName $typeName)
     {
-        $this->expressionList = $expressionList;
+        $this->typeName = $typeName;
         return $this;
     }
 

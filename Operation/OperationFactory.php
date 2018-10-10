@@ -107,7 +107,7 @@ class OperationFactory
     }
 
     /**
-     * @return FirstYearDayOperation()
+     * @return FirstYearDayOperation
      */
     public function createFirstYearDayOperation()
     {
@@ -115,7 +115,7 @@ class OperationFactory
     }
 
     /**
-     * @return IntOperation()
+     * @return IntOperation
      */
     public function createIntOperation()
     {
@@ -131,7 +131,7 @@ class OperationFactory
     }
 
     /**
-     * @return GreaterOperation()
+     * @return GreaterOperation
      */
     public function createGreaterOperation()
     {
@@ -139,7 +139,7 @@ class OperationFactory
     }
 
     /**
-     * @return LessOperation()
+     * @return LessOperation
      */
     public function createLessOperation()
     {
@@ -147,7 +147,7 @@ class OperationFactory
     }
 
     /**
-     * @return GreaterOrEqualOperation()
+     * @return GreaterOrEqualOperation
      */
     public function createGreaterOrEqualOperation()
     {
@@ -155,7 +155,7 @@ class OperationFactory
     }
 
     /**
-     * @return LessOrEqualOperation()
+     * @return LessOrEqualOperation
      */
     public function createLessOrEqualOperation()
     {
@@ -163,7 +163,7 @@ class OperationFactory
     }
 
     /**
-     * @return NotOperation()
+     * @return NotOperation
      */
     public function createNotOperation()
     {
@@ -171,7 +171,7 @@ class OperationFactory
     }
 
     /**
-     * @return AndOperation()
+     * @return AndOperation
      */
     public function createAndOperation()
     {
@@ -179,11 +179,35 @@ class OperationFactory
     }
 
     /**
-     * @return OrOperation()
+     * @return OrOperation
      */
     public function createOrOperation()
     {
         return new OrOperation();
+    }
+
+    /**
+     * @return IfElseOperation
+     */
+    public function createIfElseOperation()
+    {
+        return new IfElseOperation();
+    }
+
+    /**
+     * @return IfOperation
+     */
+    public function createIfOperation()
+    {
+        return new IfOperation();
+    }
+
+    /**
+     * @return AssignOperation
+     */
+    public function createAssignOperation()
+    {
+        return new AssignOperation();
     }
 
     /**
@@ -231,6 +255,12 @@ class OperationFactory
                 return $this->createAndOperation();
             case OperationName::OR:
                 return $this->createOrOperation();
+            case OperationName::IF_ELSE:
+                return $this->createIfElseOperation();
+            case OperationName::IF:
+                return $this->createIfOperation();
+            case OperationName::ASSIGN:
+                return $this->createAssignOperation();
         }
         return null;
     }

@@ -23,6 +23,7 @@ class TextExpression extends SimpleTextExpression
                 return $this->toPhpWithoutComments($expressionTextWithLabel);
             }
         }
+        return null;
     }
 
     /**
@@ -35,7 +36,7 @@ class TextExpression extends SimpleTextExpression
     {
         $simpleCode = $this->removeBracket($simpleTextExpressionBracketed);
         $expression = $this->createSimpleTextExpression($simpleCode)->toExpression($simpleCode);
-        $expression->setUseBrackets(true);
+        $expression->setUseBrackets(true)->init();
         $expressionLabel = $this->appendExpression($expression);
         $replaceSize = 1;
         return str_replace(
@@ -65,7 +66,7 @@ class TextExpression extends SimpleTextExpression
         $simpleTextExpression = new SimpleTextExpression();
         return $simpleTextExpression
             ->setCode($code)
-            ->setExpressionList($this->getExpressionList());
+            ->setExpressionContext($this->getExpressionContext());
     }
 
     /**

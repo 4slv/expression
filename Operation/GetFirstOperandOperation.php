@@ -8,7 +8,7 @@ class GetFirstOperandOperation extends Operation
 {
     public function resolveReturnTypeName()
     {
-        return $this->getFirstOperand()->getTypeName();
+        return $this->getFirstOperand()->getSimpleTypeName();
     }
 
     public function toPhp($code)

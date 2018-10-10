@@ -88,6 +88,11 @@ class TypeFactory {
         return new ExpressionType();
     }
 
+    public function createVariable()
+    {
+        return new VariableType();
+    }
+
     /**
      * @param TypeName $typeName название типа
      * @return Type
@@ -112,6 +117,8 @@ class TypeFactory {
                 return $this->createInterval();
             case TypeName::EXPRESSION:
                 return $this->createExpression();
+            case TypeName::VARIABLE:
+                return $this->createVariable();
         }
         return null;
     }

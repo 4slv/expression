@@ -3,7 +3,9 @@
 namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\CodeAccessor;
+use Slov\Expression\Operation\AssignOperation;
 use Slov\Expression\Operation\IfElseOperation;
+use Slov\Expression\Operation\IfOperation;
 use Slov\Expression\Operation\OperationName;
 use Slov\Expression\Operation\OperationSignRegexp;
 use Slov\Expression\Operation\Operation;
@@ -17,33 +19,9 @@ use Slov\Expression\Operand;
 /** Выражение в текстовом представлении без скобок */
 class SimpleTextExpression implements CodeToPhp
 {
-    use FactoryRepository;
-    use CodeAccessor;
-
-    /** @var ExpressionList список выражений */
-    protected $expressionList;
-
-    /**
-     * @return ExpressionList список выражений
-     */
-    public function getExpressionList()
-    {
-        if(is_null($this->expressionList))
-        {
-            $this->expressionList = new ExpressionList();
-        }
-        return $this->expressionList;
-    }
-
-    /**
-     * @param ExpressionList $expressionList список выражений
-     * @return $this
-     */
-    public function setExpressionList($expressionList)
-    {
-        $this->expressionList = $expressionList;
-        return $this;
-    }
+    use FactoryRepository,
+        CodeAccessor,
+        ExpressionContextAccessor;
 
     /**
      * @return mixed
@@ -55,6 +33,11 @@ class SimpleTextExpression implements CodeToPhp
         return eval('return '. $phpCode. ';');
     }
 
+    /**
+     * @param string $code псевдо-код
+     * @return string php код
+     * @throws ExpressionException
+     */
     public function toPhp($code)
     {
         $codeWithoutComments = preg_replace(
@@ -198,6 +181,7 @@ class SimpleTextExpression implements CodeToPhp
      * @param string[] $operationSignList список знаков операций
      * @param string[] $operandList список операндв операций
      * @return string текстовое представление выражения в котом заменена одна операция на метку с выражением
+     * @throws ExpressionException
      */
     private function replaceExpressionText(TextOperation $textOperation, $operationSignList, $operandList)
     {
@@ -231,6 +215,7 @@ class SimpleTextExpression implements CodeToPhp
      * @param TextOperation $textOperation текстовая операция
      * @param string[] $operandList список операндов
      * @return Expression выражение
+     * @throws ExpressionException
      */
     private function createExpressionFromOperationAndOperands(TextOperation $textOperation, $operandList)
     {
@@ -240,25 +225,34 @@ class SimpleTextExpression implements CodeToPhp
         $secondOperandValue = $operation->rightOperandUsed() ? $operandList[$operationPosition + 1] : '';
         $firstOperand = $this
             ->createOperand()
-            ->setExpressionList($this->getExpressionList())
+            ->setExpressionContext($this->getExpressionContext())
             ->setCode($firstOperandValue);
         $secondOperand = $this
             ->createOperand()
-            ->setExpressionList($this->getExpressionList())
+            ->setExpressionContext($this->getExpressionContext())
             ->setCode($secondOperandValue);
         $operation = $this
-            ->createOperation($textOperation)
-            ->setExpressionList($this->getExpressionList())
-            ->setFirstOperand($firstOperand)
-            ->setSecondOperand($secondOperand)
+            ->createOperation($textOperation, $firstOperand, $secondOperand)
+            ->setExpressionContext($this->getExpressionContext())
             ->setCode($textOperation->getOperationValue());
+
+        $expressionCode = implode(
+            ' ',
+            [
+                $firstOperandValue,
+                $textOperation->getOperationValue(),
+                $secondOperandValue
+            ]
+        );
 
         return $this
             ->createExpression()
+            ->setCode($expressionCode)
             ->setOperation($operation)
             ->setFirstOperand($firstOperand)
             ->setSecondOperand($secondOperand)
-            ->setUseBrackets(false);
+            ->setUseBrackets(false)
+            ->init();
     }
 
     /** Получение выражения из одиночного операнда
@@ -268,22 +262,24 @@ class SimpleTextExpression implements CodeToPhp
     {
         $firstOperand = $this
             ->createOperand()
-            ->setExpressionList($this->getExpressionList())
+            ->setExpressionContext($this->getExpressionContext())
             ->setCode($code);
 
         $operation = $this
             ->getOperationFactory()
             ->createGetFirstOperandOperation()
-            ->setExpressionList($this->getExpressionList())
+            ->setExpressionContext($this->getExpressionContext())
             ->setCode($code)
             ->setFirstOperand($firstOperand);
 
         return $this
             ->createExpression()
+            ->setCode($code)
             ->setFirstOperand($firstOperand)
             ->setSecondOperand($firstOperand)
             ->setOperation($operation)
-            ->setUseBrackets(false);
+            ->setUseBrackets(false)
+            ->init();
     }
 
     /**
@@ -296,13 +292,18 @@ class SimpleTextExpression implements CodeToPhp
 
     /**
      * @param TextOperation $textOperation
+     * @param Operand $firstOperand
+     * @param Operand $secondOperand
      * @return Operation
+     * @throws ExpressionException
      */
-    private function createOperation(TextOperation $textOperation)
+    private function createOperation(TextOperation $textOperation, Operand $firstOperand, Operand $secondOperand)
     {
         $operation = $this
             ->getOperationFactory()
-            ->create($textOperation);
+            ->create($textOperation)
+            ->setFirstOperand($firstOperand)
+            ->setSecondOperand($secondOperand);
 
         $operationCode = $textOperation->getOperationValue();
 
@@ -311,6 +312,14 @@ class SimpleTextExpression implements CodeToPhp
             case OperationName::IF_ELSE:
                 /* @var IfElseOperation $operation */
                 $this->initIfElseOperation($operation, $operationCode);
+                break;
+            case OperationName::IF:
+                /** @var IfOperation $operation */
+                $this->initIfOperation($operation, $operationCode);
+                break;
+            case OperationName::ASSIGN:
+                /* @var AssignOperation $operation */
+                $this->initAssignOperation($operation, $operationCode);
                 break;
         }
 
@@ -346,13 +355,62 @@ class SimpleTextExpression implements CodeToPhp
     }
 
     /**
+     * @param IfOperation $operation операция
+     * @param string $operationCode псевдо-код операции
+     * @throws ExpressionException
+     */
+    private function initIfOperation($operation, $operationCode)
+    {
+        if(preg_match('/^'. OperationSignRegexp::IF. '$/', $operationCode, $match))
+        {
+            $condition = $this
+                ->createTextExpression()
+                ->toExpression(trim($match[1]));
+
+            $trueResult = $this
+                ->createTextExpression()
+                ->toExpression(trim($match[2]));
+
+            $ifStructure = $this
+                ->createIfStructure($condition, $trueResult);
+
+            $operation->setIfStructure($ifStructure);
+        }
+    }
+
+    /**
+     * @param AssignOperation $operation операция присваивания
+     * @param string $assignText текстовое представление присвоения
+     */
+    private function initAssignOperation($operation, $assignText)
+    {
+        if(preg_match('/^'. OperationSignRegexp::ASSIGN. '$/', $assignText, $match))
+        {
+            $operation
+                ->setVariableName($match[1])
+                ->setVariableList($this->getVariableList());
+
+            $secondOperand = $operation->getSecondOperand();
+            $variableName = $secondOperand->getVariableName($operation->getVariableName());
+            $variableType = $secondOperand->getSimpleTypeName($secondOperand->getCode());
+
+            $variable = $this
+                ->createVariableStructure()
+                ->setName($variableName)
+                ->setCode($secondOperand->getCode())
+                ->setTypeName($variableType);
+            $this->getVariableList()->append($variableName, $variable);
+        }
+    }
+
+    /**
      * @return TextExpression преобразователь псевдо-кода в php код
      */
     protected function createTextExpression()
     {
         $textExpression = new TextExpression();
         return $textExpression
-            ->setExpressionList($this->getExpressionList());
+            ->setExpressionContext($this->getExpressionContext());
     }
 
     /**
@@ -366,8 +424,21 @@ class SimpleTextExpression implements CodeToPhp
         $ifElseStructure = new IfElseStructure();
         return $ifElseStructure
             ->setCondition($condition)
-            ->setTrueResult($trueResult)
-            ->setFalseResult($falseResult);
+            ->setTrueExpression($trueResult)
+            ->setFalseExpression($falseResult);
+    }
+
+    /**
+     * @param Expression $condition логическое условие
+     * @param Expression $trueResult результат в случае если условие истина
+     * @return IfStructure
+     */
+    private function createIfStructure($condition, $trueResult): IfStructure
+    {
+        $ifElseStructure = new IfStructure();
+        return $ifElseStructure
+            ->setCondition($condition)
+            ->setTrueExpression($trueResult);
     }
 
     /**
@@ -376,6 +447,14 @@ class SimpleTextExpression implements CodeToPhp
     protected function createExpression()
     {
         return new Expression();
+    }
+
+    /**
+     * @return VariableStructure переменная
+     */
+    protected function createVariableStructure()
+    {
+        return new VariableStructure();
     }
 
     /** Добавление выражения в список

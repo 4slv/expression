@@ -34,6 +34,8 @@ class OperationName extends Enum
 
     const IF_ELSE = 'ifElse';
 
+    const IF = 'if';
+
     const EQUAL = 'equal';
 
     const GREATER = 'greater';
@@ -97,6 +99,7 @@ class OperationName extends Enum
                 return 23;
             case self::FUNCTION:
             case self::IF_ELSE:
+            case self::IF:
             case self::FOR:
             case self::MIN:
             case self::MAX:
@@ -118,6 +121,7 @@ class OperationName extends Enum
             case self::DAYS:
             case self::FUNCTION:
             case self::IF_ELSE:
+            case self::IF:
             case self::FOR:
             case self::INT:
             case self::MONEY:
@@ -137,6 +141,7 @@ class OperationName extends Enum
         {
             case self::FUNCTION:
             case self::IF_ELSE:
+            case self::IF:
             case self::FOR:
             case self::MIN:
             case self::MAX:
@@ -154,6 +159,7 @@ class OperationName extends Enum
         {
             case self::FUNCTION:
             case self::IF_ELSE:
+            case self::IF:
             case self::FOR:
             case self::MIN:
             case self::MAX:

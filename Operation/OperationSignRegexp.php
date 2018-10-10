@@ -16,6 +16,8 @@ class OperationSignRegexp extends Enum
 
     const IF_ELSE = '\{([^\?\{\}]+)\?([^\:\{\}]+)\:([^\{\}]+)\}';
 
+    const IF = '\{([^\?\{\}]+)\?([^\:\{\}]+)}';
+
     const FUNCTION = '\$([a-zA-Z][\w\d]*)\[([^\[\]]+)?\]';
 
     const DATE = '\{date\}';

@@ -73,4 +73,18 @@ trait OperationPhpTemplateTrait
             Expression::SECOND_OPERAND.
             ')';
     }
+
+    public function getPhpTemplateOperationOnly()
+    {
+        return Expression::OPERATION;
+    }
+
+    public function getPhpTemplateAssign()
+    {
+        return
+            '(('.
+            Expression::OPERATION.
+            Expression::SECOND_OPERAND.
+            ') || true)';
+    }
 }
