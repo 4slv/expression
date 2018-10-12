@@ -86,4 +86,13 @@ class Functions
         }
         return (int) $number;
     }
+
+    /**
+     * @param int $amount сумма в минорных единицах
+     * @return Money деньги
+     */
+    public static function money($amount)
+    {
+        return Money::create($amount);
+    }
 }

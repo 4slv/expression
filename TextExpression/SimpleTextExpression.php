@@ -4,6 +4,7 @@ namespace Slov\Expression\TextExpression;
 
 use Slov\Expression\CodeAccessor;
 use Slov\Expression\Operation\AssignOperation;
+use Slov\Expression\Operation\ForOperation;
 use Slov\Expression\Operation\IfElseOperation;
 use Slov\Expression\Operation\IfOperation;
 use Slov\Expression\Operation\OperationName;
@@ -30,6 +31,9 @@ class SimpleTextExpression implements CodeToPhp
     public function execute()
     {
         $phpCode = $this->toPhp($this->getCode());
+
+        var_dump($phpCode);
+
         return eval('return '. $phpCode. ';');
     }
 
@@ -321,6 +325,10 @@ class SimpleTextExpression implements CodeToPhp
                 /* @var AssignOperation $operation */
                 $this->initAssignOperation($operation, $operationCode);
                 break;
+            case OperationName::FOR:
+                /* @var ForOperation $operation */
+                $this->initForOperation($operation, $operationCode);
+                break;
         }
 
         return $operation;
@@ -401,6 +409,37 @@ class SimpleTextExpression implements CodeToPhp
                 ->setTypeName($variableType);
             $this->getVariableList()->append($variableName, $variable);
         }
+    }
+
+    /**
+     * @param ForOperation $operation операция for
+     * @param string $forOperationText текстовое представление операции for
+     * @throws ExpressionException
+     */
+    private function initForOperation($operation, $forOperationText)
+    {
+        if(preg_match('/^'. OperationSignRegexp::FOR. '$/', $forOperationText, $match))
+        {
+            $first = $this->createTextExpression()->toExpression(trim($match[1]));
+            $condition = $this->createTextExpression()->toExpression(trim($match[2]));
+            $eachStep = $this->createTextExpression()->toExpression(trim($match[3]));
+            $action = $this->createTextExpression()->toExpression(trim($match[4]));
+
+            $forStructure = $this
+                ->createForStructure()
+                ->setFirst($first)
+                ->setCondition($condition)
+                ->setAction($action)
+                ->setEachStep($eachStep);
+
+            $operation->setForStructure($forStructure);
+        }
+    }
+
+    /** @return ForStructure */
+    private function createForStructure()
+    {
+        return new ForStructure();
     }
 
     /**
