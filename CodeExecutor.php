@@ -5,7 +5,8 @@ namespace Slov\Expression;
 /** Класс для запуска псевдо кода */
 class CodeExecutor
 {
-    use CodeAccessorTrait;
+    use CodeAccessorTrait,
+        CodeContextAccessor;
 
     /**
      * @return CodeTransform парсер псевдо кода
@@ -19,9 +20,7 @@ class CodeExecutor
     {
         $phpCode = $this
             ->createCodeTransform()
-            ->setCode($this->getCode())
-            ->toStatementList()
-            ->toPhp();
+            ->toPhp($this->getCode(), $this->getCodeContext());
         eval($phpCode);
     }
 }

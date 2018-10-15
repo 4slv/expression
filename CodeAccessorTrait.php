@@ -28,22 +28,4 @@ trait CodeAccessorTrait
         $this->code = $code;
         return $this;
     }
-
-    /**
-     * @return string разобранный псевдо код
-     */
-    public function getCodeParsed(): string
-    {
-        return $this->codeParsed;
-    }
-
-    /**
-     * @param string $codeParsed разобранный псевдо код
-     * @return $this
-     */
-    public function setCodeParsed(string $codeParsed)
-    {
-        $this->codeParsed = $codeParsed;
-        return $this;
-    }
 }

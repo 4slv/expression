@@ -3,7 +3,10 @@
 namespace Slov\Expression\Statement;
 
 /** Простая инструкция */
-abstract class SimpleStatement
+class SimpleStatement extends Statement
 {
-
+    public function toPhp($code, $codeContext): string
+    {
+        // TODO: Implement toPhp() method.
+    }
 }

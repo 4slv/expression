@@ -2,23 +2,64 @@
 
 namespace Slov\Expression;
 
-use Slov\Expression\Statement\StatementList;
+use Slov\Expression\Statement\ComplexStatementList;
+use Slov\Expression\Statement\SimpleStatementList;
+use Slov\Expression\Statement\Statement;
 
 /** Преобразователь псевдо кода */
-class CodeTransform
+class CodeTransform implements ToPhpTransformer
 {
-    use CodeAccessorTrait;
+    use CodeAccessorTrait,
+        CodeContextAccessor;
+
+    public function toPhp($code, $codeContext): string
+    {
+        $phpCode = '';
+        $this->setCode($code);
+
+        foreach ($this->toStatementList() as $statement)
+        {
+            $phpCode .= $statement->toPhp($statement->getCode(), $codeContext);
+        }
+        return $phpCode;
+    }
 
     /**
-     * @return StatementList список инструкций
+     * @return Statement[] список инструкций
      */
-    public function toStatementList()
+    private function toStatementList()
     {
         $parsedCode = $this
             ->createCodeParser()
+            ->setCodeContext($this->getCodeContext())
             ->parse($this->getCode());
-        var_dump($parsedCode);
-        die();
+        preg_match_all(
+            '/('.SimpleStatementList::LABEL_NAME. '\d+|'.ComplexStatementList::LABEL_NAME. '\d+'.')/',
+            $parsedCode,
+            $match
+            );
+        return $this->buildStatementList($match[1]);
+    }
+
+    /**
+     * @param string[] $statementLabelList список меток инструкций
+     * @return Statement[] список инструкций
+     */
+    private function buildStatementList($statementLabelList)
+    {
+        $statementList = [];
+        foreach($statementLabelList as $statementLabel){
+            $statementType = rtrim($statementLabel, '0123456789');
+            switch ($statementType){
+                case SimpleStatementList::LABEL_NAME:
+                    $statementList[] = $this->getSimpleStatementList()->get($statementLabel);
+                    break;
+                case ComplexStatementList::LABEL_NAME:
+                    $statementList[] = $this->getComplexStatementList()->get($statementLabel);
+                    break;
+            }
+        }
+        return $statementList;
     }
 
     /**

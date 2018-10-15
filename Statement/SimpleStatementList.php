@@ -48,7 +48,7 @@ class SimpleStatementList
     /**
      * @return string получение свободной метки
      */
-    private function getFreeLabel(): string
+    public function getFreeLabel(): string
     {
         return self::LABEL_NAME. count($this->list);
     }

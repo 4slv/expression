@@ -2,10 +2,9 @@
 
 namespace Slov\Expression\Statement;
 
-
+/** Построитель составной инструкции */
 class ComplexStatementBuilder
 {
-
     /** @var ComplexStatementFactory фабрика составных инструкций */
     protected $complexStatementFactory;
 
@@ -19,13 +18,19 @@ class ComplexStatementBuilder
     }
 
     /**
-     * @param $statementName
-     * @param $statementParts
+     * @param ComplexStatementName $statementName название составной инструкции
+     * @param string[] $statementParts части составной инструкции
+     * @return ComplexStatement
      */
-    public function build($statementName, $statementParts)
+    public function build($statementName, $statementParts): ComplexStatement
     {
-        $this
+        $complexStatement = $this
             ->getComplexStatementFactory()
-            ->create()
+            ->create($statementName);
+        $complexStatement
+            ->setCode($statementParts[0])
+            ->setCodeParts(array_slice($statementParts, 1))
+            ->parseParts();
+        return $complexStatement;
     }
 }

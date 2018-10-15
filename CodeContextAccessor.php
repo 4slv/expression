@@ -3,6 +3,7 @@
 namespace Slov\Expression;
 
 use Slov\Expression\Statement\ComplexStatementList;
+use Slov\Expression\Statement\SimpleStatementList;
 
 /** Доступ к контексту кода */
 trait CodeContextAccessor
@@ -46,6 +47,24 @@ trait CodeContextAccessor
     {
         return $this
             ->getComplexStatementList()
+            ->getFreeLabel();
+    }
+
+    /**
+     * @return SimpleStatementList список простых инструкций
+     */
+    public function getSimpleStatementList()
+    {
+        return $this
+            ->getCodeContext()
+            ->getSimpleStatementList();
+    }
+
+    /** @return string получение свободной метки простой инструкции */
+    public function getSimpleStatementFreeLabel()
+    {
+        return $this
+            ->getSimpleStatementList()
             ->getFreeLabel();
     }
 }

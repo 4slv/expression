@@ -26,8 +26,6 @@ abstract class ComplexStatement extends Statement
         return $this;
     }
 
-    /** Разбор кода частей и инициализация составной инструкции
-     * @return $this
-     */
+    /** Разбор кода частей и инициализация составной инструкции */
     abstract public function parseParts();
 }
