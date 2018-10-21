@@ -2,8 +2,10 @@
 
 namespace Slov\Expression;
 
+use Slov\Expression\Expression\ExpressionList;
 use Slov\Expression\Statement\ComplexStatementList;
 use Slov\Expression\Statement\SimpleStatementList;
+use Slov\Expression\TextExpression\VariableList;
 
 /** Доступ к контексту кода */
 trait CodeContextAccessor
@@ -66,5 +68,21 @@ trait CodeContextAccessor
         return $this
             ->getSimpleStatementList()
             ->getFreeLabel();
+    }
+
+    /**
+     * @return ExpressionList список выражений
+     */
+    public function getExpressionList()
+    {
+        return $this->getCodeContext()->getExpressionList();
+    }
+
+    /**
+     * @return VariableList список переменных
+     */
+    public function getVariableList(): VariableList
+    {
+        return $this->getCodeContext()->getVariableList();
     }
 }

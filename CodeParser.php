@@ -6,6 +6,8 @@ use Slov\Expression\Statement\ComplexStatement;
 use Slov\Expression\Statement\ComplexStatementList;
 use Slov\Expression\Statement\ComplexStatementName;
 use Slov\Expression\Statement\ComplexStatementRegexp;
+use Slov\Expression\Statement\SimpleStatement;
+use Slov\Expression\Statement\SimpleStatementList;
 use Slov\Expression\Statement\StatementBuilderAccessor;
 
 /** Разбор кода */
@@ -57,10 +59,9 @@ class CodeParser
     private function parseAllSimpleStatements($code)
     {
         $codeParsed = $code;
-        $simpleStatementCodeList = preg_split('/'. ComplexStatementList::LABEL_NAME. '\d+/', $code);
         $simpleStatementList = $this->getSimpleStatementList();
 
-        foreach ($simpleStatementCodeList as $simpleStatementCode)
+        foreach ($this->getSimpleStatementCodeList($code) as $simpleStatementCode)
         {
             $label = $simpleStatementList->getFreeLabel();
             $simpleStatement = $this->getSimpleStatementBuilder()
@@ -73,9 +74,29 @@ class CodeParser
                 self::$oneStatementReplace
             );
         }
-        return $codeParsed;
+        return preg_replace('/\s+/', '', $codeParsed);
     }
 
+    /** Получение списка простых инструкций из псевдо кода
+     * @param string $code псевдо код
+     * @return string[] список простых инструкций
+     */
+    private function getSimpleStatementCodeList($code)
+    {
+        $simpleStatementCodeList = preg_replace(
+            '/'. ComplexStatementList::LABEL_NAME. '\d+/',
+            '',
+            $code
+        );
+
+        preg_match_all(
+            '/'. SimpleStatement::REGEXP. '/',
+            $simpleStatementCodeList,
+            $matchSimpleStatement
+        );
+
+        return array_map('trim', $matchSimpleStatement[0]);
+    }
 
     /**
      * @param string $code псевдо код

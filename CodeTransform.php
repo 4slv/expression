@@ -34,10 +34,10 @@ class CodeTransform implements ToPhpTransformer
             ->setCodeContext($this->getCodeContext())
             ->parse($this->getCode());
         preg_match_all(
-            '/('.SimpleStatementList::LABEL_NAME. '\d+|'.ComplexStatementList::LABEL_NAME. '\d+'.')/',
+            '/('.SimpleStatementList::LABEL_NAME. '\d+|'. ComplexStatementList::LABEL_NAME. '\d+'.')/',
             $parsedCode,
             $match
-            );
+        );
         return $this->buildStatementList($match[1]);
     }
 

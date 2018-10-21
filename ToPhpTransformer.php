@@ -10,5 +10,5 @@ interface ToPhpTransformer
      * @param string $code псевдо код
      * @param CodeContext $codeContext контекст кода
      * @return string php код */
-    public function toPhp($code, $codeContext): string ;
+    public function toPhp(string $code, CodeContext $codeContext): string ;
 }
