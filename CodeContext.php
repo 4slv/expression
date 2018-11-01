@@ -5,7 +5,7 @@ namespace Slov\Expression;
 use Slov\Expression\Expression\ExpressionList;
 use Slov\Expression\Statement\ComplexStatementList;
 use Slov\Expression\Statement\SimpleStatementList;
-use Slov\Expression\TextExpression\VariableList;
+use Slov\Expression\Expression\VariableList;
 
 /** Контекст выполняемого кода */
 class CodeContext

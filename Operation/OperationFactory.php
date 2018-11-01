@@ -192,6 +192,13 @@ class OperationFactory
         return new MoneyOperation();
     }
 
+    /**
+     * @return AssignOperation
+     */
+    public function createAssignOperation()
+    {
+        return new AssignOperation();
+    }
 
     /**
      * @param TextOperation $operationName
@@ -240,6 +247,8 @@ class OperationFactory
                 return $this->createOrOperation();
             case OperationName::MONEY:
                 return $this->createMoneyOperation();
+            case OperationName::ASSIGN:
+                return $this->createAssignOperation();
         }
         return null;
     }

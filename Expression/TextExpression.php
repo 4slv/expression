@@ -1,8 +1,7 @@
 <?php
 
-namespace Slov\Expression\TextExpression;
+namespace Slov\Expression\Expression;
 
-use Slov\Expression\Expression\ExpressionException;
 
 class TextExpression extends SimpleTextExpression
 {

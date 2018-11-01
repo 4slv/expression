@@ -1,6 +1,6 @@
 <?php
 
-namespace Slov\Expression\TextExpression;
+namespace Slov\Expression\Expression;
 
 
 /** Список переменных */

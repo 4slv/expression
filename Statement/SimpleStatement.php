@@ -5,10 +5,19 @@ namespace Slov\Expression\Statement;
 /** Простая инструкция */
 class SimpleStatement extends Statement
 {
-    const REGEXP = '([^;]*);';
+    const REGEXP = '([^;]*)(;)';
 
     public function toPhp($code, $codeContext): string
     {
-        // TODO: Implement toPhp() method.
+        preg_match(
+            '/^'. self::REGEXP. '$/',
+            $code,
+            $match
+        );
+        $expressionCode = $match[1];
+        $expressionPhp = $this
+            ->createTextExpression()
+            ->toPhp($expressionCode, $codeContext);
+        return $expressionPhp. $match[2];
     }
 }

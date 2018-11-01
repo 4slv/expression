@@ -12,12 +12,6 @@ class OperationSignRegexp extends Enum
 
     const MAX = 'max\{([^}]+)\}';
 
-    const FOR = 'for\{([^;?}]+);([^;?}]+);([^;?}]+);([^}\?]+)\}';
-
-    const IF_ELSE = '\{([^\?\{\}]+)\?([^\:\{\}]+)\:([^\{\}]+)\}';
-
-    const IF = '\{([^\?\{\}]+)\?([^\:\{\}]+)}';
-
     const FUNCTION = '\$([a-zA-Z][\w\d]*)\[([^\[\]]+)?\]';
 
     const DATE = '\{date\}';

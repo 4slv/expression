@@ -2,11 +2,11 @@
 
 namespace Slov\Expression\Operation;
 
-use Slov\Expression\CodeAccessor;
+
 use Slov\Expression\CodeAccessorTrait;
 use Slov\Expression\FactoryRepository;
 use Slov\Expression\Operand;
-use Slov\Expression\TextExpression\ExpressionContextAccessor;
+use Slov\Expression\CodeContextAccessor;
 use Slov\Expression\ToPhpTransformer;
 use Slov\Expression\Type\TypeName;
 
@@ -17,7 +17,7 @@ abstract class Operation implements ToPhpTransformer {
         FactoryRepository,
         OperationPhpTemplateTrait,
         OperationToPhpTrait,
-        ExpressionContextAccessor;
+        CodeContextAccessor;
 
     /** @var Operand первый операнд */
     protected $firstOperand;

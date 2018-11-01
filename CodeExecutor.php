@@ -21,6 +21,9 @@ class CodeExecutor
         $phpCode = $this
             ->createCodeTransform()
             ->toPhp($this->getCode(), $this->getCodeContext());
+
+        echo $phpCode;
+
         eval($phpCode);
     }
 }

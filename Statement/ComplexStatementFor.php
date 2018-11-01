@@ -7,7 +7,7 @@ class ComplexStatementFor extends ComplexStatement
 {
     public function toPhp($code, $codeContext): string
     {
-        // TODO: Implement toPhp() method.
+        return $code;
     }
 
     public function parseParts()

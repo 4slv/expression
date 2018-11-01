@@ -16,7 +16,6 @@ class CodeTransform implements ToPhpTransformer
     {
         $phpCode = '';
         $this->setCode($code);
-
         foreach ($this->toStatementList() as $statement)
         {
             $phpCode .= $statement->toPhp($statement->getCode(), $codeContext);

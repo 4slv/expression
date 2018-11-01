@@ -32,10 +32,6 @@ class OperationName extends Enum
 
     const MONEY = 'money';
 
-    const IF_ELSE = 'ifElse';
-
-    const IF = 'if';
-
     const EQUAL = 'equal';
 
     const GREATER = 'greater';
@@ -54,11 +50,6 @@ class OperationName extends Enum
 
     const ASSIGN = 'assign';
 
-    const FOR = 'for';
-
-    const MIN = 'min';
-
-    const MAX = 'max';
 
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)
@@ -98,12 +89,6 @@ class OperationName extends Enum
             case self::MONEY:
                 return 23;
             case self::FUNCTION:
-            case self::IF_ELSE:
-            case self::IF:
-            case self::FOR:
-            case self::MIN:
-            case self::MAX:
-                return 24;
         }
         return 0;
     }
@@ -120,13 +105,8 @@ class OperationName extends Enum
             case self::DAYS_IN_YEAR:
             case self::DAYS:
             case self::FUNCTION:
-            case self::IF_ELSE:
-            case self::IF:
-            case self::FOR:
             case self::INT:
             case self::MONEY:
-            case self::MIN:
-            case self::MAX:
                 return false;
             default:
                 return true;
@@ -140,34 +120,9 @@ class OperationName extends Enum
         switch ($this->getValue())
         {
             case self::FUNCTION:
-            case self::IF_ELSE:
-            case self::IF:
-            case self::FOR:
-            case self::MIN:
-            case self::MAX:
                 return false;
             default:
                 return true;
-        }
-    }
-
-    /**
-     * @return string тип операции
-     */
-    public function getOperationType(){
-        switch ($this->getValue())
-        {
-            case self::FUNCTION:
-            case self::IF_ELSE:
-            case self::IF:
-            case self::FOR:
-            case self::MIN:
-            case self::MAX:
-            case self::ASSIGN:
-                return OperationType::COMPLEX;
-            default:
-                return OperationType::SIMPLE;
-
         }
     }
 }

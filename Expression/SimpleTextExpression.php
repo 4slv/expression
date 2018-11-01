@@ -1,8 +1,7 @@
 <?php
 
-namespace Slov\Expression\TextExpression;
+namespace Slov\Expression\Expression;
 
-use Slov\Expression\Expression\ExpressionException;
 use Slov\Expression\CodeAccessorTrait;
 use Slov\Expression\CodeContext;
 use Slov\Expression\CodeContextAccessor;
@@ -10,7 +9,6 @@ use Slov\Expression\Operation\OperationSignRegexp;
 use Slov\Expression\Operation\Operation;
 use Slov\Expression\ToPhpTransformer;
 use Slov\Expression\Type\TypeName;
-use Slov\Expression\Expression\Expression;
 use Slov\Expression\FactoryRepository;
 use Slov\Expression\Operand;
 use Slov\Expression\Operation\TextOperation;
@@ -65,6 +63,7 @@ class SimpleTextExpression implements ToPhpTransformer
      */
     public function toExpression($code): Expression
     {
+        print_r([$code]);
         $operationList = $this->getOperationList($code);
         if(count($operationList) > 0){
             $maxTextOperation = $this->getMaxTextOperation($operationList);
