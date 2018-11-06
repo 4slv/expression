@@ -1,7 +1,5 @@
 <?php
 
-use Slov\Expression\CodeExecutor;
-
 include 'vendor/autoload.php';
 
 $code = trim(str_replace(
@@ -11,7 +9,4 @@ $code = trim(str_replace(
 ));
 
 
-$codeExecutor = new CodeExecutor();
-$codeExecutor
-    ->setCode($code)
-    ->execute();
+var_dump($code);
