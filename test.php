@@ -7,6 +7,3 @@ $code = trim(str_replace(
     '',
     file_get_contents('testCode.php')
 ));
-
-
-var_dump($code);
