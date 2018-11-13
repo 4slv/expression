@@ -8,5 +8,5 @@ include 'vendor/autoload.php';
     file_get_contents('testCode.php')
 ));*/
 
-$code = '1 + 1';
+$code = '1';
 
