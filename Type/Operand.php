@@ -8,8 +8,23 @@ use Slov\Expression\Expression\ExpressionPart;
 /** Операнд */
 class Operand extends ExpressionPart
 {
+    public function toPhp(CodeContext $codeContext): string
+    {
+
+
+    }
+
     public function parse(CodeContext $codeContext): void
     {
-        $code = $this->getCode();
+        $this->setTypeName(
+            $this->codeToTypeName($codeContext)
+        );
     }
+
+    protected function codeToTypeName(CodeContext $codeContext): TypeName
+    {
+        return TypeRegExp::getTypeNameByStringValue($this->getCode());
+    }
+
+
 }

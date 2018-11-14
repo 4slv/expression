@@ -23,6 +23,21 @@ abstract class CodePartList
         return $label;
     }
 
+    /** Получение части псевдо кода
+     * @param string $label метка элемента списка
+     * @return CodePart часть псевдо кода
+     * @throws CodeParseException */
+    public function get($label)
+    {
+        if(array_key_exists($label, $this->list))
+        {
+            return $this->list[$label];
+        }
+        throw new CodeParseException(
+            $label. ' not found in '. self::class
+        );
+    }
+
     /** @return string название новоой метки */
     protected function getNewLabel()
     {
