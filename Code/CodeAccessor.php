@@ -16,7 +16,7 @@ trait CodeAccessor
 
     /** @param string $code псевдо код
      * @return $this */
-    protected function setCode(string $code)
+    public function setCode(string $code)
     {
         $this->code = $code;
         return $this;

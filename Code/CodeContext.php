@@ -11,21 +11,14 @@ class CodeContext
     protected $operandList;
 
     /**
-     * @return OperandList
+     * @return OperandList список операндов
      */
     public function getOperandList(): OperandList
     {
+        if(is_null($this->operandList)){
+            $this->operandList = new OperandList();
+        }
         return $this->operandList;
-    }
-
-    /**
-     * @param OperandList $operandList
-     * @return CodeContext
-     */
-    public function setOperandList(OperandList $operandList): CodeContext
-    {
-        $this->operandList = $operandList;
-        return $this;
     }
 
 

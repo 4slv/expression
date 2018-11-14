@@ -10,7 +10,12 @@ abstract class CodePartList
     /** @var CodePart[] список частей псевдо кода */
     protected $list;
 
-    abstract function getLabelPrefix(): string;
+    public function __construct()
+    {
+        $this->list = [];
+    }
+
+    abstract public function getLabelPrefix(): string;
 
     /** Добавление элемента в список
      * @param CodePart $listElement элемент списка
