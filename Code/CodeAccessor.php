@@ -21,4 +21,10 @@ trait CodeAccessor
         $this->code = $code;
         return $this;
     }
+
+    /** @return string псевдо код без пробелов по краям */
+    public function getCodeTrim(): string
+    {
+        return trim($this->getCode());
+    }
 }

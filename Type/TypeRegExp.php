@@ -26,6 +26,6 @@ class TypeRegExp extends Enum
                 return TypeName::byValue($typeName);
             }
         }
-        throw new CodeParseException('Unknown type of value: "'. $typeStringValue. '"');
+        throw new CodeParseException($typeStringValue. ' :: unknown type of value');
     }
 }

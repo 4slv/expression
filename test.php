@@ -1,7 +1,7 @@
 <?php
 
 use Slov\Expression\Code\CodeContext;
-use Slov\Expression\Type\Operand;
+use Slov\Expression\Operation\Operation;
 
 include 'vendor/autoload.php';
 
@@ -11,11 +11,11 @@ include 'vendor/autoload.php';
     file_get_contents('testCode.php')
 ));*/
 
-$code = '1';
+$code = '1 + 1';
 
 $codeContext = new CodeContext();
-$operand = new Operand();
-$php = $operand
+$operation = new Operation();
+$php = $operation
     ->setCode($code)
     ->parse($codeContext)
     ->getPhp();

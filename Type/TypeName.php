@@ -32,5 +32,13 @@ class TypeName extends Enum
     {
         return $this->getValue() === self::INT;
     }
+
+    /**
+     * @return bool true - является числом с плавающей запятой
+     */
+    public function isFloat()
+    {
+        return $this->getValue() === self::FLOAT;
+    }
 }
 
