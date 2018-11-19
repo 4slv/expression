@@ -28,9 +28,9 @@ abstract class CodePartList
         return $label;
     }
 
-    /** Получение части псевдо кода
+    /** Получение элемента списка по метке
      * @param string $label метка элемента списка
-     * @return CodePart часть псевдо кода
+     * @return CodePart элемент списка
      * @throws CodeParseException */
     public function get($label)
     {

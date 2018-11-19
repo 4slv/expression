@@ -25,6 +25,7 @@ class OperationName extends Enum
                 return 15;
             case self::MULTIPLY:
             case self::DIVISION:
+                return 16;
         }
         return 0;
     }

@@ -8,6 +8,8 @@ use Slov\Expression\Code\CodeParseException;
 /** Распознаватель операции */
 class OperationResolver
 {
+    use OperationSignRegexpAccessor;
+
     /**
      * @return OperationBuilder строитель операций
      */
@@ -23,7 +25,7 @@ class OperationResolver
      * @throws CodeParseException */
     public function resolve(string $code, CodeContext $codeContext)
     {
-        foreach ($this->getSignList() as $operationName => $signRegexp)
+        foreach ($this->getOperationSignRegexpList() as $operationName => $signRegexp)
         {
             $operationRegexp = '/^(.*)('. $signRegexp. ')(.*)$/';
             if(preg_match($operationRegexp, $code, $match)){
@@ -43,13 +45,5 @@ class OperationResolver
             }
         }
         throw new CodeParseException($code. ' :: operation is not resolved');
-    }
-
-    /**
-     * @return string[] асоциативный массив: название операции => регулярное выражение
-     */
-    protected function getSignList()
-    {
-        return OperationSignRegexp::getConstants();
     }
 }

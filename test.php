@@ -5,13 +5,7 @@ use Slov\Expression\Operation\Operation;
 
 include 'vendor/autoload.php';
 
-/*$code = trim(str_replace(
-    '<?php',
-    '',
-    file_get_contents('testCode.php')
-));*/
-
-$code = '1 + 1';
+/* $code = '1 + 1';
 
 $codeContext = new CodeContext();
 $operation = new Operation();
@@ -20,4 +14,7 @@ $php = $operation
     ->parse($codeContext)
     ->getPhp();
 
-var_dump($php);
+var_dump($php); */
+
+$pof = new \Slov\Expression\Operation\PriorityOperationFinder();
+echo $pof->find('1 + 1 * 2');
