@@ -11,8 +11,29 @@ use Slov\Expression\Operation\PriorityOperationFinder;
 /** Выражение без скобок */
 class ExpressionWithoutBrackets extends Expression
 {
+    /** @var bool флаг использования обрамляющих скобок */
+    protected $useBrackets;
+
     /** @var PriorityOperationFinder поиск приоритетной операции */
     protected $priorityOperationFinder;
+
+    /**
+     * @return bool флаг использования обрамляющих скобок
+     */
+    public function getUseBrackets(): bool
+    {
+        return $this->useBrackets;
+    }
+
+    /**
+     * @param bool $useBrackets флаг использования обрамляющих скобок
+     * @return $this
+     */
+    public function setUseBrackets(bool $useBrackets)
+    {
+        $this->useBrackets = $useBrackets;
+        return $this;
+    }
 
     /** @return PriorityOperationFinder поиск приоритетной операции */
     public function getPriorityOperationFinder(): PriorityOperationFinder
@@ -22,6 +43,16 @@ class ExpressionWithoutBrackets extends Expression
             $this->priorityOperationFinder = new PriorityOperationFinder($this->getCode());
         }
         return $this->priorityOperationFinder;
+    }
+
+    /**
+     * @return string получение изначального кода
+     */
+    public function getOriginalCode(): string
+    {
+        return $this->getUseBrackets()
+            ? '('. $this->getCode(). ')'
+            : $this->getCode();
     }
 
     /** Создание операции
