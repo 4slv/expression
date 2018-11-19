@@ -4,9 +4,8 @@ namespace Slov\Expression\Expression;
 
 
 use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\Code\CodePartList;
 
-class ExpressionList extends CodePartList
+class ExpressionList extends ExpressionPartList
 {
     const LABEL_PREFIX = 'Expression';
 

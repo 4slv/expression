@@ -3,10 +3,10 @@
 namespace Slov\Expression\Type;
 
 
-use Slov\Expression\Code\CodePartList;
 use Slov\Expression\Code\CodeParseException;
+use Slov\Expression\Expression\ExpressionPartList;
 
-class OperandList extends CodePartList
+class OperandList extends ExpressionPartList
 {
     const LABEL_PREFIX = 'Operand';
 

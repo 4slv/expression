@@ -1,0 +1,61 @@
+<?php
+
+namespace Slov\Expression\Expression;
+
+
+use Slov\Expression\Code\CodeContext;
+use Slov\Expression\Code\CodeParseException;
+use Slov\Expression\Operation\Operation;
+use Slov\Expression\Operation\PriorityOperationFinder;
+
+/** Выражение без скобок */
+class ExpressionWithoutBrackets extends Expression
+{
+    /** @var PriorityOperationFinder поиск приоритетной операции */
+    protected $priorityOperationFinder;
+
+    /** @return PriorityOperationFinder поиск приоритетной операции */
+    public function getPriorityOperationFinder(): PriorityOperationFinder
+    {
+        if(is_null($this->priorityOperationFinder))
+        {
+            $this->priorityOperationFinder = new PriorityOperationFinder($this->getCode());
+        }
+        return $this->priorityOperationFinder;
+    }
+
+    /** Создание операции
+     * @param CodeContext $codeContext контекст кода
+     * @param string $operationCode код операции
+     * @return Operation операция
+     * @throws CodeParseException */
+    protected function createOperation(CodeContext $codeContext, string $operationCode)
+    {
+        $operation = new Operation();
+        return $operation
+            ->setCode($operationCode)
+            ->parse($codeContext);
+    }
+
+    protected function defineOperation(CodeContext $codeContext): Operation
+    {
+        $priorityOperationFinder = $this->getPriorityOperationFinder();
+        $expressionCode = $this->getCode();
+        $operation = null;
+        while ($codeContext->checkLabelIsExpressionPart($expressionCode) === false)
+        {
+            $maxPriorityOperationCode = $expressionCode === $this->getCode()
+                ? $priorityOperationFinder->find()
+                : $priorityOperationFinder->init($expressionCode)->find();
+            $operation = $this->createOperation($codeContext, $maxPriorityOperationCode);
+            $replaceTimes = 1;
+            $expressionCode = str_replace(
+                $maxPriorityOperationCode,
+                $operation->getLabel(),
+                $expressionCode,
+                $replaceTimes
+            );
+        }
+        return $operation;
+    }
+}

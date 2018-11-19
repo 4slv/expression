@@ -4,10 +4,12 @@ namespace Slov\Expression\Expression;
 
 
 use Slov\Expression\Code\CodeContext;
+use Slov\Expression\Code\CodeParseException;
 use Slov\Expression\Operation\Operation;
 use Slov\Expression\Type\TypeName;
 
-class Expression extends ExpressionPart
+/** Выражение */
+abstract class Expression extends ExpressionPart
 {
     /** @var Operation операция */
     protected $operation;
@@ -24,15 +26,27 @@ class Expression extends ExpressionPart
      * @param Operation $operation операция
      * @return $this
      */
-    public function setOperation(Operation $operation)
+    protected function setOperation(Operation $operation)
     {
         $this->operation = $operation;
         return $this;
     }
 
+    /** Определить операцию выражения
+     * @param CodeContext $codeContext контекст кода
+     * @return Operation операция
+     * @throws CodeParseException */
+    abstract protected function defineOperation(CodeContext $codeContext): Operation;
+
+    public function parse(CodeContext $codeContext)
+    {
+        $this->setOperation($this->defineOperation($codeContext));
+        return parent::parse($codeContext);
+    }
+
     protected function getContextList(CodeContext $codeContext)
     {
-        $codeContext->getExpressionList();
+        return $codeContext->getExpressionList();
     }
 
     protected function typeDefinition(CodeContext $codeContext): TypeName

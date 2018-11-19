@@ -32,6 +32,30 @@ class OperationFactory
     }
 
     /**
+     * @return SubtractionOperation
+     */
+    public function createSubtractionOperation()
+    {
+        return new SubtractionOperation();
+    }
+
+    /**
+     * @return DivisionOperation
+     */
+    public function createDivisionOperation()
+    {
+        return new DivisionOperation();
+    }
+
+    /**
+     * @return  MultiplyOperation
+     */
+    public function createMultiplyOperation()
+    {
+        return new MultiplyOperation();
+    }
+
+    /**
      * @param OperationName $operationName
      * @return Operation
      */
@@ -40,6 +64,12 @@ class OperationFactory
         switch($operationName->getValue()){
             case OperationName::ADD:
                 return $this->createAddOperation();
+            case OperationName::SUBTRACTION:
+                return $this->createSubtractionOperation();
+            case OperationName::MULTIPLY:
+                return $this->createMultiplyOperation();
+            case OperationName::DIVISION:
+                return $this->createDivisionOperation();
         }
         return null;
     }

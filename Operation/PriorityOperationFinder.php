@@ -2,22 +2,83 @@
 
 namespace Slov\Expression\Operation;
 
+use Slov\Expression\Code\CodeAccessor;
 use Slov\Expression\Code\CodeParseException;
 
 
-/** Приоритетная операция */
+/** Поиск приоритетной операции */
 class PriorityOperationFinder
 {
+    use CodeAccessor;
     use OperationSignRegexpAccessor;
 
-    /** Поиск наиболее приоритетной операции
+    /** @var string[] список псевдокода знаков операций */
+    protected $operationSignList;
+
+    /** @var string[] список псевдокода операндов */
+    protected $operandList;
+
+    /**
+     * @return string[] список псевдокода знаков операций
+     */
+    public function getOperationSignList(): array
+    {
+        return $this->operationSignList;
+    }
+
+    /**
+     * @param string[] $operationSignList список псевдокода знаков операций
+     * @return $this
+     */
+    protected function setOperationSignList(array $operationSignList)
+    {
+        $this->operationSignList = $operationSignList;
+        return $this;
+    }
+
+    /**
+     * @return string[] список псевдокода операндов
+     */
+    public function getOperandList(): array
+    {
+        return $this->operandList;
+    }
+
+    /**
+     * @param string[] $operandList список псевдокода операндов
+     * @return $this
+     */
+    protected function setOperandList(array $operandList)
+    {
+        $this->operandList = $operandList;
+        return $this;
+    }
+
+    /** @param string $expressionCode псевдо код выражения без скобок */
+    public function __construct(string $expressionCode)
+    {
+        $this->init($expressionCode);
+    }
+
+    /**
      * @param string $expressionCode псевдо код выражения без скобок
+     * @return $this
+     */
+    public function init(string $expressionCode)
+    {
+        return $this
+            ->setCode($expressionCode)
+            ->setOperandList($this->createOperandList($expressionCode))
+            ->setOperationSignList($this->createOperationSignList($expressionCode));
+    }
+
+    /** Поиск наиболее приоритетной операции
      * @return string код наиболее приоритетной операции
      * @throws CodeParseException */
-    public function find(string $expressionCode): string
+    public function find(): string
     {
         $maxOperationInfo = null;
-        foreach ($this->getOperationInfoList($expressionCode) as $operationInfo)
+        foreach ($this->getOperationInfoList() as $operationInfo)
         {
             if(isset($maxOperationInfo)){
                 /** @var OperationInfo $maxOperationInfo */
@@ -28,21 +89,17 @@ class PriorityOperationFinder
                 $maxOperationInfo = $operationInfo;
             }
         }
-        return $this->getOperationCodeByPosition(
-            $maxOperationInfo->getPosition(),
-            $expressionCode
-        );
+        return $this->getOperationCodeByPosition($maxOperationInfo->getPosition());
     }
 
     /**
-     * @param string $expressionCode псевдо код выражения без скобок
      * @return OperationInfo[] список информации об операции
      * @throws CodeParseException
      */
-    private function getOperationInfoList(string $expressionCode)
+    private function getOperationInfoList()
     {
         $operationInfoList = [];
-        foreach ($this->getOperationList($expressionCode) as $position => $sign)
+        foreach ($this->getOperationSignList() as $position => $sign)
         {
             $operationInfoList[] = $this->createOperationInfo($sign, $position);
         }
@@ -51,12 +108,11 @@ class PriorityOperationFinder
 
     /** Получение псевдокода операции по порядковому номеру
      * @param int $position порядковый номер позиции операции
-     * @param string $expressionCode псевдо код выражения без скобок
      * @return string псевдокод операции */
-    private function getOperationCodeByPosition(int $position, string $expressionCode): string
+    private function getOperationCodeByPosition(int $position): string
     {
-        $operationList = $this->getOperationList($expressionCode);
-        $operandList = $this->getOperandList($expressionCode);
+        $operationList = $this->getOperationSignList();
+        $operandList = $this->getOperandList();
 
         return count($operandList)
             ?   $operandList[$position].
@@ -96,7 +152,7 @@ class PriorityOperationFinder
      * @param string $expressionCode псевдо код выражения без скобок
      * @return string[] список псевдо кодов знаков операций
      */
-    private function getOperationList($expressionCode)
+    private function createOperationSignList($expressionCode)
     {
         preg_match_all($this->getOperationListRegexp(), $expressionCode, $match);
         return $match[0];
@@ -104,9 +160,9 @@ class PriorityOperationFinder
 
     /**
      * @param string $expressionText псевдо код выражения без скобок
-     * @return string[]
+     * @return string[] список операндов
      */
-    private function getOperandList($expressionText)
+    private function createOperandList($expressionText)
     {
         return preg_split($this->getOperationListRegexp(), $expressionText);
     }

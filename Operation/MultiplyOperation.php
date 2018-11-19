@@ -6,9 +6,10 @@ namespace Slov\Expression\Operation;
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Type\TypeName;
 
-class AddOperation extends DigitOperation
+/** Операция умножения */
+class MultiplyOperation extends DigitOperation
 {
-    const OPERATION_SIGN = '+';
+    const OPERATION_SIGN = '*';
 
     public function typeDefinition(CodeContext $codeContext): TypeName
     {

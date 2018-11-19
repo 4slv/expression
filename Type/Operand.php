@@ -11,6 +11,10 @@ class Operand extends ExpressionPart
 {
     public function toPhp(CodeContext $codeContext): string
     {
+        if($codeContext->checkLabelIsExpressionPart($this->getCodeTrim())){
+            return $codeContext->getExpressionPartByLabel($this->getCodeTrim())->toPhp($codeContext);
+        }
+
         switch($this->getTypeName()->getValue())
         {
             case TypeName::INT:
@@ -28,12 +32,15 @@ class Operand extends ExpressionPart
     }
 
     /**
-     * @param CodeContext $codeContext
+     * @param CodeContext $codeContext контекст кода
      * @return TypeName
      * @throws CodeParseException
      */
     protected function typeDefinition(CodeContext $codeContext): TypeName
     {
-        return TypeRegExp::getTypeNameByStringValue($this->getCodeTrim());
+        return $codeContext->checkLabelIsExpressionPart($this->getCodeTrim())
+            ? $codeContext->getExpressionPartByLabel($this->getCodeTrim())->getTypeName()
+            : TypeRegExp::getTypeNameByStringValue($this->getCodeTrim());
+
     }
 }
