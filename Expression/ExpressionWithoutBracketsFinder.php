@@ -6,7 +6,7 @@ use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
 
 /** Поиск подвыражения в скобках */
-class PriorityExpressionWithoutBracketsFinder
+class ExpressionWithoutBracketsFinder
 {
     /**
      * @param CodeContext $codeContext контекст кода
@@ -26,6 +26,15 @@ class PriorityExpressionWithoutBracketsFinder
                 ->setCode($expressionCode)
                 ->setUseBrackets(false);
         return $expressionWithoutBrackets->parse($codeContext);
+    }
+
+    /** Проверка существования выражения в строке псевдокода
+     * @param CodeContext $codeContext контекст кода
+     * @param string $expressionCode псевдо код
+     * @return bool */
+    public function checkExpressionExists(CodeContext $codeContext, string $expressionCode): bool
+    {
+        return $codeContext->checkLabelIsExpressionPart($expressionCode) === false;
     }
 
     /**
