@@ -3,7 +3,6 @@
 namespace Slov\Expression\Expression;
 
 use Slov\Expression\Code\CodeContext;
-use Slov\Expression\Operation\Operation;
 
 /** Выражение со скобками */
 class ExpressionWithBrackets extends Expression
@@ -22,17 +21,26 @@ class ExpressionWithBrackets extends Expression
         return $this->expressionWithoutBracketsFinder;
     }
 
-    protected function defineOperation(CodeContext $codeContext): Operation
+    protected function defineExpressionPart(CodeContext $codeContext): ExpressionPart
     {
         $expressionWithoutBracketsFinder = $this->getExpressionWithoutBracketsFinder();
         $expressionCode = $this->getCode();
-        $operation = null;
-        while (
-            $expressionWithoutBracketsFinder
-                ->checkExpressionExists($codeContext,$expressionCode)
-        ){
-            
+        $expressionPart = null;
+        while ($codeContext->checkLabelIsExpressionPart($expressionCode) === false){
+            $expressionPart = $expressionWithoutBracketsFinder
+                ->find($codeContext, $expressionCode);
+            $replaceTimes = 1;
+
+            //var_dump($expressionCode, $expressionPart->getOriginalCode(), $expressionPart->getLabel());
+
+            $expressionCode = str_replace(
+                $expressionPart->getOriginalCode(),
+                $expressionPart->getLabel(),
+                $expressionCode,
+                $replaceTimes
+            );
         }
+        return $expressionPart;
     }
 
 }

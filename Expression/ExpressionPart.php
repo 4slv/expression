@@ -14,6 +14,7 @@ use Slov\Expression\Type\TypeNameAccessor;
 abstract class ExpressionPart extends CodePart
 {
     use TypeNameAccessor;
+    use UseBracketsAccessor;
 
     /** Определение типа
      * @param CodeContext $codeContext контекст кода
@@ -33,8 +34,30 @@ abstract class ExpressionPart extends CodePart
         $contextList = $this->getContextList($codeContext);
         $label = $contextList->append($this);
         $this->setLabel($label);
-        $php = $this->toPhp($codeContext);
+        $php = $this->toOriginalPhp($codeContext);
         $this->setPhp($php);
         return $this;
+    }
+
+    /**
+     * @return string получение изначального кода
+     */
+    public function getOriginalCode(): string
+    {
+        return $this->getUseBrackets()
+            ? '('. $this->getCode(). ')'
+            : $this->getCode();
+    }
+
+    /**
+     * @param CodeContext $codeContext контекст кода
+     * @return string получение оригинального php кода (со скобками)
+     * @throws CodeParseException
+     */
+    public function toOriginalPhp(CodeContext $codeContext)
+    {
+        return $this->getUseBrackets()
+            ? '('. $this->toPhp($codeContext). ')'
+            : $this->toPhp($codeContext);
     }
 }

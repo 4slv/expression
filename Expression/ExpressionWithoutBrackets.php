@@ -11,29 +11,8 @@ use Slov\Expression\Operation\PriorityOperationFinder;
 /** Выражение без скобок */
 class ExpressionWithoutBrackets extends Expression
 {
-    /** @var bool флаг использования обрамляющих скобок */
-    protected $useBrackets;
-
     /** @var PriorityOperationFinder поиск приоритетной операции */
     protected $priorityOperationFinder;
-
-    /**
-     * @return bool флаг использования обрамляющих скобок
-     */
-    public function getUseBrackets(): bool
-    {
-        return $this->useBrackets;
-    }
-
-    /**
-     * @param bool $useBrackets флаг использования обрамляющих скобок
-     * @return $this
-     */
-    public function setUseBrackets(bool $useBrackets)
-    {
-        $this->useBrackets = $useBrackets;
-        return $this;
-    }
 
     /** @return PriorityOperationFinder поиск приоритетной операции */
     public function getPriorityOperationFinder(): PriorityOperationFinder
@@ -43,16 +22,6 @@ class ExpressionWithoutBrackets extends Expression
             $this->priorityOperationFinder = new PriorityOperationFinder($this->getCode());
         }
         return $this->priorityOperationFinder;
-    }
-
-    /**
-     * @return string получение изначального кода
-     */
-    public function getOriginalCode(): string
-    {
-        return $this->getUseBrackets()
-            ? '('. $this->getCode(). ')'
-            : $this->getCode();
     }
 
     /** Создание операции
@@ -68,25 +37,25 @@ class ExpressionWithoutBrackets extends Expression
             ->parse($codeContext);
     }
 
-    protected function defineOperation(CodeContext $codeContext): Operation
+    protected function defineExpressionPart(CodeContext $codeContext): ExpressionPart
     {
         $priorityOperationFinder = $this->getPriorityOperationFinder();
         $expressionCode = $this->getCode();
-        $operation = null;
+        $expressionPart = null;
         while ($codeContext->checkLabelIsExpressionPart($expressionCode) === false)
         {
             $maxPriorityOperationCode = $expressionCode === $this->getCode()
                 ? $priorityOperationFinder->find()
                 : $priorityOperationFinder->init($expressionCode)->find();
-            $operation = $this->createOperation($codeContext, $maxPriorityOperationCode);
+            $expressionPart = $this->createOperation($codeContext, $maxPriorityOperationCode);
             $replaceTimes = 1;
             $expressionCode = str_replace(
                 $maxPriorityOperationCode,
-                $operation->getLabel(),
+                $expressionPart->getLabel(),
                 $expressionCode,
                 $replaceTimes
             );
         }
-        return $operation;
+        return $expressionPart;
     }
 }

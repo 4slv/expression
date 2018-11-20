@@ -12,7 +12,7 @@ class Operand extends ExpressionPart
     public function toPhp(CodeContext $codeContext): string
     {
         if($codeContext->checkLabelIsExpressionPart($this->getCodeTrim())){
-            return $codeContext->getExpressionPartByLabel($this->getCodeTrim())->toPhp($codeContext);
+            return $codeContext->getExpressionPartByLabel($this->getCodeTrim())->getPhp();
         }
 
         switch($this->getTypeName()->getValue())

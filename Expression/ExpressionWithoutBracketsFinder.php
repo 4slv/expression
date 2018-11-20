@@ -28,15 +28,6 @@ class ExpressionWithoutBracketsFinder
         return $expressionWithoutBrackets->parse($codeContext);
     }
 
-    /** Проверка существования выражения в строке псевдокода
-     * @param CodeContext $codeContext контекст кода
-     * @param string $expressionCode псевдо код
-     * @return bool */
-    public function checkExpressionExists(CodeContext $codeContext, string $expressionCode): bool
-    {
-        return $codeContext->checkLabelIsExpressionPart($expressionCode) === false;
-    }
-
     /**
      * @return ExpressionWithoutBrackets выражение без скобок
      */

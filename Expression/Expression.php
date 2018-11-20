@@ -11,24 +11,24 @@ use Slov\Expression\Type\TypeName;
 /** Выражение */
 abstract class Expression extends ExpressionPart
 {
-    /** @var Operation операция */
-    protected $operation;
+    /** @var ExpressionPart часть выражения */
+    protected $expressionPart;
 
     /**
-     * @return Operation операция
+     * @return ExpressionPart часть выражения
      */
-    public function getOperation(): Operation
+    public function getExpressionPart(): ExpressionPart
     {
-        return $this->operation;
+        return $this->expressionPart;
     }
 
     /**
-     * @param Operation $operation операция
+     * @param ExpressionPart $expressionPart часть выражения
      * @return $this
      */
-    protected function setOperation(Operation $operation)
+    protected function setExpressionPart(ExpressionPart $expressionPart)
     {
-        $this->operation = $operation;
+        $this->expressionPart = $expressionPart;
         return $this;
     }
 
@@ -36,11 +36,11 @@ abstract class Expression extends ExpressionPart
      * @param CodeContext $codeContext контекст кода
      * @return Operation операция
      * @throws CodeParseException */
-    abstract protected function defineOperation(CodeContext $codeContext): Operation;
+    abstract protected function defineExpressionPart(CodeContext $codeContext): ExpressionPart;
 
     public function parse(CodeContext $codeContext)
     {
-        $this->setOperation($this->defineOperation($codeContext));
+        $this->setExpressionPart($this->defineExpressionPart($codeContext));
         return parent::parse($codeContext);
     }
 
@@ -51,11 +51,11 @@ abstract class Expression extends ExpressionPart
 
     protected function typeDefinition(CodeContext $codeContext): TypeName
     {
-        return $this->getOperation()->typeDefinition($codeContext);
+        return $this->getExpressionPart()->typeDefinition($codeContext);
     }
 
     public function toPhp(CodeContext $codeContext): string
     {
-        return $this->getOperation()->toPhp($codeContext);
+        return $this->getExpressionPart()->toPhp($codeContext);
     }
 }
