@@ -5,6 +5,7 @@ namespace Slov\Expression\Code;
 use Slov\Expression\Expression\ExpressionList;
 use Slov\Expression\Expression\ExpressionPart;
 use Slov\Expression\Expression\ExpressionPartList;
+use Slov\Expression\Expression\VariableList;
 use Slov\Expression\Operation\OperationList;
 use Slov\Expression\Statement\SimpleStatementList;
 use Slov\Expression\Type\OperandList;
@@ -15,6 +16,9 @@ class CodeContext
 {
     /** @var OperandList список операндов */
     protected $operandList;
+
+    /** @var VariableList список переменных */
+    protected $variableList;
 
     /** @var OperationList список операций */
     protected $operationList;
@@ -34,7 +38,21 @@ class CodeContext
         return $this->operandList;
     }
 
-    /** @return OperationList список операций */
+    /**
+     * @return VariableList список переменных
+     */
+    public function getVariableList(): VariableList
+    {
+        if(is_null($this->variableList))
+        {
+            $this->variableList = new VariableList();
+        }
+        return $this->variableList;
+    }
+
+    /**
+     * @return OperationList список операций
+     */
     public function getOperationList(): OperationList
     {
         if(is_null($this->operationList)){
@@ -83,6 +101,10 @@ class CodeContext
                 }
             }
         }
+        if($this->getVariableList()->exists($label))
+        {
+            return $this->getVariableList()->get($label);
+        }
         throw new CodeParseException($label. ' :: label is not expression part');
     }
 
@@ -113,6 +135,6 @@ class CodeContext
                 return true;
             }
         }
-        return false;
+        return $this->getVariableList()->exists($label);
     }
 }

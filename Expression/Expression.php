@@ -5,36 +5,16 @@ namespace Slov\Expression\Expression;
 
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\Operation\Operation;
 use Slov\Expression\Type\TypeName;
 
 /** Выражение */
 abstract class Expression extends ExpressionPart
 {
-    /** @var ExpressionPart часть выражения */
-    protected $expressionPart;
-
-    /**
-     * @return ExpressionPart часть выражения
-     */
-    public function getExpressionPart(): ExpressionPart
-    {
-        return $this->expressionPart;
-    }
-
-    /**
-     * @param ExpressionPart $expressionPart часть выражения
-     * @return $this
-     */
-    protected function setExpressionPart(ExpressionPart $expressionPart)
-    {
-        $this->expressionPart = $expressionPart;
-        return $this;
-    }
+    use ExpressionPartAccessor;
 
     /** Определить операцию выражения
      * @param CodeContext $codeContext контекст кода
-     * @return Operation операция
+     * @return ExpressionPart часть выражения
      * @throws CodeParseException */
     abstract protected function defineExpressionPart(CodeContext $codeContext): ExpressionPart;
 

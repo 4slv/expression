@@ -31,8 +31,6 @@ class ExpressionWithBrackets extends Expression
                 ->find($codeContext, $expressionCode);
             $replaceTimes = 1;
 
-            //var_dump($expressionCode, $expressionPart->getOriginalCode(), $expressionPart->getLabel());
-
             $expressionCode = str_replace(
                 $expressionPart->getOriginalCode(),
                 $expressionPart->getLabel(),

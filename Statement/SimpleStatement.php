@@ -4,31 +4,20 @@ namespace Slov\Expression\Statement;
 
 
 use Slov\Expression\Code\CodeContext;
-use Slov\Expression\Expression\ExpressionPart;
-use Slov\Expression\Operation\Operation;
-use Slov\Expression\Type\TypeName;
+use Slov\Expression\Code\CodePart;
+use Slov\Expression\Expression\ExpressionPartAccessor;
 
-class SimpleStatement extends ExpressionPart
+class SimpleStatement extends CodePart
 {
-    /** @var Operation операция */
-    protected $operation;
+    use ExpressionPartAccessor;
 
-    /**
+    /** Определить операцию выражения
+     * @param CodeContext $codeContext контекст кода
      * @return Operation операция
-     */
-    public function getOperation(): Operation
+     * @throws CodeParseException */
+    protected function defineExpressionPart(CodeContext $codeContext): ExpressionPart
     {
-        return $this->operation;
-    }
 
-    /**
-     * @param Operation $operation операция
-     * @return $this
-     */
-    public function setOperation(Operation $operation)
-    {
-        $this->operation = $operation;
-        return $this;
     }
 
     public function parse(CodeContext $codeContext)
@@ -45,13 +34,8 @@ class SimpleStatement extends ExpressionPart
         return $codeContext->getSimpleStatementList();
     }
 
-    protected function typeDefinition(CodeContext $codeContext): TypeName
-    {
-        return $this->getOperation()->typeDefinition($codeContext);
-    }
-
     public function toPhp(CodeContext $codeContext): string
     {
-        return $this->getOperation()->toPhp($codeContext);
+        return $this->getExpressionPart()->toPhp($codeContext). ';';
     }
 }

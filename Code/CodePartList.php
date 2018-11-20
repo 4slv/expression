@@ -34,13 +34,22 @@ abstract class CodePartList
      * @throws CodeParseException */
     public function get($label)
     {
-        if(array_key_exists($label, $this->list))
+        if($this->exists($label))
         {
             return $this->list[$label];
         }
         throw new CodeParseException(
             $label. ' not found in '. self::class
         );
+    }
+
+    /** Проверка существования элемента с указанной меткой
+     * @param string $label метка элемента списка
+     * @return bool
+     */
+    public function exists($label): bool
+    {
+        return array_key_exists($label, $this->list);
     }
 
     /** @return string название новоой метки */

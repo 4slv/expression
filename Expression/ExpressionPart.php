@@ -32,11 +32,17 @@ abstract class ExpressionPart extends CodePart
         $this->setTypeName($typeName);
         /** @var CodePartList $contextList */
         $contextList = $this->getContextList($codeContext);
-        $label = $contextList->append($this);
+        $label = $contextList->append($this, $this->defineLabel());
         $this->setLabel($label);
         $php = $this->toOriginalPhp($codeContext);
         $this->setPhp($php);
         return $this;
+    }
+
+    /** @return null|string метка элемента */
+    protected function defineLabel(): ?string
+    {
+        return null;
     }
 
     /**

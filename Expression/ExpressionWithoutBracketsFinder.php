@@ -31,7 +31,7 @@ class ExpressionWithoutBracketsFinder
     /**
      * @return ExpressionWithoutBrackets выражение без скобок
      */
-    public function createExpressionWithoutBrackets()
+    protected function createExpressionWithoutBrackets(): ExpressionWithoutBrackets
     {
         return new ExpressionWithoutBrackets();
     }

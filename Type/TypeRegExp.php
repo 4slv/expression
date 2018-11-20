@@ -10,6 +10,7 @@ class TypeRegExp extends Enum
 {
     const INT = '\d+';
     const FLOAT = '\d+\.\d+';
+    const VARIABLE = '\$(\w[\w\d]*)';
 
     /**
      * @param string $typeStringValue строковое представление типа
