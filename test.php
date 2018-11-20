@@ -7,7 +7,7 @@ use Slov\Expression\Operation\Operation;
 
 include 'vendor/autoload.php';
 
-$code = '1 + test * (2 + 1)';
+$code = '1 + 1 * (2 + 1)';
 
 $codeContext = new CodeContext();
 $expression = new ExpressionWithBrackets();
