@@ -5,13 +5,12 @@ namespace Slov\Expression\Statement;
 
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\Code\CodePart;
 use Slov\Expression\Expression\AssignExpression;
 use Slov\Expression\Expression\Expression;
 use Slov\Expression\Expression\ExpressionAccessor;
 
 /** Простая инструкция */
-class SimpleStatement extends CodePart
+class SimpleStatement extends Statement
 {
     use ExpressionAccessor;
 
@@ -39,10 +38,9 @@ class SimpleStatement extends CodePart
         throw new CodeParseException($statementCode. ':: code is not simple statement');
     }
 
-    public function parse(CodeContext $codeContext)
+    protected function initStatement(CodeContext $codeContext): void
     {
         $this->setExpression($this->defineExpression($codeContext));
-        return parent::parse($codeContext);
     }
 
     /**
