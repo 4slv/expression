@@ -4,10 +4,13 @@ namespace Slov\Expression\Expression;
 
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
+use Slov\Expression\FactoryRegistry;
 
 /** Поиск подвыражения в скобках */
 class ExpressionWithoutBracketsFinder
 {
+    use FactoryRegistry;
+
     /**
      * @param CodeContext $codeContext контекст кода
      * @param string $expressionCode псевдокод выражения со скобками
@@ -26,13 +29,5 @@ class ExpressionWithoutBracketsFinder
                 ->setCode($expressionCode)
                 ->setUseBrackets(false);
         return $expressionWithoutBrackets->parse($codeContext);
-    }
-
-    /**
-     * @return ExpressionWithoutBrackets выражение без скобок
-     */
-    protected function createExpressionWithoutBrackets(): ExpressionWithoutBrackets
-    {
-        return new ExpressionWithoutBrackets();
     }
 }

@@ -29,10 +29,10 @@ class ExpressionWithoutBrackets extends Expression
      * @param string $operationCode код операции
      * @return Operation операция
      * @throws CodeParseException */
-    protected function createOperation(CodeContext $codeContext, string $operationCode)
+    protected function buildOperation(CodeContext $codeContext, string $operationCode)
     {
-        $operation = new Operation();
-        return $operation
+        return $this
+            ->createOperation()
             ->setCode($operationCode)
             ->parse($codeContext);
     }
@@ -47,7 +47,7 @@ class ExpressionWithoutBrackets extends Expression
             $maxPriorityOperationCode = $expressionCode === $this->getCode()
                 ? $priorityOperationFinder->find()
                 : $priorityOperationFinder->init($expressionCode)->find();
-            $expressionPart = $this->createOperation($codeContext, $maxPriorityOperationCode);
+            $expressionPart = $this->buildOperation($codeContext, $maxPriorityOperationCode);
             $replaceTimes = 1;
             $expressionCode = str_replace(
                 $maxPriorityOperationCode,

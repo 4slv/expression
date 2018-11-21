@@ -36,22 +36,6 @@ class AssignExpression extends Expression
         throw new CodeParseException($assignExpressionCode. ' :: code is not assign expression');
     }
 
-    /**
-     * @return ExpressionWithBrackets выражение без скобок
-     */
-    protected function createExpressionWithBrackets(): ExpressionWithBrackets
-    {
-        return new ExpressionWithBrackets();
-    }
-
-    /**
-     * @return Variable переменная
-     */
-    protected function createVariable()
-    {
-        return new Variable();
-    }
-
     public function toPhp(CodeContext $codeContext): string
     {
         return implode(

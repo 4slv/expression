@@ -2,12 +2,15 @@
 
 namespace Slov\Expression\Code;
 
+use Slov\Expression\FactoryRegistry;
+
 /** Часть псевдо кода */
 abstract class CodePart implements CodeParser, CodeToPhp
 {
     use CodeAccessor;
     use PhpAccessor;
     use LabelAccessor;
+    use FactoryRegistry;
 
     /**
      * @throws CodeParseException
