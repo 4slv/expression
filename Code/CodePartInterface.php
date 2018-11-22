@@ -5,7 +5,7 @@ namespace Slov\Expression\Code;
 use Slov\Expression\FactoryRegistry;
 
 /** Часть псевдо кода */
-abstract class CodePart implements CodeParser, CodeToPhp
+abstract class CodePartInterface implements CodeParserInterface, CodeToPhp
 {
     use CodeAccessor;
     use PhpAccessor;

@@ -7,7 +7,7 @@ abstract class CodePartList
 {
     const LABEL_PREFIX = 'CodePart';
 
-    /** @var CodePart[] список частей псевдо кода */
+    /** @var CodePartInterface[] список частей псевдо кода */
     protected $list;
 
     public function __construct()
@@ -18,7 +18,7 @@ abstract class CodePartList
     abstract public function getLabelPrefix(): string;
 
     /** Добавление элемента в список
-     * @param CodePart $listElement элемент списка
+     * @param CodePartInterface $listElement элемент списка
      * @param string $elementLabel метка элемента списка
      * @return string метка добавленного элемента */
     public function append($listElement, $elementLabel = null)
@@ -30,7 +30,7 @@ abstract class CodePartList
 
     /** Получение элемента списка по метке
      * @param string $label метка элемента списка
-     * @return CodePart элемент списка
+     * @return CodePartInterface элемент списка
      * @throws CodeParseException */
     public function get($label)
     {

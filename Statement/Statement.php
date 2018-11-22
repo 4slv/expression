@@ -4,10 +4,10 @@ namespace Slov\Expression\Statement;
 
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\Code\CodePart;
+use Slov\Expression\Code\CodePartInterface;
 
 /** Инструкция */
-abstract class Statement extends CodePart
+abstract class Statement extends CodePartInterface
 {
     /** Инициализация инструкции
      *  @param CodeContext $codeContext контекст кода
