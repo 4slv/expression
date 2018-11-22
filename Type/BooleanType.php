@@ -10,7 +10,7 @@ class BooleanType extends Type{
      */
     function getType() : TypeName
     {
-        return new TypeName(TypeName::BOOLEAN);
+        return TypeName::byValue(TypeName::BOOLEAN);
     }
 
     /**

@@ -39,7 +39,7 @@ class SubtractionOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::SUBTRACTION);
+        return OperationName::byValue(OperationName::SUBTRACTION);
     }
 
     /**

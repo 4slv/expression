@@ -10,7 +10,7 @@ class StringType extends Type
      */
     function getType()
     {
-        return new TypeName(TypeName::STRING);
+        return TypeName::byValue(TypeName::STRING);
     }
 
     /**

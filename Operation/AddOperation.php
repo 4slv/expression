@@ -41,7 +41,7 @@ class AddOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::ADD);
+        return OperationName::byValue(OperationName::ADD);
     }
 
     /**

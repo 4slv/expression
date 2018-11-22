@@ -11,7 +11,7 @@ class RemainderOfDivisionOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::REMAINDER_OF_DIVISION);
+        return OperationName::byValue(OperationName::REMAINDER_OF_DIVISION);
     }
 
     protected function resolveReturnTypeName()

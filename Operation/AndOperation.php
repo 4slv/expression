@@ -14,7 +14,7 @@ class AndOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::AND);
+        return OperationName::byValue(OperationName::AND);
     }
 
     /**

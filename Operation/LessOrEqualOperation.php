@@ -18,7 +18,7 @@ class LessOrEqualOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::LESS_OR_EQUALS);
+        return OperationName::byValue(OperationName::LESS_OR_EQUALS);
     }
 
     /**

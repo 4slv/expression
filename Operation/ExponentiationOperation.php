@@ -15,7 +15,7 @@ class ExponentiationOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::EXPONENTIATION);
+        return OperationName::byValue(OperationName::EXPONENTIATION);
     }
 
     /**

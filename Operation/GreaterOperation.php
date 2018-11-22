@@ -17,7 +17,7 @@ class GreaterOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::GREATER);
+        return OperationName::byValue(OperationName::GREATER);
     }
 
     /**

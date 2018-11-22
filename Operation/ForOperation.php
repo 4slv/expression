@@ -32,7 +32,7 @@ class ForOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::FOR);
+        return OperationName::byValue(OperationName::FOR);
     }
 
     protected function calculateValues($firstOperandValue, $secondOperandValue)

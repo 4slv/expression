@@ -10,7 +10,7 @@ class DateOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::DATE);
+        return OperationName::byValue(OperationName::DATE);
     }
 
     protected function resolveReturnTypeName()

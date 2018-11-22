@@ -53,7 +53,7 @@ class FunctionOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::FUNCTION);
+        return OperationName::byValue(OperationName::FUNCTION);
     }
 
     protected function createZero(){}

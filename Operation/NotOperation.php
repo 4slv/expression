@@ -14,7 +14,7 @@ class NotOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::NOT);
+        return OperationName::byValue(OperationName::NOT);
     }
 
     /**

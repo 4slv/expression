@@ -67,7 +67,7 @@ class AssignOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::ASSIGN);
+        return OperationName::byValue(OperationName::ASSIGN);
     }
 
     protected function resolveReturnTypeName()

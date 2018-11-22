@@ -9,7 +9,7 @@ class MoneyType extends Type
 {
     public function getType()
     {
-        return new TypeName(TypeName::MONEY);
+        return TypeName::byValue(TypeName::MONEY);
     }
 
     /**

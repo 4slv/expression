@@ -34,7 +34,7 @@ class VariableType extends Type
      */
     function getType(): TypeName
     {
-        return new TypeName(TypeName::VARIABLE);
+        return TypeName::byValue(TypeName::VARIABLE);
     }
 
     /**
@@ -66,9 +66,11 @@ class VariableType extends Type
 
     public function calculate()
     {
-        if($this->getVariableList()->exists($this->getValue()))
+        $variableList = $this->getVariableList();
+        $value = $this->getValue();
+        if($variableList->exists($value))
         {
-            $variable = $this->getVariableList()->get($this->getValue());
+            $variable = $variableList->get($value);
             if($variable instanceof Expression)
             {
                 return $variable->calculate();

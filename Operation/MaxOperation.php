@@ -11,7 +11,7 @@ class MaxOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::MAX);
+        return OperationName::byValue(OperationName::MAX);
     }
 
     protected function getListElement(array $list)

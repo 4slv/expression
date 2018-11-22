@@ -13,7 +13,7 @@ class TextExpressionValidator extends TextExpression
      */
     public function validate()
     {
-        $this->validateSubExpressionList($this->getExpressionText());
+        $this->validateSubExpressionList($this->getExpressionTextWithoutComments());
     }
 
     /**

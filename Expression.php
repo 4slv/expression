@@ -150,5 +150,4 @@ class Expression implements Calculation
             );
         }
     }
-
 }

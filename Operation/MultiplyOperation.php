@@ -14,7 +14,7 @@ class MultiplyOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::MULTIPLY);
+        return OperationName::byValue(OperationName::MULTIPLY);
     }
 
     protected function resolveReturnTypeName()

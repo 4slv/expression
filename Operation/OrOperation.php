@@ -14,7 +14,7 @@ class OrOperation extends Operation
      */
     public function getOperationName()
     {
-        return new OperationName(OperationName::OR);
+        return OperationName::byValue(OperationName::OR);
     }
 
     /**

@@ -12,7 +12,7 @@ class DaysOperation extends Operation
 
     public function getOperationName()
     {
-        return new OperationName(OperationName::DAYS);
+        return OperationName::byValue(OperationName::DAYS);
     }
 
     protected function resolveReturnTypeName()

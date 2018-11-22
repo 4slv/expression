@@ -2,7 +2,7 @@
 
 namespace Slov\Expression\Type;
 
-use MyCLabs\Enum\Enum;
+use MabeEnum\Enum;
 use Slov\Expression\ExpressionException;
 
 /** Регулярное выражение описывающее тип */
@@ -26,12 +26,12 @@ class TypeRegExp extends Enum
      */
     public static function getTypeNameByStringValue($typeStringValue)
     {
-        foreach(self::values() as $typeKey => $typeRegExp)
+        foreach(self::getConstants() as $typeKey => $typeRegExp)
         {
             if(preg_match('/^'. $typeRegExp. '$/', $typeStringValue))
             {
                 $typeName = constant(TypeName::class. '::'. $typeKey);
-                return new TypeName($typeName);
+                return TypeName::byValue($typeName);
             }
         }
         throw new ExpressionException('Unknown type of value: "'. $typeStringValue. '"');

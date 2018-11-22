@@ -28,6 +28,10 @@ class TestTextExpression extends TestCase
         $ratePerMonth = 12.25 / 12 / 100;
         $creditMonths = 12 * 15;
         return [
+            # комментарии в текстовом выражениии
+            ['/* Пример */
+                1 + 1
+              /* комментария */', 2],
             # операции с целыми числами
             ['2 + 1', 3],
             ['2 - 1', 1],

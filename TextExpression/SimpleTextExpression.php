@@ -31,10 +31,10 @@ class SimpleTextExpression extends TextExpression
     protected function createTextOperation($operationValue, $position)
     {
         $operationSignValue = $this->getOperationSignValue($operationValue);
-        $operationSign = new OperationSign($operationSignValue);
-        $operationKey = $operationSign->getKey();
+        $operationSign = OperationSign::byValue($operationSignValue);
+        $operationKey = $operationSign->getName();
         $operationNameValue = constant(OperationName::class. '::'. $operationKey);
-        $operationName = new OperationName($operationNameValue);
+        $operationName = OperationName::byValue($operationNameValue);
         $textOperation = new TextOperation();
         return $textOperation
             ->setOperationValue($operationValue)
@@ -65,7 +65,7 @@ class SimpleTextExpression extends TextExpression
      */
     public function toExpression()
     {
-        return $this->createExpressionFromTextExpression($this->getExpressionText());
+        return $this->createExpressionFromTextExpression($this->getExpressionTextWithoutComments());
     }
 
     /**

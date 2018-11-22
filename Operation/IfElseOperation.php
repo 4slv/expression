@@ -36,7 +36,7 @@ class IfElseOperation extends Operation
      */
     public function getOperationName() : OperationName
     {
-        return new OperationName(OperationName::IF_ELSE);
+        return OperationName::byValue(OperationName::IF_ELSE);
     }
 
     protected function createZero(){}
