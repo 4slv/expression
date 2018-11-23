@@ -7,7 +7,7 @@ use Slov\Expression\Bracket\BracketType;
 /** Разбор псевдокода содержащего условную инструкцию if */
 class IfStatementCodeParser extends StatementCodeParser
 {
-    protected function getStatementTypeRegexp(): StatementTypeRegexp
+    public function getStatementTypeRegexp(): StatementTypeRegexp
     {
         return StatementTypeRegexp::byName(StatementTypeRegexp::IF_STATEMENT);
     }

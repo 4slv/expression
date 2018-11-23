@@ -3,9 +3,11 @@
 namespace Slov\Expression\Statement;
 
 
+use Slov\Expression\Bracket\BracketType;
+
 class ForStatementCodeParser extends StatementCodeParser
 {
-    protected function getStatementTypeRegexp(): StatementTypeRegexp
+    public function getStatementTypeRegexp(): StatementTypeRegexp
     {
         return StatementTypeRegexp::byValue(StatementTypeRegexp::FOR_STATEMENT);
     }

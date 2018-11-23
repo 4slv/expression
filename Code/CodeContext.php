@@ -26,6 +26,9 @@ class CodeContext
     /** @var ExpressionList список выражений */
     protected $expressionList;
 
+    /** @var CodeBlockList список блоков кода */
+    protected $codeBlockList;
+
     /** @var SimpleStatementList список простых инструкций */
     protected $simpleStatementList;
 
@@ -71,6 +74,18 @@ class CodeContext
             $this->expressionList = new ExpressionList();
         }
         return $this->expressionList;
+    }
+
+    /**
+     * @return CodeBlockList список блоков кода
+     */
+    public function getCodeBlockList(): CodeBlockList
+    {
+        if(is_null($this->codeBlockList))
+        {
+            $this->codeBlockList = new CodeBlockList();
+        }
+        return $this->codeBlockList;
     }
 
     /**

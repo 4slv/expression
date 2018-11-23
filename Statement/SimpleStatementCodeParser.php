@@ -6,7 +6,7 @@ namespace Slov\Expression\Statement;
 class SimpleStatementCodeParser extends StatementCodeParser
 {
 
-    protected function getStatementTypeRegexp(): StatementTypeRegexp
+    public function getStatementTypeRegexp(): StatementTypeRegexp
     {
         return StatementTypeRegexp::byValue(StatementTypeRegexp::SIMPLE_STATEMENT);
     }

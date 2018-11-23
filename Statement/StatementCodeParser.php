@@ -13,7 +13,7 @@ abstract class StatementCodeParser
     /**
      * @return StatementTypeRegexp регулярное выражение для типа инструкции
      */
-    abstract protected function getStatementTypeRegexp(): StatementTypeRegexp;
+    abstract public function getStatementTypeRegexp(): StatementTypeRegexp;
 
     /**
      * @param string $code псевдокод
