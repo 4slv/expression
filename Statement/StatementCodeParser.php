@@ -2,11 +2,14 @@
 
 namespace Slov\Expression\Statement;
 
+use Slov\Expression\Bracket\BracketParserAccessor;
 use Slov\Expression\Code\CodeParseException;
 
 /** Разбор псевдокода инструкции */
 abstract class StatementCodeParser
 {
+    use BracketParserAccessor;
+
     /**
      * @return StatementTypeRegexp регулярное выражение для типа инструкции
      */
