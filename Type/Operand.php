@@ -19,6 +19,7 @@ class Operand extends ExpressionPart
         {
             case TypeName::INT:
             case TypeName::FLOAT:
+            case TypeName::BOOLEAN:
                 return $this->getCodeTrim();
         }
         return $this->toPhpParseError();

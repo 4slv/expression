@@ -5,7 +5,7 @@ use Slov\Expression\Code\CodeBlock;
 
 include 'vendor/autoload.php';
 
-$code = 'if(true){ $i = 1; $a = 2; }';
+$code = 'if(false){ $i = 1; $a = 2; }';
 
 $codeContext = new CodeContext();
 $codeBlock = new CodeBlock();

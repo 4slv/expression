@@ -9,6 +9,7 @@ class TypeName extends Enum
 {
     const INT = 'int';
     const FLOAT = 'float';
+    const BOOLEAN = 'boolean';
 
     /**
      * @return bool тип является цифровым
@@ -39,6 +40,14 @@ class TypeName extends Enum
     public function isFloat()
     {
         return $this->getValue() === self::FLOAT;
+    }
+
+    /**
+     * @return bool true - тип boolean
+     */
+    public function isBoolean()
+    {
+        return $this->getValue() === self::BOOLEAN;
     }
 }
 

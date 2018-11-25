@@ -10,6 +10,7 @@ class TypeRegExp extends Enum
 {
     const INT = '\d+';
     const FLOAT = '\d+\.\d+';
+    const BOOLEAN = '(true|false)';
     const VARIABLE = '\$(\w[\w\d]*)';
 
     /**

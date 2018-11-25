@@ -99,7 +99,8 @@ class IfStatement extends Statement
         $successCodeBlockLabel = $this
             ->createCodeBlock()
             ->setCode($successCodeBlockCode)
-            ->parse($codeContext);
+            ->parse($codeContext)
+            ->getLabel();
 
         $this->setSuccessCodeBlockLabel($successCodeBlockLabel);
     }
@@ -109,10 +110,12 @@ class IfStatement extends Statement
         $replace = [
             '%condition%' => $codeContext
                 ->getExpressionList()
-                ->get($this->getConditionExpressionLabel()),
+                ->get($this->getConditionExpressionLabel())
+                ->getPhp(),
             '%successCodeBlock%' => $codeContext
                 ->getCodeBlockList()
                 ->get($this->successCodeBlockLabel)
+                ->getPhp()
         ];
 
         return str_replace(
