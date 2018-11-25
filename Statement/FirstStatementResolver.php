@@ -10,7 +10,7 @@ class FirstStatementResolver
     /** @var StatementCodeParserRegistry реестр способов разбора псевдокода на код инструкций */
     protected $statementCodeParserRegistry;
 
-    /** @var StatementRegistry реестр инструкций */
+    /** @var StatementFactory фабрика инструкций */
     protected $statementRegistry;
 
     /**
@@ -26,13 +26,13 @@ class FirstStatementResolver
     }
 
     /**
-     * @return StatementRegistry реестр инструкций
+     * @return StatementFactory фабрика инструкций
      */
-    protected function getStatementRegistry(): StatementRegistry
+    protected function getStatementRegistry(): StatementFactory
     {
         if(is_null($this->statementRegistry))
         {
-            $this->statementRegistry = new StatementRegistry();
+            $this->statementRegistry = new StatementFactory();
         }
         return $this->statementRegistry;
     }
@@ -74,7 +74,11 @@ class FirstStatementResolver
         $resultStatementTypePart = null;
         foreach($this->getStatementTypePartList() as $statementTypePart){
             $position = strpos($code, $statementTypePart->getValue());
-            if($position < $minPosition)
+            if(
+                $position !==false
+                &&
+                $position < $minPosition
+            )
             {
                 $minPosition = $position;
                 $resultStatementTypePart = $statementTypePart;
@@ -94,6 +98,8 @@ class FirstStatementResolver
      */
     protected function getStatementTypePartList()
     {
-        return StatementTypePart::getConstants();
+        /** @var StatementType[] $result */
+        $result = StatementTypePart::getEnumerators();
+        return $result;
     }
 }

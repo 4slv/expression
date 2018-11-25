@@ -7,7 +7,7 @@ use Slov\Expression\Expression\ExpressionPart;
 use Slov\Expression\Expression\ExpressionPartList;
 use Slov\Expression\Expression\VariableList;
 use Slov\Expression\Operation\OperationList;
-use Slov\Expression\Statement\SimpleStatementList;
+use Slov\Expression\Statement\StatementList;
 use Slov\Expression\Type\OperandList;
 
 
@@ -29,8 +29,8 @@ class CodeContext
     /** @var CodeBlockList список блоков кода */
     protected $codeBlockList;
 
-    /** @var SimpleStatementList список простых инструкций */
-    protected $simpleStatementList;
+    /** @var StatementList список инструкций */
+    protected $statementList;
 
     /** @return OperandList список операндов */
     public function getOperandList(): OperandList
@@ -89,14 +89,14 @@ class CodeContext
     }
 
     /**
-     * @return SimpleStatementList список простых инструкций
+     * @return StatementList список инструкций
      */
-    public function getSimpleStatementList(): SimpleStatementList
+    public function getStatementList(): StatementList
     {
-        if(is_null($this->simpleStatementList)){
-            $this->simpleStatementList = new SimpleStatementList();
+        if(is_null($this->statementList)){
+            $this->statementList = new StatementList();
         }
-        return $this->simpleStatementList;
+        return $this->statementList;
     }
 
     /**

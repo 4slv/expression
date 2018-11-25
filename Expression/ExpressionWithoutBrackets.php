@@ -4,53 +4,38 @@ namespace Slov\Expression\Expression;
 
 
 use Slov\Expression\Code\CodeContext;
-use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\Operation\Operation;
-use Slov\Expression\Operation\PriorityOperationFinder;
 
 /** Выражение без скобок */
 class ExpressionWithoutBrackets extends Expression
 {
-    /** @var PriorityOperationFinder поиск приоритетной операции */
-    protected $priorityOperationFinder;
+    /** @var FirstExpressionPartResolver определение первой части выражения */
+    protected $firstExpressionPartResolver;
 
-    /** @return PriorityOperationFinder поиск приоритетной операции */
-    public function getPriorityOperationFinder(): PriorityOperationFinder
+    /**
+     * @return FirstExpressionPartResolver определение первой части выражения
+     */
+    public function getFirstExpressionPartResolver(): FirstExpressionPartResolver
     {
-        if(is_null($this->priorityOperationFinder))
+        if(is_null($this->firstExpressionPartResolver))
         {
-            $this->priorityOperationFinder = new PriorityOperationFinder($this->getCode());
+            $this->firstExpressionPartResolver = new FirstExpressionPartResolver();
         }
-        return $this->priorityOperationFinder;
-    }
-
-    /** Создание операции
-     * @param CodeContext $codeContext контекст кода
-     * @param string $operationCode код операции
-     * @return Operation операция
-     * @throws CodeParseException */
-    protected function buildOperation(CodeContext $codeContext, string $operationCode)
-    {
-        return $this
-            ->createOperation()
-            ->setCode($operationCode)
-            ->parse($codeContext);
+        return $this->firstExpressionPartResolver;
     }
 
     protected function defineExpressionPart(CodeContext $codeContext): ExpressionPart
     {
-        $priorityOperationFinder = $this->getPriorityOperationFinder();
         $expressionCode = $this->getCode();
         $expressionPart = null;
         while ($codeContext->checkLabelIsExpressionPart($expressionCode) === false)
         {
-            $maxPriorityOperationCode = $expressionCode === $this->getCode()
-                ? $priorityOperationFinder->find()
-                : $priorityOperationFinder->init($expressionCode)->find();
-            $expressionPart = $this->buildOperation($codeContext, $maxPriorityOperationCode);
+            $expressionPart = $this
+                ->getFirstExpressionPartResolver()
+                ->resolve($codeContext, $expressionCode);
+
             $replaceTimes = 1;
             $expressionCode = str_replace(
-                $maxPriorityOperationCode,
+                $expressionPart->getCode(),
                 $expressionPart->getLabel(),
                 $expressionCode,
                 $replaceTimes

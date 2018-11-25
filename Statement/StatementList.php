@@ -6,12 +6,12 @@ namespace Slov\Expression\Statement;
 use Slov\Expression\Code\CodeParseException;
 use Slov\Expression\Code\CodePartList;
 
-/** Список простых инструкций */
-class SimpleStatementList extends CodePartList
+/** Список инструкций */
+class StatementList extends CodePartList
 {
-    const LABEL_PREFIX = 'SimpleStatement';
+    const LABEL_PREFIX = 'Statement';
 
-    /** @var SimpleStatement[] список простых инструкций */
+    /** @var Statement[] список инструкций */
     protected $list;
 
     public function getLabelPrefix(): string
@@ -19,8 +19,8 @@ class SimpleStatementList extends CodePartList
         return self::LABEL_PREFIX;
     }
 
-    /** Добавление простой инструкции в список
-     * @param SimpleStatement $listElement элемент
+    /** Добавление элемента в список
+     * @param Statement $listElement элемент
      * @param string $elementLabel метка элемента
      * @return string метка элемента */
     public function append($listElement, $elementLabel = null)
@@ -28,13 +28,13 @@ class SimpleStatementList extends CodePartList
         return parent::append($listElement, $elementLabel);
     }
 
-    /** Получение простой инструкции по метке
+    /** Получение элемента по метке
      * @param string $label метка элемента из списка
-     * @return SimpleStatement простая инструкция
+     * @return Statement инструкция
      * @throws CodeParseException */
     public function get($label)
     {
-        /** @var SimpleStatement $result */
+        /** @var Statement $result */
         $result = parent::get($label);
         return $result;
     }

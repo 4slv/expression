@@ -9,7 +9,7 @@ class IfStatementCodeParser extends StatementCodeParser
 {
     public function getStatementTypeRegexp(): StatementTypeRegexp
     {
-        return StatementTypeRegexp::byName(StatementTypeRegexp::IF_STATEMENT);
+        return StatementTypeRegexp::byValue(StatementTypeRegexp::IF_STATEMENT);
     }
 
     public function parse(string $code): string

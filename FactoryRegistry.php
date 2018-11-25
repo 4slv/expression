@@ -7,6 +7,7 @@ use Slov\Expression\Expression\ExpressionWithBrackets;
 use Slov\Expression\Expression\ExpressionWithoutBrackets;
 use Slov\Expression\Expression\Variable;
 use Slov\Expression\Operation\Operation;
+use Slov\Expression\Type\Operand;
 
 /** Доступ к фабрике реестру */
 trait FactoryRegistry
@@ -49,5 +50,13 @@ trait FactoryRegistry
     protected function createVariable(): Variable
     {
         return new Variable();
+    }
+
+    /**
+     * @return Operand операнд
+     */
+    protected function createOperand()
+    {
+        return new Operand();
     }
 }

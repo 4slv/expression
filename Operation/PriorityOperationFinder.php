@@ -54,12 +54,6 @@ class PriorityOperationFinder
         return $this;
     }
 
-    /** @param string $expressionCode псевдо код выражения без скобок */
-    public function __construct(string $expressionCode)
-    {
-        $this->init($expressionCode);
-    }
-
     /**
      * @param string $expressionCode псевдо код выражения без скобок
      * @return $this
@@ -96,7 +90,7 @@ class PriorityOperationFinder
      * @return OperationInfo[] список информации об операции
      * @throws CodeParseException
      */
-    private function getOperationInfoList()
+    public function getOperationInfoList()
     {
         $operationInfoList = [];
         foreach ($this->getOperationSignList() as $position => $sign)

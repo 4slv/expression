@@ -1,17 +1,21 @@
 <?php
 
 use Slov\Expression\Code\CodeContext;
-use Slov\Expression\Statement\SimpleStatement;
+use Slov\Expression\Code\CodeBlock;
 
 include 'vendor/autoload.php';
 
-$code = '$i = 1 + 1 * (2 + 1);';
+$code = '$i = 1; $a = 2;';
 
 $codeContext = new CodeContext();
-$statement = new SimpleStatement();
-$php = $statement
+$codeBlock = new CodeBlock();
+$php = $codeBlock
     ->setCode($code)
     ->parse($codeContext)
     ->getPhp();
 
-var_dump($php, $codeContext->getExpressionPartByLabel('$i')->getPhp());
+var_dump(
+    $php,
+    $codeContext->getExpressionPartByLabel('$i')->getPhp(),
+    $codeContext->getExpressionPartByLabel('$a')->getPhp()
+);

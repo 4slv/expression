@@ -45,11 +45,11 @@ class SimpleStatement extends Statement
 
     /**
      * @param CodeContext $codeContext контекст кода
-     * @return SimpleStatementList список простых инструкций
+     * @return StatementList список простых инструкций
      */
     protected function getContextList(CodeContext $codeContext)
     {
-        return $codeContext->getSimpleStatementList();
+        return $codeContext->getStatementList();
     }
 
     public function toPhp(CodeContext $codeContext): string
