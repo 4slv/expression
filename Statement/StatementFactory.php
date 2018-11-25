@@ -7,12 +7,6 @@ use Slov\Expression\Code\CodeParseException;
 /** Фабрика инструкций */
 class StatementFactory
 {
-    /** @var Statement[] список инструкций */
-    protected $list;
-
-    /** @var SimpleStatement простая инструкция */
-    protected $simpleStatement;
-
     /**
      * Получение инструкции по типу инструкции
      * @param StatementType $statementType тип инструкции
@@ -25,6 +19,8 @@ class StatementFactory
         {
             case StatementType::SIMPLE_STATEMENT:
                 return $this->createSimpleStatement();
+            case StatementType::IF_STATEMENT:
+                return $this->createIfStatement();
             default:
                 throw new CodeParseException(
                     $statementType->getValue().
@@ -40,5 +36,13 @@ class StatementFactory
     public function createSimpleStatement(): SimpleStatement
     {
         return new SimpleStatement();
+    }
+
+    /**
+     * @return IfStatement условная инструкция
+     */
+    public function createIfStatement(): IfStatement
+    {
+        return new IfStatement();
     }
 }

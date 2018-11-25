@@ -7,7 +7,7 @@ use Slov\Expression\Code\CodeParseException;
 /** Разбор строки со скобками */
 class BracketParser
 {
-    /** Выделение первой группы скобок
+    /** Выделение первой группы скобок с содержимым
      * @param string $code код со скобками
      * @param BracketType $bracketType тип скобок
      * @return string код первой скобки с содержимым
@@ -39,5 +39,17 @@ class BracketParser
             return substr($code, $openBracketBeginOffset, $length);
         }
         throw new CodeParseException($code. ' :: bracket parsing error');
+    }
+
+    /** Выделение содержимого первой группы скобок
+     * @param string $code код со скобками
+     * @param BracketType $bracketType тип скобок
+     * @return string содержимое первой группы скобок
+     * @throws CodeParseException
+     */
+    public function parseFirstGroupContent(string $code, BracketType $bracketType): string
+    {
+        $firstGroup = $this->parseFirstGroup($code, $bracketType);
+        return substr($firstGroup, 1, -1);
     }
 }

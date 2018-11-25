@@ -24,7 +24,7 @@ class IfStatementCodeParser extends StatementCodeParser
                 ->getBracketParser()
                 ->parseFirstGroup(
                     $statementCode,
-                    BracketType::byName(BracketType::BRACES)
+                    BracketType::byValue(BracketType::BRACES)
                 );
             return $statementCodeBegin. $statementCodeEnd;
         }

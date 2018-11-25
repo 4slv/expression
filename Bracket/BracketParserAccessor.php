@@ -13,7 +13,7 @@ trait BracketParserAccessor
      */
     public function getBracketParser(): BracketParser
     {
-        if($this->bracketParser){
+        if(is_null($this->bracketParser)){
             $this->bracketParser = new BracketParser();
         }
         return $this->bracketParser;

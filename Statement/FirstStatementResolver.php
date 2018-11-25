@@ -11,7 +11,7 @@ class FirstStatementResolver
     protected $statementCodeParserRegistry;
 
     /** @var StatementFactory фабрика инструкций */
-    protected $statementRegistry;
+    protected $statementFactory;
 
     /**
      * @return StatementCodeParserRegistry реестр способов разбора псевдокода на код инструкций
@@ -28,13 +28,13 @@ class FirstStatementResolver
     /**
      * @return StatementFactory фабрика инструкций
      */
-    protected function getStatementRegistry(): StatementFactory
+    protected function getStatementFactory(): StatementFactory
     {
-        if(is_null($this->statementRegistry))
+        if(is_null($this->statementFactory))
         {
-            $this->statementRegistry = new StatementFactory();
+            $this->statementFactory = new StatementFactory();
         }
-        return $this->statementRegistry;
+        return $this->statementFactory;
     }
 
     /**
@@ -57,7 +57,7 @@ class FirstStatementResolver
             ->parse($code);
 
         return $this
-            ->getStatementRegistry()
+            ->getStatementFactory()
             ->getElementByType($statementType)
             ->setCode($statementCode);
     }

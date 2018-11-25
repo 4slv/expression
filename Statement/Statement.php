@@ -19,4 +19,13 @@ abstract class Statement extends CodePart
         $this->initStatement($codeContext);
         return parent::parse($codeContext);
     }
+
+    /**
+     * @param CodeContext $codeContext контекст кода
+     * @return StatementList список простых инструкций
+     */
+    protected function getContextList(CodeContext $codeContext)
+    {
+        return $codeContext->getStatementList();
+    }
 }

@@ -43,15 +43,6 @@ class SimpleStatement extends Statement
         $this->setExpression($this->defineExpression($codeContext));
     }
 
-    /**
-     * @param CodeContext $codeContext контекст кода
-     * @return StatementList список простых инструкций
-     */
-    protected function getContextList(CodeContext $codeContext)
-    {
-        return $codeContext->getStatementList();
-    }
-
     public function toPhp(CodeContext $codeContext): string
     {
         return $this->getExpression()->toPhp($codeContext). self::STATEMENT_SEPARATOR;

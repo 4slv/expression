@@ -2,6 +2,7 @@
 
 namespace Slov\Expression;
 
+use Slov\Expression\Code\CodeBlock;
 use Slov\Expression\Expression\AssignExpression;
 use Slov\Expression\Expression\ExpressionWithBrackets;
 use Slov\Expression\Expression\ExpressionWithoutBrackets;
@@ -12,6 +13,14 @@ use Slov\Expression\Type\Operand;
 /** Доступ к фабрике реестру */
 trait FactoryRegistry
 {
+    /**
+     * @return CodeBlock блок кода
+     */
+    protected function createCodeBlock(): CodeBlock
+    {
+        return new CodeBlock();
+    }
+
     /**
      * @return AssignExpression выражение присваивания
      */
