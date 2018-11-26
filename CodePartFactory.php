@@ -10,8 +10,8 @@ use Slov\Expression\Expression\Variable;
 use Slov\Expression\Operation\Operation;
 use Slov\Expression\Type\Operand;
 
-/** Доступ к фабрике реестру */
-trait FactoryRegistry
+/** Фабрика частей кода */
+trait CodePartFactory
 {
     /**
      * @return CodeBlock блок кода

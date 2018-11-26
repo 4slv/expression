@@ -2,7 +2,7 @@
 
 namespace Slov\Expression\Code;
 
-use Slov\Expression\FactoryRegistry;
+use Slov\Expression\CodePartFactory;
 
 /** Часть псевдо кода */
 abstract class CodePart implements CodeParserInterface, CodeToPhp
@@ -10,7 +10,7 @@ abstract class CodePart implements CodeParserInterface, CodeToPhp
     use CodeAccessor;
     use PhpAccessor;
     use LabelAccessor;
-    use FactoryRegistry;
+    use CodePartFactory;
 
     /**
      * @throws CodeParseException

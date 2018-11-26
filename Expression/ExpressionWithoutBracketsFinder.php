@@ -4,12 +4,12 @@ namespace Slov\Expression\Expression;
 
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\FactoryRegistry;
+use Slov\Expression\CodePartFactory;
 
 /** Поиск подвыражения в скобках */
 class ExpressionWithoutBracketsFinder
 {
-    use FactoryRegistry;
+    use CodePartFactory;
 
     /**
      * @param CodeContext $codeContext контекст кода
