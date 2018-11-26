@@ -112,6 +112,9 @@ class ForStatement extends Statement
         if(count($circleControlCodeList) === 3)
         {
             $this->initFirstStep($codeContext, $circleControlCodeList[0]);
+            $this->initCondition($codeContext, $circleControlCodeList[1]);
+            $this->initEachStep($codeContext, $circleControlCodeList[2]);
+            $this->initEachStepBlock($codeContext, $this->getCode());
         } else {
             throw new CodeParseException(
                 $circleControlCode.
@@ -122,17 +125,74 @@ class ForStatement extends Statement
     }
 
     /**
+     * Получение метки инструкции по псевдокоду
+     * @param CodeContext $codeContext код контекста
+     * @param string $code псевдокод инструкции
+     * @return string метка инструкции
+     */
+    protected function getExpressionLabel(CodeContext $codeContext, string $code): string
+    {
+        return $this
+            ->getExpressionResolver()
+            ->setCode($code)
+            ->resolve($codeContext)
+            ->getLabel();
+    }
+
+    /**
      * Инициализация инструкции первого шага
      * @param CodeContext $codeContext код контекста
      * @param string $code псевдокод инструкции
      */
     protected function initFirstStep(CodeContext $codeContext, string $code): void
     {
-        $firstStepLabel = $this
-            ->getExpressionResolver()
-            ->setCode($code)
-            ->resolve($codeContext)
+        $this->setFirstStepLabel(
+            $this->getExpressionLabel($codeContext, $code)
+        );
+    }
+
+    /**
+     * Инициализация инструкции условия
+     * @param CodeContext $codeContext код контекста
+     * @param string $code псевдокод инструкции
+     */
+    protected function initCondition(CodeContext $codeContext, string $code): void
+    {
+        $this->setConditionLabel(
+            $this->getExpressionLabel($codeContext, $code)
+        );
+    }
+
+    /**
+     * Инициализация инструкции каждого шага
+     * @param CodeContext $codeContext код контекста
+     * @param string $code псевдокод инструкции
+     */
+    protected function initEachStep(CodeContext $codeContext, string $code): void
+    {
+        $this->setEachStepLabel(
+            $this->getExpressionLabel($codeContext, $code)
+        );
+    }
+
+    /** Инициализация блока кода тела цикла
+     * @param CodeContext $codeContext код контекста
+     * @param string $code псевдькод блока кода
+     * @throws CodeParseException
+     */
+    protected function initEachStepBlock(CodeContext $codeContext, string $code): void
+    {
+        $eachStepBlockCode = $this
+            ->getBracketParser()
+            ->parseFirstGroupContent(
+                $code,
+                BracketType::byValue(BracketType::BRACES)
+            );
+        $eachStepBlockLabel = $this
+            ->createCodeBlock()
+            ->setCode($eachStepBlockCode)
+            ->parse($codeContext)
             ->getLabel();
-        $this->setFirstStepLabel($firstStepLabel);
+        $this->setEachStepBlockLabel($eachStepBlockLabel);
     }
 }
