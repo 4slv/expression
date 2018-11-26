@@ -15,11 +15,11 @@ class ExpressionResolver
     public function resolve(CodeContext $codeContext): Expression
     {
         $assignRegexp = AssignExpression::EXPRESSION_CODE_REGEXP;
-        $expression = preg_match($assignRegexp, $expressionCode)
+        $expression = preg_match($assignRegexp, $this->getCode())
             ? $this->createAssignExpression()
             : $this->createExpressionWithBrackets();
         return $expression
-            ->setCode($expressionCode)
+            ->setCode($this->getCode())
             ->parse($codeContext);
     }
 }

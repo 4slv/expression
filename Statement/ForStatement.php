@@ -6,11 +6,13 @@ use Slov\Expression\Bracket\BracketParserAccessor;
 use Slov\Expression\Bracket\BracketType;
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
+use Slov\Expression\Expression\ExpressionResolverAccessor;
 
 /** Инсттукция цикла for */
 class ForStatement extends Statement
 {
     use BracketParserAccessor;
+    use ExpressionResolverAccessor;
 
     const TEMPLATE = "for(%first_step%;%condition%;%each_step%)\n{\n%each_step_block%\n}";
 
@@ -123,10 +125,14 @@ class ForStatement extends Statement
      * Инициализация инструкции первого шага
      * @param CodeContext $codeContext код контекста
      * @param string $code псевдокод инструкции
-     * @throws CodeParseException
      */
     protected function initFirstStep(CodeContext $codeContext, string $code): void
     {
-        
+        $firstStepLabel = $this
+            ->getExpressionResolver()
+            ->setCode($code)
+            ->resolve($codeContext)
+            ->getLabel();
+        $this->setFirstStepLabel($firstStepLabel);
     }
 }
