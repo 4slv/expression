@@ -7,22 +7,22 @@ use Slov\Expression\Code\CodeParseException;
 /** Определение первой инструкции */
 class FirstStatementResolver
 {
-    /** @var StatementCodeParserRegistry реестр способов разбора псевдокода на код инструкций */
-    protected $statementCodeParserRegistry;
+    /** @var StatementCodeParserFactory Фабрика способов разбора псевдокода на код инструкций */
+    protected $statementCodeParserFactory;
 
     /** @var StatementFactory фабрика инструкций */
     protected $statementFactory;
 
     /**
-     * @return StatementCodeParserRegistry реестр способов разбора псевдокода на код инструкций
+     * @return StatementCodeParserFactory Фабрика способов разбора псевдокода на код инструкций
      */
-    protected function getStatementCodeParserRegistry(): StatementCodeParserRegistry
+    protected function getStatementCodeParserFactory(): StatementCodeParserFactory
     {
-        if(is_null($this->statementCodeParserRegistry))
+        if(is_null($this->statementCodeParserFactory))
         {
-            $this->statementCodeParserRegistry = new StatementCodeParserRegistry();
+            $this->statementCodeParserFactory = new StatementCodeParserFactory();
         }
-        return $this->statementCodeParserRegistry;
+        return $this->statementCodeParserFactory;
     }
 
     /**
@@ -52,7 +52,7 @@ class FirstStatementResolver
         }
 
         $statementCode = $this
-            ->getStatementCodeParserRegistry()
+            ->getStatementCodeParserFactory()
             ->getElementByType($statementType)
             ->parse($code);
 

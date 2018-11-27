@@ -21,6 +21,8 @@ class StatementFactory
                 return $this->createSimpleStatement();
             case StatementType::IF_STATEMENT:
                 return $this->createIfStatement();
+            case StatementType::FOR_STATEMENT:
+                return $this->createForStatement();
             default:
                 throw new CodeParseException(
                     $statementType->getValue().
@@ -44,5 +46,13 @@ class StatementFactory
     public function createIfStatement(): IfStatement
     {
         return new IfStatement();
+    }
+
+    /**
+     * @return ForStatement цикл for
+     */
+    public function createForStatement(): ForStatement
+    {
+        return new ForStatement();
     }
 }

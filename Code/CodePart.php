@@ -2,8 +2,6 @@
 
 namespace Slov\Expression\Code;
 
-use Slov\Expression\CodePartFactory;
-
 /** Часть псевдо кода */
 abstract class CodePart implements CodeParserInterface, CodeToPhp
 {

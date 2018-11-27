@@ -14,7 +14,7 @@ class ForStatement extends Statement
     use BracketParserAccessor;
     use ExpressionResolverAccessor;
 
-    const TEMPLATE = "for(%first_step%;%condition%;%each_step%)\n{\n%each_step_block%\n}";
+    const TEMPLATE = "for(%first_step%; %condition%; %each_step%)\n{\n%each_step_block%\n}";
 
     /** @var string метка инструкции первого шага */
     protected $firstStepLabel;
@@ -102,13 +102,13 @@ class ForStatement extends Statement
 
     protected function initStatement(CodeContext $codeContext): void
     {
-        $circleControlCode = $this
+        $forHeadCode = $this
             ->getBracketParser()
             ->parseFirstGroupContent(
                 $this->getCode(),
                 BracketType::byValue(BracketType::ROUND_BRACKETS)
             );
-        $circleControlCodeList = explode(';', $circleControlCode);
+        $circleControlCodeList = explode(';', $forHeadCode);
         if(count($circleControlCodeList) === 3)
         {
             $this->initFirstStep($codeContext, $circleControlCodeList[0]);
@@ -117,8 +117,8 @@ class ForStatement extends Statement
             $this->initEachStepBlock($codeContext, $this->getCode());
         } else {
             throw new CodeParseException(
-                $circleControlCode.
-                ' :: code is not for code'
+                $forHeadCode.
+                ' :: code is not for head code'
             );
         }
 
@@ -194,5 +194,21 @@ class ForStatement extends Statement
             ->parse($codeContext)
             ->getLabel();
         $this->setEachStepBlockLabel($eachStepBlockLabel);
+    }
+
+    public function toPhp(CodeContext $codeContext): string
+    {
+        $replace = [
+            '%first_step%' => $codeContext->getExpressionList()->get($this->getFirstStepLabel())->getPhp(),
+            '%condition%' => $codeContext->getExpressionList()->get($this->getConditionLabel())->getPhp(),
+            '%each_step%' => $codeContext->getExpressionList()->get($this->getEachStepLabel())->getPhp(),
+            '%each_step_block%' => $codeContext->getCodeBlockList()->get($this->getEachStepBlockLabel())->getPhp()
+        ];
+
+        return str_replace(
+            array_keys($replace),
+            array_values($replace),
+            self::TEMPLATE
+        );
     }
 }

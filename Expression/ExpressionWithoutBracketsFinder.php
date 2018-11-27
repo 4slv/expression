@@ -4,7 +4,7 @@ namespace Slov\Expression\Expression;
 
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\CodePartFactory;
+use Slov\Expression\Code\CodePartFactory;
 
 /** Поиск подвыражения в скобках */
 class ExpressionWithoutBracketsFinder

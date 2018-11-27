@@ -1,8 +1,7 @@
 <?php
 
-namespace Slov\Expression;
+namespace Slov\Expression\Code;
 
-use Slov\Expression\Code\CodeBlock;
 use Slov\Expression\Expression\AssignExpression;
 use Slov\Expression\Expression\ExpressionWithBrackets;
 use Slov\Expression\Expression\ExpressionWithoutBrackets;

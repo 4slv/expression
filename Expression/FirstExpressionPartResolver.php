@@ -5,7 +5,7 @@ namespace Slov\Expression\Expression;
 use Slov\Expression\Code\CodeAccessor;
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\CodePartFactory;
+use Slov\Expression\Code\CodePartFactory;
 use Slov\Expression\Operation\Operation;
 use Slov\Expression\Operation\PriorityOperationFinder;
 

@@ -5,7 +5,7 @@ use Slov\Expression\Code\CodeBlock;
 
 include 'vendor/autoload.php';
 
-$code = 'if(false){ $i = 1; $a = 2; }';
+$code = 'for($i = 1; $i = 0; $i = $i + 1){ $i = 1; $a = 2; }';
 
 $codeContext = new CodeContext();
 $codeBlock = new CodeBlock();
@@ -16,6 +16,5 @@ $php = $codeBlock
 
 var_dump(
     $php,
-    $codeContext->getExpressionPartByLabel('$i')->getPhp(),
-    $codeContext->getExpressionPartByLabel('$a')->getPhp()
+    $codeContext->getExpressionPartByLabel('$i')->getPhp()
 );

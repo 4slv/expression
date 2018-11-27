@@ -29,6 +29,6 @@ class Variable extends ExpressionPart
 
     public function toPhp(CodeContext $codeContext): string
     {
-        return $this->getExpressionPart()->toPhp($codeContext);
+        return $this->getVariableName();
     }
 }
