@@ -9,16 +9,24 @@ use Slov\Expression\Type\TypeName;
 /** Операция деления */
 class DivisionOperation extends Operation
 {
-    const OPERATION_SIGN = '/';
+    const MONEY_OPERATION = 'div';
 
     public function typeDefinition(CodeContext $codeContext): TypeName
     {
+        if(
+            $this->getLeftOperandTypeName()->isMoney()
+            &&
+            $this->getRightOperandTypeName()->isDigit()
+        ){
+            return $this->getTypeNameFactory()->createMoney();
+        }
+
         if(
             $this->getLeftOperandTypeName()->isDigit()
             &&
             $this->getRightOperandTypeName()->isDigit()
         ){
-            return TypeName::byName(TypeName::FLOAT);
+            return $this->getTypeNameFactory()->createFloat();
         }
         return $this->typeDefinitionFailed();
     }
@@ -26,9 +34,17 @@ class DivisionOperation extends Operation
     public function toPhp(CodeContext $codeContext): string
     {
         if(
+            $this->getLeftOperandTypeName()->isMoney()
+            &&
+            $this->getRightOperandTypeName()->isDigit()
+        ){
+            return $this->getOperationToPhpTemplate()->objectMethod($this, self::MONEY_OPERATION);
+        }
+
+        if(
             $this->getLeftOperandTypeName()->isDigit()
             &&
-            $this->getLeftOperandTypeName()->isDigit()
+            $this->getRightOperandTypeName()->isDigit()
         ){
             return $this->getOperationToPhpTemplate()->sameCode($this);
         }
@@ -37,6 +53,6 @@ class DivisionOperation extends Operation
 
     public function getSign(): string
     {
-        return self::OPERATION_SIGN;
+        return OperationSign::DIVISION;
     }
 }

@@ -12,6 +12,8 @@ class OperationName extends Enum
     const MULTIPLY = 'multiply';
     const SUBTRACTION = 'subtraction';
     const DIVISION = 'division';
+    const REMAINDER_OF_DIVISION = 'remainder_of_division';
+    const EXPONENTIATION = 'exponentiation';
 
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)
@@ -25,6 +27,7 @@ class OperationName extends Enum
                 return 15;
             case self::MULTIPLY:
             case self::DIVISION:
+            case self::REMAINDER_OF_DIVISION:
                 return 16;
         }
         return 0;

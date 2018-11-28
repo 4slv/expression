@@ -1,20 +1,18 @@
 <?php
 
 use Slov\Expression\Code\CodeContext;
-use Slov\Expression\Code\CodeBlock;
+use Slov\Expression\Code\CodeExecutor;
 
 include 'vendor/autoload.php';
 
-$code = 'for($i = 1; $i = 0; $i = $i + 1){ $i = 1; $a = 2; }';
+$code = 'for($i = 1; false; $i = $i + 1){ $i = 1; $a = 2; }';
 
 $codeContext = new CodeContext();
-$codeBlock = new CodeBlock();
-$php = $codeBlock
+$codeBlock = new CodeExecutor();
+$variableList = $codeBlock
     ->setCode($code)
-    ->parse($codeContext)
-    ->getPhp();
+    ->setCodeContext($codeContext)
+    ->execute()
+    ->getVariableList();
 
-var_dump(
-    $php,
-    $codeContext->getExpressionPartByLabel('$i')->getPhp()
-);
+var_dump($variableList);

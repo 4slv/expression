@@ -37,4 +37,12 @@ class OperationList extends ExpressionPartList
         $result = parent::get($label);
         return $result;
     }
+
+    /**
+     * @return Operation[] список элементов
+     */
+    public function getList(): array
+    {
+        return $this->list;
+    }
 }

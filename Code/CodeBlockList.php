@@ -31,4 +31,12 @@ class CodeBlockList extends CodePartList
         $result = parent::get($label);
         return $result;
     }
+
+    /**
+     * @return CodeBlock[] список элементов
+     */
+    public function getList(): array
+    {
+        return $this->list;
+    }
 }

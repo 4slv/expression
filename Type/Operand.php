@@ -9,20 +9,25 @@ use Slov\Expression\Code\CodeParseException;
 /** Операнд */
 class Operand extends ExpressionPart
 {
+    /**
+     * @return TypeFactory фабрика типов
+     */
+    protected function getTypeFactory()
+    {
+        return TypeFactory::getInstance();
+    }
+
     public function toPhp(CodeContext $codeContext): string
     {
         if($codeContext->checkLabelIsExpressionPart($this->getCodeTrim())){
             return $codeContext->getExpressionPartByLabel($this->getCodeTrim())->getPhp();
         }
 
-        switch($this->getTypeName()->getValue())
-        {
-            case TypeName::INT:
-            case TypeName::FLOAT:
-            case TypeName::BOOLEAN:
-                return $this->getCodeTrim();
-        }
-        return $this->toPhpParseError();
+        return $this
+            ->getTypeFactory()
+            ->create($this->getTypeName())
+            ->setCode($this->getCode())
+            ->toPhp($codeContext);
     }
 
     /** @param CodeContext $codeContext контекст кода

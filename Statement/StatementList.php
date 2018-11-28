@@ -38,4 +38,12 @@ class StatementList extends CodePartList
         $result = parent::get($label);
         return $result;
     }
+
+    /**
+     * @return Statement[] список элементов
+     */
+    public function getList(): array
+    {
+        return $this->list;
+    }
 }

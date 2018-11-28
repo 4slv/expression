@@ -33,4 +33,12 @@ class ExpressionList extends ExpressionPartList
         $result = parent::get($label);
         return $result;
     }
+
+    /**
+     * @return Expression[] список элементов
+     */
+    public function getList(): array
+    {
+        return $this->list;
+    }
 }

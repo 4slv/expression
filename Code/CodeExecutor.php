@@ -11,6 +11,14 @@ class CodeExecutor
     /** @var CodeContext контекст кода */
     protected $codeContext;
 
+    /** @var array ассоциативный массив вида: название переменной => значение переменной */
+    protected $variableList;
+
+    public function __construct()
+    {
+        $this->variableList = [];
+    }
+
     /**
      * @return CodeContext контекст кода
      */
@@ -29,12 +37,70 @@ class CodeExecutor
         return $this;
     }
 
-    public function execute(): void
+    /**
+     * @return array список переменных
+     */
+    public function getVariableList(): array
     {
-        eval($this
+        return $this->variableList;
+    }
+
+    /**
+     * @param array $variableList список переменных
+     * @return $this
+     */
+    protected function setVariableList(array $variableList)
+    {
+        $this->variableList = $variableList;
+        return $this;
+    }
+
+    /**
+     * @param string $variableName значение переменной
+     * @return mixed
+     */
+    public function getVariableByName(string $variableName)
+    {
+        return $this->variableList[$variableName] ?? null;
+    }
+
+    /** Выполнить псевдо код
+     * @return $this
+     * @throws CodeParseException
+     */
+    public function execute()
+    {
+        $codeBlock = $this
             ->createCodeBlock()
             ->setCode($this->getCode())
             ->parse($this->getCodeContext())
-            ->getPhp());
+            ->getPhp();
+        $returnVariableList = $this
+            ->getReturnVariableListCode();
+
+        $code = $codeBlock. "\n". $returnVariableList;
+
+        $variableList = eval($code);
+        $this->setVariableList($variableList);
+        return $this;
+    }
+
+    /**
+     * @return string код возврата
+     */
+    protected function getReturnVariableListCode(): string
+    {
+        $variableToString = [];
+        $variableList = $this->getCodeContext()->getVariableList()->getList();
+        foreach ($variableList as $variableName => $variableCode)
+        {
+            $variableToString[] = "'$variableName' => $variableName ?? null";
+        }
+        return
+            str_replace(
+                '%variableStringList%',
+                implode(", ", $variableToString),
+                'return [%variableStringList%];'
+            );
     }
 }

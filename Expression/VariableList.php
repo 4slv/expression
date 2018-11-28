@@ -37,4 +37,12 @@ class VariableList extends ExpressionPartList
         $result = parent::get($label);
         return $result;
     }
+
+    /**
+     * @return Variable[] список элементов
+     */
+    public function getList(): array
+    {
+        return $this->list;
+    }
 }

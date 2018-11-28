@@ -52,6 +52,14 @@ abstract class CodePartList
         return array_key_exists($label, $this->list);
     }
 
+    /**
+     * @return CodePart[] список элементов
+     */
+    public function getList(): array
+    {
+        return $this->list;
+    }
+
     /** @return string название новоой метки */
     protected function getNewLabel()
     {

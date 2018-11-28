@@ -2,31 +2,21 @@
 
 namespace Slov\Expression\Operation;
 
-
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Type\TypeName;
 
-/** Операция с числами */
-abstract class DigitOperation extends Operation
+/** Остаток от деления */
+class RemainderOfDivisionOperation extends Operation
 {
     public function typeDefinition(CodeContext $codeContext): TypeName
     {
         if(
-            $this->getLeftOperandTypeName()->isInt()
+            $this->getLeftOperandTypeName()->isDigit()
             &&
-            $this->getRightOperandTypeName()->isInt()
+            $this->getRightOperandTypeName()->isDigit()
         ){
-            return $this->getLeftOperandTypeName();
+            return $this->getTypeNameFactory()->createInt();
         }
-
-        if(
-            $this->getLeftOperandTypeName()->isFloat()
-            ||
-            $this->getRightOperandTypeName()->isFloat()
-        ){
-            return $this->getTypeNameFactory()->createFloat();
-        }
-
         return $this->typeDefinitionFailed();
     }
 
@@ -40,5 +30,10 @@ abstract class DigitOperation extends Operation
             return $this->getOperationToPhpTemplate()->sameCode($this);
         }
         return $this->codeToPhpFailed();
+    }
+
+    public function getSign(): string
+    {
+        return OperationSign::REMINDER_OF_DIVISION;
     }
 }

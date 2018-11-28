@@ -37,4 +37,12 @@ abstract class ExpressionPartList extends CodePartList
             $label. ' not found in '. self::class
         );
     }
+
+    /**
+     * @return ExpressionPart[] список элементов
+     */
+    public function getList(): array
+    {
+        return $this->list;
+    }
 }

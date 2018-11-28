@@ -8,10 +8,13 @@ use Slov\Expression\Code\CodeParseException;
 use Slov\Expression\Expression\ExpressionPart;
 use Slov\Expression\Type\Operand;
 use Slov\Expression\Type\TypeName;
+use Slov\Expression\Type\TypeNameFactoryAccessor;
 
 /** Операция */
 class Operation extends ExpressionPart
 {
+    use TypeNameFactoryAccessor;
+
     /** @var Operation операция */
     protected $operation;
 
