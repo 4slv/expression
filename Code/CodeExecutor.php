@@ -31,6 +31,10 @@ class CodeExecutor
 
     public function execute(): void
     {
-        //$this->createCodeBlock()->setCode($this->getCode())->parse($this->getCodeContext())
+        eval($this
+            ->createCodeBlock()
+            ->setCode($this->getCode())
+            ->parse($this->getCodeContext())
+            ->getPhp());
     }
 }
