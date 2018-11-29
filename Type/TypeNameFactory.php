@@ -55,5 +55,19 @@ class TypeNameFactory
         return TypeName::byValue(TypeName::MONEY);
     }
 
+    /**
+     * @return TypeName название типа: дата и время
+     */
+    public function createDateTime()
+    {
+        return TypeName::byValue(TypeName::DATE_TIME);
+    }
 
+    /**
+     * @return TypeName название типа: временной интервал
+     */
+    public function createDateInterval()
+    {
+        return TypeName::byValue(TypeName::DATE_INTERVAL);
+    }
 }

@@ -58,6 +58,22 @@ class TypeFactory
     }
 
     /**
+     * @return DateTimeType
+     */
+    public function createDateTime()
+    {
+        return new DateTimeType();
+    }
+
+    /**
+     * @return DateIntervalType
+     */
+    public function createDateInterval()
+    {
+        return new DateIntervalType();
+    }
+
+    /**
      * @param TypeName $typeName название типа
      * @return Type тип
      * @throws CodeParseException
@@ -74,6 +90,10 @@ class TypeFactory
                 return $this->createBoolean();
             case TypeName::MONEY:
                 return $this->createMoney();
+            case TypeName::DATE_TIME:
+                return $this->createDateTime();
+            case TypeName::DATE_INTERVAL:
+                return $this->createDateInterval();
             default:
                 throw new CodeParseException($typeName->getValue(). ' :: type creation impossible');
         }

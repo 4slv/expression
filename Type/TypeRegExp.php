@@ -8,10 +8,12 @@ use Slov\Expression\Code\CodeParseException;
 /** Регулярное выражение описывающее тип */
 class TypeRegExp extends Enum
 {
+    const DATE_TIME = '(\d{4}\.\d{2}\.\d{2})( \d{2}\:\d{2}\:\d{2})?(\.\d{6})?';
+    const DATE_INTERVAL = '(\d+)\s?(day|days)';
     const INT = '\d+';
     const FLOAT = '\d+\.\d+';
     const BOOLEAN = '(true|false)';
-    const VARIABLE = '\$(\w[\w\d]*)';
+    const VARIABLE = '\$([a-z][\w\d]*)';
     const MONEY = '(\d+)?\$(\d{2})?';
 
     /**
@@ -23,7 +25,7 @@ class TypeRegExp extends Enum
     {
         foreach(self::getConstants() as $typeKey => $typeRegExp)
         {
-            if(preg_match('/^'. $typeRegExp. '$/', $typeStringValue))
+            if(preg_match('/^'. $typeRegExp. '$/i', $typeStringValue))
             {
                 $typeName = constant(TypeName::class. '::'. $typeKey);
                 return TypeName::byValue($typeName);

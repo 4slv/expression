@@ -5,6 +5,7 @@ namespace Slov\Expression\Code;
 use Slov\Expression\Expression\ExpressionList;
 use Slov\Expression\Expression\ExpressionPart;
 use Slov\Expression\Expression\ExpressionPartList;
+use Slov\Expression\Expression\FunctionCallList;
 use Slov\Expression\Expression\VariableList;
 use Slov\Expression\Operation\OperationList;
 use Slov\Expression\Statement\StatementList;
@@ -19,6 +20,9 @@ class CodeContext
 
     /** @var VariableList список переменных */
     protected $variableList;
+
+    /** @var FunctionCallList список вызовов функций */
+    protected $functionCallList;
 
     /** @var OperationList список операций */
     protected $operationList;
@@ -51,6 +55,18 @@ class CodeContext
             $this->variableList = new VariableList();
         }
         return $this->variableList;
+    }
+
+    /**
+     * @return FunctionCallList список вызовов функций
+     */
+    public function getFunctionCallList(): FunctionCallList
+    {
+        if(is_null($this->functionCallList))
+        {
+            $this->functionCallList = new FunctionCallList();
+        }
+        return $this->functionCallList;
     }
 
     /**

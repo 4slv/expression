@@ -11,6 +11,9 @@ class TypeName extends Enum
     const FLOAT = 'float';
     const BOOLEAN = 'boolean';
     const MONEY = 'money';
+    const DATE_TIME = 'dateTime';
+    const DATE_INTERVAL = 'dateInterval';
+    const UNKNOWN = 'unknown';
 
     /**
      * @return bool тип является цифровым
@@ -57,6 +60,22 @@ class TypeName extends Enum
     public function isMoney()
     {
         return $this->getValue() === self::MONEY;
+    }
+
+    /**
+     * @return bool true - тип DateTime
+     */
+    public function isDateTime()
+    {
+        return $this->getValue() === self::DATE_TIME;
+    }
+
+    /**
+     * @return bool true - тип DateInterval
+     */
+    public function isDateInterval()
+    {
+        return $this->getValue() === self::DATE_INTERVAL;
     }
 }
 
