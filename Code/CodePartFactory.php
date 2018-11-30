@@ -5,6 +5,7 @@ namespace Slov\Expression\Code;
 use Slov\Expression\Expression\AssignExpression;
 use Slov\Expression\Expression\ExpressionWithBrackets;
 use Slov\Expression\Expression\ExpressionWithoutBrackets;
+use Slov\Expression\Expression\FunctionCall;
 use Slov\Expression\Expression\Variable;
 use Slov\Expression\Operation\Operation;
 use Slov\Expression\Type\Operand;
@@ -50,6 +51,14 @@ trait CodePartFactory
     protected function createOperation(): Operation
     {
         return new Operation();
+    }
+
+    /**
+     * @return FunctionCall вызов функции
+     */
+    protected function createFunctionCall(): FunctionCall
+    {
+        return new FunctionCall();
     }
 
     /**

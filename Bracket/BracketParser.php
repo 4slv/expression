@@ -52,4 +52,39 @@ class BracketParser
         $firstGroup = $this->parseFirstGroup($code, $bracketType);
         return substr($firstGroup, 1, -1);
     }
+
+    /**
+     * Разбиение строки на части с учётом группировки скобок
+     * @param string $code строка
+     * @param BracketType $bracketType тип скобок
+     * @param string $delimiter разделитель
+     * @return string[] части строки с корректной вложенностью скобок
+     * @throws CodeParseException
+     */
+    public function split(string $code, BracketType $bracketType, string $delimiter): array
+    {
+        $result = [];
+        $codePartList = explode($delimiter, $code);
+        $resultPartList = [];
+        $openBracket = $bracketType->getOpenBracket();
+        $closeBracket = $bracketType->getCloseBracket();
+        foreach ($codePartList as $codePart)
+        {
+            $resultPartList[] = $codePart;
+            $resultPart = implode($delimiter, $resultPartList);
+            $openBracketCount = substr_count($resultPart, $openBracket);
+            $closeBracketCount = substr_count($resultPart, $closeBracket);
+            if($openBracketCount === $closeBracketCount)
+            {
+                $result[] = $resultPart;
+                $resultPartList = [];
+            }
+        }
+
+        if(implode($delimiter, $result) === $code)
+        {
+            return $result;
+        }
+        throw new CodeParseException($code. ' :: bracket parsing error');
+    }
 }

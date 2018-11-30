@@ -34,13 +34,15 @@ class FunctionList
      * @param string $name название функции
      * @throws CodeParseException
      */
-    public static function append(callable $function, string $name)
+    public static function append(callable $function, string $name): void
     {
         if(self::exists($name) === false)
         {
             self::$list[$name] = $function;
+        } else {
+            throw new CodeParseException($name. ' :: function already defined');
         }
-        throw new CodeParseException($name. ' :: function already defined');
+
     }
 
     /**

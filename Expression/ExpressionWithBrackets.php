@@ -2,11 +2,17 @@
 
 namespace Slov\Expression\Expression;
 
+use Slov\Expression\Bracket\BracketParserAccessor;
+use Slov\Expression\Bracket\BracketType;
 use Slov\Expression\Code\CodeContext;
+use Slov\Expression\Code\CodeParseException;
+use Slov\Expression\Type\TypeRegExp;
 
 /** Выражение со скобками */
 class ExpressionWithBrackets extends Expression
 {
+    use BracketParserAccessor;
+
     /** @var ExpressionWithoutBracketsFinder поиск выражения без скобок */
     protected $expressionWithoutBracketsFinder;
 
@@ -21,11 +27,50 @@ class ExpressionWithBrackets extends Expression
         return $this->expressionWithoutBracketsFinder;
     }
 
+    /**
+     * Разбор функций из псевдокода и замена их метками
+     * @param CodeContext $codeContext контекст кода
+     * @return string псевдокод с метками вместо вызовов функций
+     * @throws CodeParseException
+     */
+    protected function parseFunctions(CodeContext $codeContext): string
+    {
+        $expressionCode = $this->getCode();
+
+        while (preg_match('/'. TypeRegExp::FUNCTION.'/', $expressionCode, $match))
+        {
+            $parametersCode = $this
+                ->getBracketParser()
+                ->parseFirstGroup(
+                    $match[4],
+                    BracketType::byValue(BracketType::ROUND_BRACKETS)
+                );
+            $functionCallCode = $match[1]. $parametersCode;
+            $functionCallLabel = $this
+                ->createFunctionCall()
+                ->setCode($functionCallCode)
+                ->parse($codeContext)
+                ->getLabel();
+            $count = 1;
+
+            $expressionCode = str_replace(
+                $functionCallCode,
+                $functionCallLabel,
+                $expressionCode,
+                $count
+            );
+        }
+        return $expressionCode;
+    }
+
     protected function defineExpressionPart(CodeContext $codeContext): ExpressionPart
     {
         $expressionWithoutBracketsFinder = $this->getExpressionWithoutBracketsFinder();
-        $expressionCode = $this->getCode();
-        $expressionPart = null;
+        $expressionCode = $this->parseFunctions($codeContext);
+        $expressionPart = $codeContext->checkLabelIsExpressionPart($expressionCode)
+            ? $codeContext->getExpressionPartByLabel($expressionCode)
+            : null;
+
         while ($codeContext->checkLabelIsExpressionPart($expressionCode) === false){
             $expressionPart = $expressionWithoutBracketsFinder
                 ->find($codeContext, $expressionCode);

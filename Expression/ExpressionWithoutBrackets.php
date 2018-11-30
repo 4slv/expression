@@ -5,6 +5,7 @@ namespace Slov\Expression\Expression;
 
 use Slov\Expression\Code\CodeContext;
 
+
 /** Выражение без скобок */
 class ExpressionWithoutBrackets extends Expression
 {

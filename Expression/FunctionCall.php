@@ -2,20 +2,32 @@
 
 namespace Slov\Expression\Expression;
 
+use Slov\Expression\Bracket\BracketParserAccessor;
+use Slov\Expression\Bracket\BracketType;
 use Slov\Expression\Code\CodeContext;
+use Slov\Expression\Code\CodeParseException;
+use Slov\Expression\Functions\FunctionList;
 use Slov\Expression\Type\TypeName;
+use Slov\Expression\Type\TypeRegExp;
 
 
 /** Вызов функции */
 class FunctionCall extends ExpressionPart
 {
+    use BracketParserAccessor;
+
+    const PHP_TEMPLATE = "%callMethod%('%functionName%', [%parametersList%])";
+
     /** @var string название функции */
     protected $functionName;
 
     /** @var string[] список меток параметров */
     protected $parameterLabelList;
 
-    /**
+    /** @var TypeName тип возвращаемого значения */
+    protected $returnType;
+
+        /**
      * @return string название функции
      */
     public function getFunctionName(): string
@@ -33,11 +45,116 @@ class FunctionCall extends ExpressionPart
         return $this;
     }
 
+    /**
+     * @return string[] список меток параметров
+     */
+    public function getParameterLabelList(): array
+    {
+        return $this->parameterLabelList;
+    }
+
+    /**
+     * @param string[] $parameterLabelList список меток параметров
+     * @return $this
+     */
+    protected function setParameterLabelList(array $parameterLabelList)
+    {
+        $this->parameterLabelList = $parameterLabelList;
+        return $this;
+    }
+
+    /**
+     * @return TypeName тип возвращаемого значения
+     */
+    public function getReturnType(): TypeName
+    {
+        return $this->returnType;
+    }
+
+    /**
+     * @param TypeName $returnType тип возвращаемого значения
+     * @return $this
+     */
+    public function setReturnType(TypeName $returnType)
+    {
+        $this->returnType = $returnType;
+        return $this;
+    }
+
+    public function parse(CodeContext $codeContext)
+    {
+        $this->parseFunction($codeContext);
+        return parent::parse($codeContext);
+    }
+
+    /**
+     * Разбор псевдокода функции
+     * @param CodeContext $codeContext контекст кода
+     * @throws CodeParseException
+     */
+    protected function parseFunction(CodeContext $codeContext): void
+    {
+        if(preg_match('/'.TypeRegExp::FUNCTION.'/', $this->getCode(), $match))
+        {
+            $this->parseReturnType($match[2]);
+            $this->setFunctionName($match[3]);
+            $parametersCode = $this
+                ->getBracketParser()
+                ->parseFirstGroupContent(
+                    $match[4],
+                    BracketType::byValue(BracketType::ROUND_BRACKETS)
+                );
+            $this->parseParametersList($codeContext, $parametersCode);
+        } else {
+            throw new CodeParseException($this->getCode(). ' :: is not a function');
+        }
+    }
+
+    /**
+     * Разбор возвращаемого значения функции
+     * @param string $returnTypeValue текстовое обозначение возвращаемого значения функции
+     * @throws CodeParseException
+     */
+    protected function parseReturnType(string $returnTypeValue): void
+    {
+        if(TypeName::has($returnTypeValue))
+        {
+            $this->setReturnType(TypeName::byValue($returnTypeValue));
+        } else {
+            throw new CodeParseException($returnTypeValue. ' :: incorrect return type');
+        }
+    }
+
+    /**
+     * Разбор списка параметров
+     * @param CodeContext $codeContext контекст кода
+     * @param string $parametersCode псевдокод списка параметров
+     * @throws CodeParseException
+     */
+    protected function parseParametersList(CodeContext $codeContext, string $parametersCode)
+    {
+        $parameterLabelList = [];
+        $parameterCodeList = $this
+            ->getBracketParser()
+            ->split(
+                $parametersCode,
+                BracketType::byValue(BracketType::ROUND_BRACKETS),
+                ','
+            );
+        foreach($parameterCodeList as $parameterCode)
+        {
+            $parameterLabelList[] = $this
+                ->createExpressionWithBrackets()
+                ->setCode($parameterCode)
+                ->parse($codeContext)
+                ->getLabel();
+        }
+        $this->setParameterLabelList($parameterLabelList);
+    }
+
     protected function typeDefinition(CodeContext $codeContext): TypeName
     {
-        return TypeName::has($this->getFunctionName())
-            ? TypeName::byValue($this->getFunctionName())
-            : TypeName::byValue(TypeName::UNKNOWN);
+        return $this->getReturnType();
     }
 
     protected function getContextList(CodeContext $codeContext)
@@ -47,6 +164,25 @@ class FunctionCall extends ExpressionPart
 
     public function toPhp(CodeContext $codeContext): string
     {
-        // TODO: Implement toPhp() method.
+        $parametersPhpList = [];
+        foreach ($this->getParameterLabelList() as $parameterLabel)
+        {
+            $parametersPhpList[] = $codeContext
+                ->getExpressionList()
+                ->get($parameterLabel)
+                ->getPhp();
+        }
+
+        $replace = [
+            '%callMethod%' => FunctionList::class. '::call',
+            '%functionName%' => $this->getFunctionName(),
+            '%parametersList%' => implode(', ', $parametersPhpList)
+        ];
+
+        return str_replace(
+            array_keys($replace),
+            array_values($replace),
+            self::PHP_TEMPLATE
+        );
     }
 }

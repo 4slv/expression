@@ -146,6 +146,7 @@ class CodeContext
     {
         return [
             $this->getOperandList(),
+            $this->getFunctionCallList(),
             $this->getOperationList(),
             $this->getExpressionList()
         ];

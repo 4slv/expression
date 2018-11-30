@@ -13,7 +13,6 @@ class TypeName extends Enum
     const MONEY = 'money';
     const DATE_TIME = 'dateTime';
     const DATE_INTERVAL = 'dateInterval';
-    const UNKNOWN = 'unknown';
 
     /**
      * @return bool тип является цифровым

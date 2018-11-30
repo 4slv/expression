@@ -2,30 +2,30 @@
 
 namespace Slov\Expression\Functions;
 
-use Slov\Expression\Type\TypeName;
 use Slov\Expression\Code\CodeParseException;
 
 /** Построитель списка функций */
 class FunctionListBuilder
 {
-    public function build()
+    /**
+     * Инициализация функций
+     * @throws CodeParseException
+     */
+    public function build(): void
     {
         FunctionList::emptyList();
+        $this->buildInlineFunctions();
     }
 
     /**
-     * Создание функций приведения типа
+     * Инициализация внутрених функций
      * @throws CodeParseException
      */
-    protected function createCastFunctions(): void
+    public function buildInlineFunctions(): void
     {
-        $castFunction = function($parameter){
-            return $parameter;
-        };
-
-        foreach (TypeName::getValues() as $typeName)
+        foreach (get_class_methods(InlineFunctions::class) as $methodName)
         {
-            FunctionList::append($castFunction, $typeName);
+            FunctionList::append([InlineFunctions::class, $methodName], $methodName);
         }
     }
 

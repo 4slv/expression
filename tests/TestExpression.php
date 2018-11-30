@@ -16,7 +16,7 @@ class TestExpression extends TestCase
     public function expressionsDataProvider()
     {
         return [
-            # операции с целыми числами
+            /*# операции с целыми числами
             ['2 + 1', 3],
             ['2 - 1', 1],
             ['15 * 12', 180],
@@ -61,7 +61,7 @@ class TestExpression extends TestCase
                     ->diff(DateTime::createFromFormat('Y.m.d', '2018.02.05'))
             ],
             ['3 days - 1 day', DateInterval::createFromDateString('+2 day')],
-            //['{days} (3 days - 1 day)', 2],
+            */['(int) days(3 days - 1 day)', 2],
         ];
     }
 
