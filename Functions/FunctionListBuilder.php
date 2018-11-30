@@ -21,7 +21,7 @@ class FunctionListBuilder
      * Инициализация внутрених функций
      * @throws CodeParseException
      */
-    public function buildInlineFunctions(): void
+    protected function buildInlineFunctions(): void
     {
         foreach (get_class_methods(InlineFunctions::class) as $methodName)
         {

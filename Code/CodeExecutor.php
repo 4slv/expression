@@ -2,6 +2,8 @@
 
 namespace Slov\Expression\Code;
 
+use Slov\Expression\Functions\FunctionListBuilder;
+
 /** Запуск псевдокода */
 class CodeExecutor
 {
@@ -17,6 +19,7 @@ class CodeExecutor
     public function __construct()
     {
         $this->variableList = [];
+        $this->initFunctionList();
     }
 
     /**
@@ -53,6 +56,12 @@ class CodeExecutor
     {
         $this->variableList = $variableList;
         return $this;
+    }
+
+    protected function initFunctionList(): void
+    {
+        $functionListBuilder = new FunctionListBuilder();
+        $functionListBuilder->build();
     }
 
     /**

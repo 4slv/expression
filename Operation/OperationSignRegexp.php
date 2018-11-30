@@ -14,6 +14,7 @@ class OperationSignRegexp extends Enum
     const SUBTRACTION = '\-';
     const DIVISION = '\/';
     const REMAINDER_OF_DIVISION = '\%';
+    const EQUAL = '\=\=';
 
     /** @param string $operationSign псевдо код знака операции
      * @return OperationName название операции

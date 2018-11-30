@@ -12,8 +12,9 @@ class OperationName extends Enum
     const MULTIPLY = 'multiply';
     const SUBTRACTION = 'subtraction';
     const DIVISION = 'division';
-    const REMAINDER_OF_DIVISION = 'remainder_of_division';
+    const REMAINDER_OF_DIVISION = 'remainderOfDivision';
     const EXPONENTIATION = 'exponentiation';
+    const EQUAL = 'equal';
 
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)
@@ -22,6 +23,8 @@ class OperationName extends Enum
     {
         switch ($this->getValue())
         {
+            case self::EQUAL:
+                return 12;
             case self::ADD:
             case self::SUBTRACTION:
                 return 15;
@@ -31,26 +34,5 @@ class OperationName extends Enum
                 return 16;
         }
         return 0;
-    }
-
-    /**
-     * @return bool true - левый операнд используется
-     */
-    public function leftOperandUsed(){
-        switch ($this->getValue())
-        {
-            default:
-                return true;
-        }
-    }
-    /**
-     * @return bool true - правый операнд используется
-     */
-    public function rightOperandUsed(){
-        switch ($this->getValue())
-        {
-            default:
-                return true;
-        }
     }
 }
