@@ -103,6 +103,105 @@ class TestExpression extends TestCase
             ['(int) int(1.1)', 1],
             ['(int) int(2.195896)', 2],
             ['(int) int(3.9)', 3],
+            // функция equal, int
+            ['3 == 3', true],
+            ['1 == 3', false],
+            // функция equal, float
+            ['3.14 == 3.14', true],
+            ['3.14 == 2.14', false],
+            // функция equal, DateTime
+            ['2018.06.19 15:06:00 == 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 == 2018.06.19 15:06:01', false],
+            // функция equal, DateInterval
+            ['6 day == 6 day', true],
+            ['6 day == 5 day', false],
+            // функция equal, Money
+            ['300$ == 300$', true],
+            ['300$ == 301$', false],
+
+            // функция greater, int
+            ['3 > 2', true],
+            ['3 > 3', false],
+            ['3 > 4', false],
+            // функция greater, float
+            ['3.14 > 3.13', true],
+            ['3.14 > 3.14', false],
+            ['3.14 > 3.15', false],
+            // функция greater, DateTime
+            ['2018.06.19 15:06:00 > 2018.06.19 15:05:59', true],
+            ['2018.06.19 15:06:00 > 2018.06.19 15:06:00', false],
+            ['2018.06.19 15:06:00 > 2018.06.19 15:06:01', false],
+            // функция greater, DateInterval
+            ['6 day > 5 day', true],
+            ['6 day > 6 day', false],
+            ['6 day > 7 day', false],
+            // функция greater, Money
+            ['301$ > 300$', true],
+            ['300$ > 300$', false],
+            ['300$ > 301$', false],
+
+            // функция less, int
+            ['3 < 4', true],
+            ['3 < 3', false],
+            ['3 < 2', false],
+            // функция less, float
+            ['3.14 < 3.15', true],
+            ['3.14 < 3.14', false],
+            ['3.14 < 3.13', false],
+            // функция less, DateTime
+            ['2018.06.19 15:06:00 < 2018.06.19 15:06:01', true],
+            ['2018.06.19 15:06:00 < 2018.06.19 15:06:00', false],
+            ['2018.06.19 15:06:00 < 2018.06.19 15:05:59', false],
+            // функция less, DateInterval
+            ['6 day < 7 day', true],
+            ['6 day < 6 day', false],
+            ['6 day < 5 day', false],
+            // функция less, Money
+            ['300$ < 301$', true],
+            ['300$ < 300$', false],
+            ['301$ < 300$', false],
+
+            // функция greater or equals, int
+            ['3 >= 2', true],
+            ['3 >= 3', true],
+            ['3 >= 4', false],
+            // функция greater or equals, float
+            ['3.14 >= 3.13', true],
+            ['3.14 >= 3.14', true],
+            ['3.14 >= 3.15', false],
+            // функция greater or equals, DateTime
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:05:59', true],
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 >= 2018.06.19 15:06:01', false],
+            // функция greater or equals, DateInterval
+            ['6 day >= 5 day', true],
+            ['6 day >= 6 day', true],
+            ['6 day >= 7 day', false],
+            // функция greater or equals, Money
+            ['301$ >= 300$', true],
+            ['300$ >= 300$', true],
+            ['300$ >= 301$', false],
+
+            // функция less or equals, int
+            ['3 <= 4', true],
+            ['3 <= 3', true],
+            ['3 <= 2', false],
+            // функция less or equals, float
+            ['3.14 <= 3.15', true],
+            ['3.14 <= 3.14', true],
+            ['3.14 <= 3.13', false],
+            // функция less or equals, DateTime
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:06:01', true],
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:06:00', true],
+            ['2018.06.19 15:06:00 <= 2018.06.19 15:05:59', false],
+            // функция less or equals, DateInterval
+            ['6 day <= 7 day', true],
+            ['6 day <= 6 day', true],
+            ['6 day <= 5 day', false],
+            // функция less or equals, Money
+            ['300$ <= 301$', true],
+            ['300$ <= 300$', true],
+            ['301$ <= 300$', false],
         ];
     }
 

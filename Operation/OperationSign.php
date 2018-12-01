@@ -13,4 +13,9 @@ class OperationSign extends Enum
     const SUBTRACTION = '-';
     const DIVISION = '/';
     const REMINDER_OF_DIVISION = '%';
+    const EQUAL = '==';
+    const GREATER = '>';
+    const LESS = '<';
+    const GREATER_OR_EQUAL = '>=';
+    const LESS_OR_EQUAL = '<=';
 }

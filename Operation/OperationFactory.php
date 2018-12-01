@@ -74,6 +74,46 @@ class OperationFactory
     }
 
     /**
+     * @return EqualOperation
+     */
+    public function createEqualOperation()
+    {
+        return new EqualOperation();
+    }
+
+    /**
+     * @return GreaterOperation
+     */
+    public function createGreaterOperation()
+    {
+        return new GreaterOperation();
+    }
+
+    /**
+     * @return LessOperation
+     */
+    public function createLessOperation()
+    {
+        return new LessOperation();
+    }
+
+    /**
+     * @return GreaterOrEqualOperation
+     */
+    public function createGreaterOrEqualOperation()
+    {
+        return new GreaterOrEqualOperation();
+    }
+
+    /**
+     * @return LessOrEqualOperation
+     */
+    public function createLessOrEqualOperation()
+    {
+        return new LessOrEqualOperation();
+    }
+
+    /**
      * @param OperationName $operationName название операции
      * @return Operation операция
      * @throws CodeParseException
@@ -93,6 +133,16 @@ class OperationFactory
                 return $this->createRemainderOfDivisionOperation();
             case OperationName::EXPONENTIATION:
                 return $this->createExponentiationOperation();
+            case OperationName::EQUAL:
+                return $this->createEqualOperation();
+            case OperationName::GREATER:
+                return $this->createGreaterOperation();
+            case OperationName::LESS:
+                return $this->createLessOperation();
+            case OperationName::GREATER_OR_EQUAL:
+                return $this->createGreaterOrEqualOperation();
+            case OperationName::LESS_OR_EQUAL:
+                return $this->createLessOrEqualOperation();
             default:
                 throw new CodeParseException($operationName->getValue(). ' :: operation creation impossible');
         }

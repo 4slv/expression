@@ -15,6 +15,10 @@ class OperationSignRegexp extends Enum
     const DIVISION = '\/';
     const REMAINDER_OF_DIVISION = '\%';
     const EQUAL = '\=\=';
+    const GREATER_OR_EQUAL = '\>\=';
+    const GREATER = '\>';
+    const LESS_OR_EQUAL = '\<\=';
+    const LESS = '\<';
 
     /** @param string $operationSign псевдо код знака операции
      * @return OperationName название операции

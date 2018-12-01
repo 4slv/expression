@@ -108,6 +108,7 @@ class Operation extends ExpressionPart
             ->createOperationResolver()
             ->resolve($this->getCode(), $codeContext);
         $this->setOperation($operation);
+
         return parent::parse($codeContext);
     }
 
