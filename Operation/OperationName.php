@@ -19,6 +19,11 @@ class OperationName extends Enum
     const LESS = 'less';
     const GREATER_OR_EQUAL = 'greaterOrEqual';
     const LESS_OR_EQUAL = 'lessOrEqual';
+    const NOT_EQUAL = 'notEqual';
+    const NOT = 'not';
+    const AND = 'and';
+    const OR = 'or';
+    const IF_ELSE = 'ifElse';
 
     /**
      * @return int приоритет операции (чем больше значение, тем выше приоритет)
@@ -27,7 +32,14 @@ class OperationName extends Enum
     {
         switch ($this->getValue())
         {
+            case self::IF_ELSE:
+                return 4;
+            case self::OR:
+                return 7;
+            case self::AND:
+                return 8;
             case self::EQUAL:
+            case self::NOT_EQUAL:
                 return 12;
             case self::GREATER:
             case self::LESS:
@@ -41,6 +53,8 @@ class OperationName extends Enum
             case self::DIVISION:
             case self::REMAINDER_OF_DIVISION:
                 return 16;
+            case self::NOT:
+                return 17;
         }
         return 0;
     }

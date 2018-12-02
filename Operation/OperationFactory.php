@@ -114,6 +114,38 @@ class OperationFactory
     }
 
     /**
+     * @return NotEqualOperation
+     */
+    public function createNotEqualOperation()
+    {
+        return new NotEqualOperation();
+    }
+
+    /**
+     * @return NotOperation
+     */
+    public function createNotOperation()
+    {
+        return new NotOperation();
+    }
+
+    /**
+     * @return AndOperation
+     */
+    public function createAndOperation()
+    {
+        return new AndOperation();
+    }
+
+    /**
+     * @return OrOperation
+     */
+    public function createOrOperation()
+    {
+        return new OrOperation();
+    }
+
+    /**
      * @param OperationName $operationName название операции
      * @return Operation операция
      * @throws CodeParseException
@@ -143,6 +175,14 @@ class OperationFactory
                 return $this->createGreaterOrEqualOperation();
             case OperationName::LESS_OR_EQUAL:
                 return $this->createLessOrEqualOperation();
+            case OperationName::NOT_EQUAL:
+                return $this->createNotEqualOperation();
+            case OperationName::NOT:
+                return $this->createNotOperation();
+            case OperationName::AND:
+                return $this->createAndOperation();
+            case OperationName::OR:
+                return $this->createOrOperation();
             default:
                 throw new CodeParseException($operationName->getValue(). ' :: operation creation impossible');
         }

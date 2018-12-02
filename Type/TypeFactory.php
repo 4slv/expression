@@ -74,6 +74,14 @@ class TypeFactory
     }
 
     /**
+     * @return NullType
+     */
+    public function createNull()
+    {
+        return new NullType();
+    }
+
+    /**
      * @param TypeName $typeName название типа
      * @return Type тип
      * @throws CodeParseException
@@ -94,6 +102,8 @@ class TypeFactory
                 return $this->createDateTime();
             case TypeName::DATE_INTERVAL:
                 return $this->createDateInterval();
+            case TypeName::NULL:
+                return $this->createNull();
             default:
                 throw new CodeParseException($typeName->getValue(). ' :: type creation impossible');
         }

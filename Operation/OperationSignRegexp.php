@@ -8,6 +8,7 @@ use Slov\Expression\Code\CodeParseException;
 /** Регулярное выражение операции */
 class OperationSignRegexp extends Enum
 {
+    const IF_ELSE = '([^\?]+)\?([^\:]+)\:(.+)\}';
     const EXPONENTIATION = '\*\*';
     const ADD = '\+';
     const MULTIPLY = '\*';
@@ -19,6 +20,10 @@ class OperationSignRegexp extends Enum
     const GREATER = '\>';
     const LESS_OR_EQUAL = '\<\=';
     const LESS = '\<';
+    const NOT_EQUAL = '\!\=';
+    const NOT = '\!';
+    const AND = '\&\&';
+    const OR = '\|\|';
 
     /** @param string $operationSign псевдо код знака операции
      * @return OperationName название операции

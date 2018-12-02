@@ -103,6 +103,7 @@ class TestExpression extends TestCase
             ['(int) int(1.1)', 1],
             ['(int) int(2.195896)', 2],
             ['(int) int(3.9)', 3],
+
             // функция equal, int
             ['3 == 3', true],
             ['1 == 3', false],
@@ -118,6 +119,22 @@ class TestExpression extends TestCase
             // функция equal, Money
             ['300$ == 300$', true],
             ['300$ == 301$', false],
+
+            // функция notEqual, int
+            ['3 != 3', false],
+            ['1 != 3', true],
+            // функция notEqual, float
+            ['3.14 != 3.14', false],
+            ['3.14 != 2.14', true],
+            // функция notEqual, DateTime
+            ['2018.06.19 15:06:00 != 2018.06.19 15:06:00', false],
+            ['2018.06.19 15:06:00 != 2018.06.19 15:06:01', true],
+            // функция notEqual, DateInterval
+            ['6 day != 6 day', false],
+            ['6 day != 5 day', true],
+            // функция notEqual, Money
+            ['300$ != 300$', false],
+            ['300$ != 301$', true],
 
             // функция greater, int
             ['3 > 2', true],
@@ -202,6 +219,19 @@ class TestExpression extends TestCase
             ['300$ <= 301$', true],
             ['300$ <= 300$', true],
             ['301$ <= 300$', false],
+            // операция логичческого не
+            ['!true', false],
+            ['!false', true],
+            // логическая операция and
+            ['false && false', false],
+            ['false && true', false],
+            ['true && false', false],
+            ['true && true', true],
+            // логическая операция or
+            ['false || false', false],
+            ['false || true', true],
+            ['true || false', true],
+            ['true || true', true],
         ];
     }
 

@@ -18,4 +18,8 @@ class OperationSign extends Enum
     const LESS = '<';
     const GREATER_OR_EQUAL = '>=';
     const LESS_OR_EQUAL = '<=';
+    const NOT_EQUAL = '!=';
+    const NOT = '!';
+    const AND = '&&';
+    const OR = '||';
 }

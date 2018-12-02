@@ -16,6 +16,7 @@ class TypeRegExp extends Enum
     const BOOLEAN = '(true|false)';
     const VARIABLE = '\$([a-z][\w\d]*)';
     const MONEY = '(\d+)?\$(\d{2})?';
+    const NULL = '';
 
     /**
      * @param string $typeStringValue строковое представление типа
