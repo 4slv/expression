@@ -20,218 +20,237 @@ class TestExpression extends TestCase
         $creditMonths = 12 * 15;
         return [
             # операции с целыми числами
-            ['2 + 1', 3],
-            ['2 - 1', 1],
-            ['15 * 12', 180],
-            ['4 / 2', 2],
-            ['5 % 3', 2],
-            ['2 ** 3', 8],
+            ['$result = 2 + 1;', 3],
+            ['$result = 2 - 1;', 1],
+            ['$result = 15 * 12;', 180],
+            ['$result = 4 / 2;', 2],
+            ['$result = 5 % 3;', 2],
+            ['$result = 2 ** 3;', 8],
             # операции с плавающей запятой
-            ['2.1 + 1', 3.1],
-            ['2 - 0.9', 1.1],
-            ['1.1 * 2.2', 2.42],
-            ['12.25 / 12', 12.25 / 12],
-            ['5.1 % 3.9', 2],
-            ['2.1 ** 2' , 4.41],
+            ['$result = 2.1 + 1;', 3.1],
+            ['$result = 2 - 0.9;', 1.1],
+            ['$result = 1.1 * 2.2;', 2.42],
+            ['$result = 12.25 / 12;', 12.25 / 12],
+            ['$result = 5.1 % 3.9;', 2],
+            ['$result = 2.1 ** 2;' , 4.41],
             # операции с деньгами
-            ['2$ + 1$', Money::create(300)],
-            ['2$ - 1$', Money::create(100)],
-            ['2$ * 3', Money::create(600)],
-            ['4$ / 2', Money::create(200)],
-            ['2$10 + 1$', Money::create(310)],
-            ['2$ - $90', Money::create(110)],
-            ['1$10 * 2.2', Money::create(242)],
+            ['$result = 2$ + 1$;', Money::create(300)],
+            ['$result = 2$ - 1$;', Money::create(100)],
+            ['$result = 2$ * 3;', Money::create(600)],
+            ['$result = 4$ / 2;', Money::create(200)],
+            ['$result = 2$10 + 1$;', Money::create(310)],
+            ['$result = 2$ - $90;', Money::create(110)],
+            ['$result = 1$10 * 2.2;', Money::create(242)],
             # операции с датами
             [
-                '2018.02.05.033333',
+                '$result = 2018.02.05.033333;',
                 DateTime::createFromFormat('Y.m.d H:i:s.u', '2018.02.05 00:00:00.033333')
             ],
             [
-                '2018.02.05 22:30:23.033333',
+                '$result = 2018.02.05 22:30:23.033333;',
                 DateTime::createFromFormat('Y.m.d H:i:s.u', '2018.02.05 22:30:23.033333')
             ],
             [
-                '2018.02.05 + 1 day',
+                '$result = 2018.02.05 + 1 day;',
                 DateTime::createFromFormat('Y.m.d H:i:s', '2018.02.06 00:00:00')
             ],
             [
-                '2018.02.05 - 1 day',
+                '$result = 2018.02.05 - 1 day;',
                 DateTime::createFromFormat('Y.m.d H:i:s', '2018.02.04 00:00:00')
             ],
             [
-                '2018.02.05 - 2018.02.04',
+                '$result = 2018.02.05 - 2018.02.04;',
                 DateTime::createFromFormat('Y.m.d', '2018.02.04')
                     ->diff(DateTime::createFromFormat('Y.m.d', '2018.02.05'))
             ],
-            ['3 days - 1 day', DateInterval::createFromDateString('+2 day')],
+            ['$result = 3 days - 1 day;', DateInterval::createFromDateString('+2 day')],
             [
-                '2018.02.05 - 1 day',
+                '$result = 2018.02.05 - 1 day;',
                 DateTime::createFromFormat('Y.m.d H:i:s', '2018.02.04 00:00:00')
             ],
             [
-                '2018.02.05 - 2018.02.04',
+                '$result = 2018.02.05 - 2018.02.04;',
                 DateTime::createFromFormat('Y.m.d', '2018.02.04')
                     ->diff(DateTime::createFromFormat('Y.m.d', '2018.02.05'))
             ],
-            ['3 days - 1 day', DateInterval::createFromDateString('+2 day')],
-            ['(int) days(3 days - 1 day)', 2],
+            ['$result = 3 days - 1 day;', DateInterval::createFromDateString('+2 day')],
+            ['$result = (int) days(3 days - 1 day);', 2],
             [
-                '(dateTime) date(2018.03.21 23:09:33)',
+                '$result = (dateTime) date(2018.03.21 23:09:33);',
                 DateTime::createFromFormat('Y.m.d H:i:s', '2018.03.21 00:00:00')
             ],
-            ['(int) daysInYear(2018.03.21)', 365],
-            ['(int) daysInYear(2020.03.21)', 366],
+            ['$result = (int) daysInYear(2018.03.21);', 365],
+            ['$result = (int) daysInYear(2020.03.21);', 366],
             # выражение с несколькими операциями
-            ['33 - 2 * 4 ** 2', 1],
+            ['$result = 33 - 2 * 4 ** 2;', 1],
             # выражения со скобками
-            ['33 - 2 * (3 + 1) ** 2', 1],
+            ['$result = 33 - 2 * (3 + 1) ** 2;', 1],
             [
-                "$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1))",
+                '$result = '. "$creditAmount * (($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths) / ((1 + $ratePerMonth) ** $creditMonths - 1));",
                 Money::create(4257045)
             ],
             // функция days
-            ['(dateInterval) days(0)', DateInterval::createFromDateString('0 day')],
-            ['(dateInterval) days(1)', DateInterval::createFromDateString('1 day')],
-            ['(dateInterval) days(365)', DateInterval::createFromDateString('365 day')],
-            ['(int) days(365 days)', 365],
-            ['(int) days(2018.01.01 - 2017.01.01)', 365],
-            ['(int) days(2016.09.13 - 2016.07.13) - 1', 61],
+            ['$result = (dateInterval) days(0);', DateInterval::createFromDateString('0 day')],
+            ['$result = (dateInterval) days(1);', DateInterval::createFromDateString('1 day')],
+            ['$result = (dateInterval) days(365);', DateInterval::createFromDateString('365 day')],
+            ['$result = (int) days(365 days);', 365],
+            ['$result = (int) days(2018.01.01 - 2017.01.01);', 365],
+            ['$result = (int) days(2016.09.13 - 2016.07.13) - 1;', 61],
             // функция FirstYearDay
-            ['(dateTime) firstYearDay(2018.05.10)', DateTime::createFromFormat('Y.m.d H:i:s', '2018.01.01 00:00:00')],
-            ['(dateTime) firstYearDay(2022.06.12 08:56:10)', DateTime::createFromFormat('Y.m.d H:i:s', '2022.01.01 00:00:00')],
+            ['$result = (dateTime) firstYearDay(2018.05.10);', DateTime::createFromFormat('Y.m.d H:i:s', '2018.01.01 00:00:00')],
+            ['$result = (dateTime) firstYearDay(2022.06.12 08:56:10);', DateTime::createFromFormat('Y.m.d H:i:s', '2022.01.01 00:00:00')],
             // функция IntOperation
-            ['(int) int(1.1)', 1],
-            ['(int) int(2.195896)', 2],
-            ['(int) int(3.9)', 3],
+            ['$result = (int) int(1.1);', 1],
+            ['$result = (int) int(2.195896);', 2],
+            ['$result = (int) int(3.9);', 3],
 
             // функция equal, int
-            ['3 == 3', true],
-            ['1 == 3', false],
+            ['$result = 3 == 3;', true],
+            ['$result = 1 == 3;', false],
             // функция equal, float
-            ['3.14 == 3.14', true],
-            ['3.14 == 2.14', false],
+            ['$result = 3.14 == 3.14;', true],
+            ['$result = 3.14 == 2.14;', false],
             // функция equal, DateTime
-            ['2018.06.19 15:06:00 == 2018.06.19 15:06:00', true],
-            ['2018.06.19 15:06:00 == 2018.06.19 15:06:01', false],
+            ['$result = 2018.06.19 15:06:00 == 2018.06.19 15:06:00;', true],
+            ['$result = 2018.06.19 15:06:00 == 2018.06.19 15:06:01;', false],
             // функция equal, DateInterval
-            ['6 day == 6 day', true],
-            ['6 day == 5 day', false],
+            ['$result = 6 day == 6 day;', true],
+            ['$result = 6 day == 5 day;', false],
             // функция equal, Money
-            ['300$ == 300$', true],
-            ['300$ == 301$', false],
+            ['$result = 300$ == 300$;', true],
+            ['$result = 300$ == 301$;', false],
 
             // функция notEqual, int
-            ['3 != 3', false],
-            ['1 != 3', true],
+            ['$result = 3 != 3;', false],
+            ['$result = 1 != 3;', true],
             // функция notEqual, float
-            ['3.14 != 3.14', false],
-            ['3.14 != 2.14', true],
+            ['$result = 3.14 != 3.14;', false],
+            ['$result = 3.14 != 2.14;', true],
             // функция notEqual, DateTime
-            ['2018.06.19 15:06:00 != 2018.06.19 15:06:00', false],
-            ['2018.06.19 15:06:00 != 2018.06.19 15:06:01', true],
+            ['$result = 2018.06.19 15:06:00 != 2018.06.19 15:06:00;', false],
+            ['$result = 2018.06.19 15:06:00 != 2018.06.19 15:06:01;', true],
             // функция notEqual, DateInterval
-            ['6 day != 6 day', false],
-            ['6 day != 5 day', true],
+            ['$result = 6 day != 6 day;', false],
+            ['$result = 6 day != 5 day;', true],
             // функция notEqual, Money
-            ['300$ != 300$', false],
-            ['300$ != 301$', true],
+            ['$result = 300$ != 300$;', false],
+            ['$result = 300$ != 301$;', true],
 
             // функция greater, int
-            ['3 > 2', true],
-            ['3 > 3', false],
-            ['3 > 4', false],
+            ['$result = 3 > 2;', true],
+            ['$result = 3 > 3;', false],
+            ['$result = 3 > 4;', false],
             // функция greater, float
-            ['3.14 > 3.13', true],
-            ['3.14 > 3.14', false],
-            ['3.14 > 3.15', false],
+            ['$result = 3.14 > 3.13;', true],
+            ['$result = 3.14 > 3.14;', false],
+            ['$result = 3.14 > 3.15;', false],
             // функция greater, DateTime
-            ['2018.06.19 15:06:00 > 2018.06.19 15:05:59', true],
-            ['2018.06.19 15:06:00 > 2018.06.19 15:06:00', false],
-            ['2018.06.19 15:06:00 > 2018.06.19 15:06:01', false],
+            ['$result = 2018.06.19 15:06:00 > 2018.06.19 15:05:59;', true],
+            ['$result = 2018.06.19 15:06:00 > 2018.06.19 15:06:00;', false],
+            ['$result = 2018.06.19 15:06:00 > 2018.06.19 15:06:01;', false],
             // функция greater, DateInterval
-            ['6 day > 5 day', true],
-            ['6 day > 6 day', false],
-            ['6 day > 7 day', false],
+            ['$result = 6 day > 5 day;', true],
+            ['$result = 6 day > 6 day;', false],
+            ['$result = 6 day > 7 day;', false],
             // функция greater, Money
-            ['301$ > 300$', true],
-            ['300$ > 300$', false],
-            ['300$ > 301$', false],
+            ['$result = 301$ > 300$;', true],
+            ['$result = 300$ > 300$;', false],
+            ['$result = 300$ > 301$;', false],
 
             // функция less, int
-            ['3 < 4', true],
-            ['3 < 3', false],
-            ['3 < 2', false],
+            ['$result = 3 < 4;', true],
+            ['$result = 3 < 3;', false],
+            ['$result = 3 < 2;', false],
             // функция less, float
-            ['3.14 < 3.15', true],
-            ['3.14 < 3.14', false],
-            ['3.14 < 3.13', false],
+            ['$result = 3.14 < 3.15;', true],
+            ['$result = 3.14 < 3.14;', false],
+            ['$result = 3.14 < 3.13;', false],
             // функция less, DateTime
-            ['2018.06.19 15:06:00 < 2018.06.19 15:06:01', true],
-            ['2018.06.19 15:06:00 < 2018.06.19 15:06:00', false],
-            ['2018.06.19 15:06:00 < 2018.06.19 15:05:59', false],
+            ['$result = 2018.06.19 15:06:00 < 2018.06.19 15:06:01;', true],
+            ['$result = 2018.06.19 15:06:00 < 2018.06.19 15:06:00;', false],
+            ['$result = 2018.06.19 15:06:00 < 2018.06.19 15:05:59;', false],
             // функция less, DateInterval
-            ['6 day < 7 day', true],
-            ['6 day < 6 day', false],
-            ['6 day < 5 day', false],
+            ['$result = 6 day < 7 day;', true],
+            ['$result = 6 day < 6 day;', false],
+            ['$result = 6 day < 5 day;', false],
             // функция less, Money
-            ['300$ < 301$', true],
-            ['300$ < 300$', false],
-            ['301$ < 300$', false],
+            ['$result = 300$ < 301$;', true],
+            ['$result = 300$ < 300$;', false],
+            ['$result = 301$ < 300$;', false],
 
             // функция greater or equals, int
-            ['3 >= 2', true],
-            ['3 >= 3', true],
-            ['3 >= 4', false],
+            ['$result = 3 >= 2;', true],
+            ['$result = 3 >= 3;', true],
+            ['$result = 3 >= 4;', false],
             // функция greater or equals, float
-            ['3.14 >= 3.13', true],
-            ['3.14 >= 3.14', true],
-            ['3.14 >= 3.15', false],
+            ['$result = 3.14 >= 3.13;', true],
+            ['$result = 3.14 >= 3.14;', true],
+            ['$result = 3.14 >= 3.15;', false],
             // функция greater or equals, DateTime
-            ['2018.06.19 15:06:00 >= 2018.06.19 15:05:59', true],
-            ['2018.06.19 15:06:00 >= 2018.06.19 15:06:00', true],
-            ['2018.06.19 15:06:00 >= 2018.06.19 15:06:01', false],
+            ['$result = 2018.06.19 15:06:00 >= 2018.06.19 15:05:59;', true],
+            ['$result = 2018.06.19 15:06:00 >= 2018.06.19 15:06:00;', true],
+            ['$result = 2018.06.19 15:06:00 >= 2018.06.19 15:06:01;', false],
             // функция greater or equals, DateInterval
-            ['6 day >= 5 day', true],
-            ['6 day >= 6 day', true],
-            ['6 day >= 7 day', false],
+            ['$result = 6 day >= 5 day;', true],
+            ['$result = 6 day >= 6 day;', true],
+            ['$result = 6 day >= 7 day;', false],
             // функция greater or equals, Money
-            ['301$ >= 300$', true],
-            ['300$ >= 300$', true],
-            ['300$ >= 301$', false],
+            ['$result = 301$ >= 300$;', true],
+            ['$result = 300$ >= 300$;', true],
+            ['$result = 300$ >= 301$;', false],
 
             // функция less or equals, int
-            ['3 <= 4', true],
-            ['3 <= 3', true],
-            ['3 <= 2', false],
+            ['$result = 3 <= 4;', true],
+            ['$result = 3 <= 3;', true],
+            ['$result = 3 <= 2;', false],
             // функция less or equals, float
-            ['3.14 <= 3.15', true],
-            ['3.14 <= 3.14', true],
-            ['3.14 <= 3.13', false],
+            ['$result = 3.14 <= 3.15;', true],
+            ['$result = 3.14 <= 3.14;', true],
+            ['$result = 3.14 <= 3.13;', false],
             // функция less or equals, DateTime
-            ['2018.06.19 15:06:00 <= 2018.06.19 15:06:01', true],
-            ['2018.06.19 15:06:00 <= 2018.06.19 15:06:00', true],
-            ['2018.06.19 15:06:00 <= 2018.06.19 15:05:59', false],
+            ['$result = 2018.06.19 15:06:00 <= 2018.06.19 15:06:01;', true],
+            ['$result = 2018.06.19 15:06:00 <= 2018.06.19 15:06:00;', true],
+            ['$result = 2018.06.19 15:06:00 <= 2018.06.19 15:05:59;', false],
             // функция less or equals, DateInterval
-            ['6 day <= 7 day', true],
-            ['6 day <= 6 day', true],
-            ['6 day <= 5 day', false],
+            ['$result = 6 day <= 7 day;', true],
+            ['$result = 6 day <= 6 day;', true],
+            ['$result = 6 day <= 5 day;', false],
             // функция less or equals, Money
-            ['300$ <= 301$', true],
-            ['300$ <= 300$', true],
-            ['301$ <= 300$', false],
+            ['$result = 300$ <= 301$;', true],
+            ['$result = 300$ <= 300$;', true],
+            ['$result = 301$ <= 300$;', false],
             // операция логичческого не
-            ['!true', false],
-            ['!false', true],
+            ['$result = !true;', false],
+            ['$result = !false;', true],
             // логическая операция and
-            ['false && false', false],
-            ['false && true', false],
-            ['true && false', false],
-            ['true && true', true],
+            ['$result = false && false;', false],
+            ['$result = false && true;', false],
+            ['$result = true && false;', false],
+            ['$result = true && true;', true],
             // логическая операция or
-            ['false || false', false],
-            ['false || true', true],
-            ['true || false', true],
-            ['true || true', true],
+            ['$result = false || false;', false],
+            ['$result = false || true;', true],
+            ['$result = true || false;', true],
+            ['$result = true || true;', true],
+            // тернарный опреатор ... ? ... : ...
+            ['$result = 1 > 2 ? 1 : 2;', 2],
+            ['$result = 1 < 2 ? 1 : 2;', 1],
+            ['$result = 1 < 2 && 2 < 3 ? 1 : 2;', 1],
+            ['$result = 1 < 2 && 2 > 3 ? 1 : 2;', 2],
+            ['$result = 1 < 2 ? 1 + 1 : 2 + 2;', 2],
+            ['$result = 1 > 2 ? 1 + 1 : 2 + 2;', 4],
+            ['$result = (1 > 0 ? 1 : 0) + (1 > 2 ? 1 : 2) * (2 > 1 ? 3 : 2);', 7],
+            ['$result = 2 > 1 ? (int) int((int) days(2018.01.02 - 2018.01.01) / 14) + 1 : 1;', 1],
+
+            // оператор присваивания
+            ['$result = true;', true],
+            ['$i = 1; $result = true ? $i : 2;', 1],
+            ['$i = 1; $result = (true ? $i : 2) + $i;', 2],
+            ['$i = 1; $i = $i + 1; $result = $i;', 2],
+
+            // цикл for
+            ['for($i = 1; $i < 10; $i = $i + 1){$result = $i;}', 9],
+            ['for($i = 1; $i < 10; $i = $i + 1){$result = $i % 2 > 0 ? 1 : 2;}', 1],
         ];
     }
 
@@ -247,7 +266,7 @@ class TestExpression extends TestCase
         $codeBlock = new CodeExecutor();
         $variableName = '$result';
         $actualResult = $codeBlock
-            ->setCode("$variableName = ". $expressionText. ';')
+            ->setCode($expressionText)
             ->setCodeContext($codeContext)
             ->execute()
             ->getVariableByName($variableName);

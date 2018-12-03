@@ -146,6 +146,14 @@ class OperationFactory
     }
 
     /**
+     * @return IfElseOperation()
+     */
+    public function createIfElseOperation()
+    {
+        return new IfElseOperation();
+    }
+
+    /**
      * @param OperationName $operationName название операции
      * @return Operation операция
      * @throws CodeParseException
@@ -183,6 +191,8 @@ class OperationFactory
                 return $this->createAndOperation();
             case OperationName::OR:
                 return $this->createOrOperation();
+            case OperationName::IF_ELSE:
+                return $this->createIfElseOperation();
             default:
                 throw new CodeParseException($operationName->getValue(). ' :: operation creation impossible');
         }

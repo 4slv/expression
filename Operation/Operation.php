@@ -108,7 +108,7 @@ class Operation extends ExpressionPart
             ->createOperationResolver()
             ->resolve($this->getCode(), $codeContext);
         $this->setOperation($operation);
-        $this->parseOperationParts($codeContext);
+        $operation->parseOperationParts($codeContext);
         return parent::parse($codeContext);
     }
 
@@ -117,7 +117,9 @@ class Operation extends ExpressionPart
      * @param CodeContext $codeContext контекст операции
      * @throws CodeParseException
      */
-    protected function parseOperationParts(CodeContext $codeContext): void {}
+    protected function parseOperationParts(CodeContext $codeContext): void
+    {
+    }
 
     protected function createOperationResolver()
     {

@@ -27,12 +27,11 @@ class OperationResolver
     {
         foreach ($this->getOperationSignRegexpList() as $operationName => $signRegexp)
         {
-            $operationRegexp = '/^(.*)('. $signRegexp. ')(.*)$/';
+            $operationRegexp = '/^(.*?)('. $signRegexp. ')(.*?)$/';
             if(preg_match($operationRegexp, $code, $match)){
                 $leftOperandCode = $match[1];
                 $operationSignCode = $match[2];
                 $rightOperandCode = $match[3];
-
                 $operationBuilder = $this
                     ->createOperationBuilder()
                     ->setOperationCode($code)

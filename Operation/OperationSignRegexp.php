@@ -8,7 +8,7 @@ use Slov\Expression\Code\CodeParseException;
 /** Регулярное выражение операции */
 class OperationSignRegexp extends Enum
 {
-    const IF_ELSE = '([^\?]+)\?([^\:]+)\:(.+)\}';
+    const IF_ELSE = '[^\?]+?\?[^\:]+?\:.+';
     const EXPONENTIATION = '\*\*';
     const ADD = '\+';
     const MULTIPLY = '\*';
