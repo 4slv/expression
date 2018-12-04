@@ -4,6 +4,9 @@ namespace Slov\Expression\Functions;
 
 use DateInterval;
 use DateTime;
+use Slov\Expression\Code\CodeRunException;
+use Slov\Expression\Expression\ExpressionPart;
+use Slov\Expression\Type\Type;
 use Slov\Money\Money;
 
 /** Встроенные функции */
@@ -82,5 +85,35 @@ class InlineFunctions
             return $number->getAmount();
         }
         return (int) $number;
+    }
+
+    /**
+     * @param int $amount сумма в минорных единицах
+     * @return Money деньги
+     */
+    public static function money($amount)
+    {
+        return Money::create($amount);
+    }
+
+
+    public static function min(){
+        /** @var ExpressionPart[] $list список сравниваемых параметров */
+        $list = func_get_args();
+        if(count($list) === 0){
+            throw new CodeRunException('min: expected at least one parameter');
+        }
+        $firstElement = current($list);
+        $firstElementType = is_object($firstElement)
+            ? get_class($firstElement)
+            : 
+        if($firstElement instanceof ExpressionPart){
+            foreach($list as $element){
+                if($element->getTypeName()->i)
+            }
+        } else {
+
+        }
+
     }
 }

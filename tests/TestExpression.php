@@ -251,6 +251,20 @@ class TestExpression extends TestCase
             // цикл for
             ['for($i = 1; $i < 10; $i = $i + 1){$result = $i;}', 9],
             ['for($i = 1; $i < 10; $i = $i + 1){$result = $i % 2 > 0 ? 1 : 2;}', 1],
+
+            // функция money
+            ['$result = (money) money(100);', Money::create(100)],
+
+            // проверка приоритета выполнения операций
+            ['$result = 7 - 2 * 3;', 1],
+            ['$result = 7 - 2 - 3;', 2],
+            ['$result = 1 < 2 + 1;', true],
+            [
+                '$result = (money) money((int) int(200000$) * 0.03822 * ((1 + 0.03822) ** 8) / ((1 + 0.03822) ** 8 - 1));',
+                Money::create(2948761)
+            ],
+            // функция min, max
+            ['(int) min(3,2,1)', 1],
         ];
     }
 
