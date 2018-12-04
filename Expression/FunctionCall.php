@@ -96,12 +96,33 @@ class FunctionCall extends ExpressionPart
     {
         if(preg_match('/'.TypeRegExp::FUNCTION.'/', $this->getCode(), $match))
         {
-            $this->parseReturnType($match[2]);
-            $this->setFunctionName($match[3]);
+            $returnType = $match[3];
+            $functionName = $match[4];
+
+            if($functionName !== $returnType && TypeName::has($returnType) && TypeName::has($functionName))
+            {
+                throw new CodeParseException(
+                    $this->getCode(). " :: type '$returnType' does not match function name '$functionName'"
+                );
+            }
+
+            if(TypeName::has($functionName) === false && strlen($returnType) === 0)
+            {
+                throw new CodeParseException(
+                    $this->getCode(). " :: function '$functionName' has no return type"
+                );
+            }
+
+            $returnType = TypeName::has($functionName)
+                ? $functionName
+                : $returnType;
+
+            $this->parseReturnType($returnType);
+            $this->setFunctionName($functionName);
             $parametersCode = $this
                 ->getBracketParser()
                 ->parseFirstGroupContent(
-                    $match[4],
+                    $match[5],
                     BracketType::byValue(BracketType::ROUND_BRACKETS)
                 );
             $this->parseParametersList($codeContext, $parametersCode);

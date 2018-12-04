@@ -42,7 +42,7 @@ class ExpressionWithBrackets extends Expression
             $parametersCode = $this
                 ->getBracketParser()
                 ->parseFirstGroup(
-                    $match[4],
+                    $match[5],
                     BracketType::byValue(BracketType::ROUND_BRACKETS)
                 );
             $functionCallCode = $match[1]. $parametersCode;

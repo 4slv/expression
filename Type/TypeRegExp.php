@@ -8,7 +8,7 @@ use Slov\Expression\Code\CodeParseException;
 /** Регулярное выражение описывающее тип */
 class TypeRegExp extends Enum
 {
-    const FUNCTION = '(\((\w+)\)\s*([a-z]\w*))(\(.*\))';
+    const FUNCTION = '((\((\w+)\)\s*)?([a-z]\w*))(\(.*\))';
     const DATE_TIME = '(\d{4}\.\d{2}\.\d{2})( \d{2}\:\d{2}\:\d{2})?(\.\d{6})?';
     const DATE_INTERVAL = '(\d+)\s?(day|days)';
     const INT = '\d+';

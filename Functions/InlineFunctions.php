@@ -6,7 +6,6 @@ use DateInterval;
 use DateTime;
 use Slov\Expression\Code\CodeRunException;
 use Slov\Expression\Expression\ExpressionPart;
-use Slov\Expression\Type\Type;
 use Slov\Money\Money;
 
 /** Встроенные функции */
@@ -24,7 +23,8 @@ class InlineFunctions
         return $returnDate;
     }
 
-    /** Определение числа дней в году
+    /**
+     * Определение числа дней в году
      * @param DateTime $dateTime дата со временем
      * @return int число дней в году
      */
@@ -65,7 +65,8 @@ class InlineFunctions
         }
     }
 
-    /** Получение первой даты года
+    /**
+     * Получение первой даты года
      * @param DateTime $date дата
      * @return DateTime
      */
@@ -76,7 +77,8 @@ class InlineFunctions
             ->setTime(0,0,0);
     }
 
-    /** Приведение к целому числу
+    /**
+     * Приведение к целому числу
      * @param float|Money $number
      * @return int */
     public static function int($number)
@@ -96,24 +98,71 @@ class InlineFunctions
         return Money::create($amount);
     }
 
-
-    public static function min(){
-        /** @var ExpressionPart[] $list список сравниваемых параметров */
+    /**
+     * Получение наименьшего элемента в списке
+     * @param mixed $element, ... неограниченное кол-во элементов
+     * @return mixed|Money
+     * @throws CodeRunException
+     */
+    public static function min($element){
+        /** @var mixed[] $list список сравниваемых параметров */
         $list = func_get_args();
         if(count($list) === 0){
-            throw new CodeRunException('min: expected at least one parameter');
+            throw new CodeRunException('function min :: expected at least one parameter');
         }
         $firstElement = current($list);
         $firstElementType = is_object($firstElement)
             ? get_class($firstElement)
-            : 
-        if($firstElement instanceof ExpressionPart){
-            foreach($list as $element){
-                if($element->getTypeName()->i)
+            : gettype($firstElement);
+        foreach($list as $number => $element){
+            $elementType = is_object($element)
+                ? get_class($element)
+                : gettype($element);
+            if($firstElementType !== $elementType){
+                throw new CodeRunException(
+                    "function min :: $number parameter is $elementType ($firstElementType expected)"
+                );
             }
-        } else {
-
         }
+        if(is_object($firstElement) && $firstElement instanceof Money)
+        {
+            /** @var Money[] $list список сравниваемых параметров */
+            return Money::min($list);
+        }
+        return min($list);
+    }
 
+    /**
+     * Получение наибольшего элемента в списке
+     * @param mixed $element, ... неограниченное кол-во элементов
+     * @return mixed|Money
+     * @throws CodeRunException
+     */
+    public static function max($element){
+        /** @var mixed[] $list список сравниваемых параметров */
+        $list = func_get_args();
+        if(count($list) === 0){
+            throw new CodeRunException('function max :: expected at least one parameter');
+        }
+        $firstElement = current($list);
+        $firstElementType = is_object($firstElement)
+            ? get_class($firstElement)
+            : gettype($firstElement);
+        foreach($list as $number => $element){
+            $elementType = is_object($element)
+                ? get_class($element)
+                : gettype($element);
+            if($firstElementType !== $elementType){
+                throw new CodeRunException(
+                    "function max :: $number parameter is $elementType ($firstElementType expected)"
+                );
+            }
+        }
+        if(is_object($firstElement) && $firstElement instanceof Money)
+        {
+            /** @var Money[] $list список сравниваемых параметров */
+            return Money::max($list);
+        }
+        return max($list);
     }
 }

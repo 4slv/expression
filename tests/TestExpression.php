@@ -100,9 +100,9 @@ class TestExpression extends TestCase
             ['$result = (dateTime) firstYearDay(2018.05.10);', DateTime::createFromFormat('Y.m.d H:i:s', '2018.01.01 00:00:00')],
             ['$result = (dateTime) firstYearDay(2022.06.12 08:56:10);', DateTime::createFromFormat('Y.m.d H:i:s', '2022.01.01 00:00:00')],
             // функция IntOperation
-            ['$result = (int) int(1.1);', 1],
-            ['$result = (int) int(2.195896);', 2],
-            ['$result = (int) int(3.9);', 3],
+            ['$result = int(1.1);', 1],
+            ['$result = int(2.195896);', 2],
+            ['$result = int(3.9);', 3],
 
             // функция equal, int
             ['$result = 3 == 3;', true],
@@ -240,7 +240,7 @@ class TestExpression extends TestCase
             ['$result = 1 < 2 ? 1 + 1 : 2 + 2;', 2],
             ['$result = 1 > 2 ? 1 + 1 : 2 + 2;', 4],
             ['$result = (1 > 0 ? 1 : 0) + (1 > 2 ? 1 : 2) * (2 > 1 ? 3 : 2);', 7],
-            ['$result = 2 > 1 ? (int) int((int) days(2018.01.02 - 2018.01.01) / 14) + 1 : 1;', 1],
+            ['$result = 2 > 1 ? int((int) days(2018.01.02 - 2018.01.01) / 14) + 1 : 1;', 1],
 
             // оператор присваивания
             ['$result = true;', true],
@@ -252,19 +252,31 @@ class TestExpression extends TestCase
             ['for($i = 1; $i < 10; $i = $i + 1){$result = $i;}', 9],
             ['for($i = 1; $i < 10; $i = $i + 1){$result = $i % 2 > 0 ? 1 : 2;}', 1],
 
+            // функция min, max
+            ['$result = (int) min(3,2,1);', 1],
+            ['$result = (int) max(1,2,3);', 3],
+            ['$result = (money) min(3$, 1$, 2$);', Money::create(100)],
+            ['$result = (money) max(1$, 3$, 2$);', Money::create(300)],
+            [
+                '$result = (dateTime) min(2018.01.01, 2015.02.02, 2016.03.03);',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2015.02.02 00:00:00')
+            ],
+            [
+                '$result = (dateTime) max(2018.01.01, 2019.02.02, 2016.03.03);',
+                DateTime::createFromFormat('Y.m.d H:i:s', '2019.02.02 00:00:00')
+            ],
+
             // функция money
-            ['$result = (money) money(100);', Money::create(100)],
+            ['$result = money(100);', Money::create(100)],
 
             // проверка приоритета выполнения операций
             ['$result = 7 - 2 * 3;', 1],
             ['$result = 7 - 2 - 3;', 2],
             ['$result = 1 < 2 + 1;', true],
             [
-                '$result = (money) money((int) int(200000$) * 0.03822 * ((1 + 0.03822) ** 8) / ((1 + 0.03822) ** 8 - 1));',
+                '$result = money(int(200000$) * 0.03822 * ((1 + 0.03822) ** 8) / ((1 + 0.03822) ** 8 - 1));',
                 Money::create(2948761)
             ],
-            // функция min, max
-            ['(int) min(3,2,1)', 1],
         ];
     }
 
