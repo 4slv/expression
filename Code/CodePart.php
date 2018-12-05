@@ -24,12 +24,23 @@ abstract class CodePart implements CodeParserInterface, CodeToPhp
      * @throws CodeParseException */
     public function parse(CodeContext $codeContext)
     {
-        /** @var CodePartList $contextList */
-        $contextList = $this->getContextList($codeContext);
-        $label = $contextList->append($this);
-        $this->setLabel($label);
-        $php = $this->toPhp($codeContext);
-        $this->setPhp($php);
+        try{
+            /** @var CodePartList $contextList */
+            $contextList = $this->getContextList($codeContext);
+            $label = $contextList->append($this);
+            $this->setLabel($label);
+            $php = $this->toPhp($codeContext);
+            $this->setPhp($php);
+        } catch (CodeParseException $exception) {
+            throw new CodeParseException(
+                "\n".
+                $exception->getMessage().
+                "\n===\n".
+                $this->getCode().
+                "\n"
+            );
+        }
+
         return $this;
     }
 

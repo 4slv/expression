@@ -19,7 +19,7 @@ class ExpressionWithoutBracketsFinder
      */
     public function find(CodeContext $codeContext, string $expressionCode): ExpressionWithoutBrackets
     {
-        $expressionWithoutBrackets = preg_match('/\(([^\(\)]+)\)/', $expressionCode, $match)
+        $expressionWithoutBrackets = preg_match('/\(([^\(\)]+)\)/msi', $expressionCode, $match)
             ? $this
                 ->createExpressionWithoutBrackets()
                 ->setCode($match[1])

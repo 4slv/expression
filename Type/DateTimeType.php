@@ -13,7 +13,7 @@ class DateTimeType extends Type
 
     public function toPhp(CodeContext $codeContext): string
     {
-        preg_match('/^'. TypeRegExp::DATE_TIME. '$/', $this->getCodeTrim(), $match);
+        preg_match('/^'. TypeRegExp::DATE_TIME. '$/msi', $this->getCodeTrim(), $match);
         $date = $match[1];
         $time = isset($match[2]) && strlen($match[2]) > 0 ? $match[2] : ' 00:00:00';
         $microseconds = isset($match[3]) ? $match[3] : null;

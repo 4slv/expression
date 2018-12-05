@@ -12,7 +12,7 @@ class AssignExpression extends Expression
 
     const ASSIGN_SIGN = '=';
 
-    const EXPRESSION_CODE_REGEXP = '/(\$\w[\w\d]*)\s*\=\s*(.+)/';
+    const EXPRESSION_CODE_REGEXP = '/(\$\w[\w\d]*)\s*\=\s*(.+)/msi';
 
     protected function defineExpressionPart(CodeContext $codeContext): ExpressionPart
     {

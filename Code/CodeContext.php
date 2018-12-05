@@ -122,7 +122,7 @@ class CodeContext
      */
     public function getExpressionPartByLabel($label)
     {
-        if(preg_match('/^(\w+?)(\d+)$/', $label,$match)){
+        if(preg_match('/^(\w+?)(\d+)$/msi', $label,$match)){
             $labelPrefix = $match[1];
             foreach ($this->getExpressionPartListArray() as $expressionPartList)
             {

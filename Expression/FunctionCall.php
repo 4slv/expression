@@ -94,7 +94,7 @@ class FunctionCall extends ExpressionPart
      */
     protected function parseFunction(CodeContext $codeContext): void
     {
-        if(preg_match('/'.TypeRegExp::FUNCTION.'/', $this->getCode(), $match))
+        if(preg_match('/'.TypeRegExp::FUNCTION.'/msi', $this->getCode(), $match))
         {
             $returnType = $match[3];
             $functionName = $match[4];

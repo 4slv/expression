@@ -247,6 +247,24 @@ class TestExpression extends TestCase
             ['$i = 1; $result = true ? $i : 2;', 1],
             ['$i = 1; $result = (true ? $i : 2) + $i;', 2],
             ['$i = 1; $i = $i + 1; $result = $i;', 2],
+            ['
+             $creditMonths = 180;
+             $creditAmount = 350000000;
+             $yearPercent = 12.25;
+             $monthsInYear = 12;
+             $rateToPercentFactor = 100;
+             $ratePerMonth = $yearPercent / $monthsInYear / $rateToPercentFactor;
+             $result = int(
+                $creditAmount
+                *
+                (
+                    ($ratePerMonth * (1 + $ratePerMonth) ** $creditMonths)
+                    /
+                    ((1 + $ratePerMonth) ** $creditMonths - 1)
+                )
+             );',
+                4257045
+            ],
 
             // цикл for
             ['for($i = 1; $i < 10; $i = $i + 1){$result = $i;}', 9],

@@ -37,7 +37,7 @@ class ExpressionWithBrackets extends Expression
     {
         $expressionCode = $this->getCode();
 
-        while (preg_match('/'. TypeRegExp::FUNCTION.'/', $expressionCode, $match))
+        while (preg_match('/'. TypeRegExp::FUNCTION.'/msi', $expressionCode, $match))
         {
             $parametersCode = $this
                 ->getBracketParser()

@@ -20,9 +20,9 @@ abstract class DigitOperation extends Operation
         }
 
         if(
-            $this->getLeftOperandTypeName()->isFloat()
+            $this->getLeftOperandTypeName()->isDigit()
             ||
-            $this->getRightOperandTypeName()->isFloat()
+            $this->getRightOperandTypeName()->isDigit()
         ){
             return $this->getTypeNameFactory()->createFloat();
         }

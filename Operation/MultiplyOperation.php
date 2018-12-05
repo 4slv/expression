@@ -14,9 +14,16 @@ class MultiplyOperation extends DigitOperation
     public function typeDefinition(CodeContext $codeContext): TypeName
     {
         if(
-            ($this->getLeftOperandTypeName()->isMoney() && $this->getRightOperandTypeName()->isDigit())
+            (   $this->getLeftOperandTypeName()->isMoney()
+                &&
+                $this->getRightOperandTypeName()->isDigit()
+            )
             ||
-            ($this->getLeftOperandTypeName()->isDigit() && $this->getRightOperandTypeName()->isMoney())
+            (
+                $this->getLeftOperandTypeName()->isDigit()
+                &&
+                $this->getRightOperandTypeName()->isMoney()
+            )
         ){
             return $this->getTypeNameFactory()->createMoney();
         }

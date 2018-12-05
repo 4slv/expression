@@ -13,7 +13,7 @@ class DateIntervalType extends Type
 
     public function toPhp(CodeContext $codeContext): string
     {
-        preg_match('/^'. TypeRegExp::DATE_INTERVAL. '$/', $this->getCodeTrim(), $match);
+        preg_match('/^'. TypeRegExp::DATE_INTERVAL. '$/msi', $this->getCodeTrim(), $match);
         $periodQuantity = $match[1];
         $periodType = $match[2];
         $periodTypeToName = [

@@ -5,7 +5,6 @@ namespace Slov\Expression\Functions;
 use DateInterval;
 use DateTime;
 use Slov\Expression\Code\CodeRunException;
-use Slov\Expression\Expression\ExpressionPart;
 use Slov\Money\Money;
 
 /** Встроенные функции */

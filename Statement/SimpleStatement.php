@@ -14,7 +14,7 @@ class SimpleStatement extends Statement
 {
     use ExpressionAccessor;
 
-    const STATEMENT_REGEXP = '/([^;]*);/';
+    const STATEMENT_REGEXP = '/([^;]*);/msi';
 
     const STATEMENT_SEPARATOR = ';';
 
