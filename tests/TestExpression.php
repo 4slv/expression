@@ -396,4 +396,26 @@ class TestExpression extends TestCase
 
         $this->assertEquals('abcde', $actualResult);
     }
+
+    public function testExpressionFunctionsWithoutParams()
+    {
+        $funcWithoutParams = function () {
+            return 100;
+        };
+
+        $expressionText = '$result = (int) func();';
+
+        $functionList = new FunctionList();
+        $functionList->append($funcWithoutParams, 'func');
+        $codeContext = new CodeContext();
+        $codeExecutor = new CodeExecutor($functionList);
+        $variableName = '$result';
+        $actualResult = $codeExecutor
+            ->setCode($expressionText)
+            ->setCodeContext($codeContext)
+            ->execute()
+            ->getVariableByName($variableName);
+
+        $this->assertEquals(100, $actualResult);
+    }
 }

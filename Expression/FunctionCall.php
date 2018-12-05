@@ -164,11 +164,13 @@ class FunctionCall extends ExpressionPart
             );
         foreach($parameterCodeList as $parameterCode)
         {
-            $parameterLabelList[] = $this
-                ->createExpressionWithBrackets()
-                ->setCode($parameterCode)
-                ->parse($codeContext)
-                ->getLabel();
+            if(strlen(trim($parametersCode)) > 0){
+                $parameterLabelList[] = $this
+                    ->createExpressionWithBrackets()
+                    ->setCode($parameterCode)
+                    ->parse($codeContext)
+                    ->getLabel();
+            }
         }
         $this->setParameterLabelList($parameterLabelList);
     }
