@@ -7,14 +7,17 @@ use Slov\Expression\Code\CodeParseException;
 /** Построитель списка функций */
 class FunctionListBuilder
 {
+    use UserFunctionListAccessor;
+
     /**
      * Инициализация функций
      * @throws CodeParseException
      */
     public function build(): void
     {
-        FunctionList::emptyList();
+        StaticFunctionList::emptyList();
         $this->buildInlineFunctions();
+        $this->buildUserFunctions();
     }
 
     /**
@@ -25,7 +28,18 @@ class FunctionListBuilder
     {
         foreach (get_class_methods(InlineFunctions::class) as $methodName)
         {
-            FunctionList::append([InlineFunctions::class, $methodName], $methodName);
+            StaticFunctionList::append([InlineFunctions::class, $methodName], $methodName);
+        }
+    }
+
+    /**
+     * Инициащизация пользовательских функций
+     * @throws CodeParseException
+     */
+    protected function buildUserFunctions(): void
+    {
+        foreach ($this->getUserFunctionList()->getList() as $functionName => $function){
+            StaticFunctionList::append($function, $functionName);
         }
     }
 

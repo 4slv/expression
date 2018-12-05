@@ -2,22 +2,32 @@
 
 namespace Slov\Expression\Functions;
 
+
 use Slov\Expression\Code\CodeParseException;
 
-/** Список функций */
-class FunctionList
+
+/** Список статических функций */
+class StaticFunctionList
 {
     /** @var callable[] ассоциативный массив вида: название => функция */
-    protected $list = [];
+    protected static $list = [];
+
+    protected function __construct(){}
+
+    /** Опустошить список функций */
+    public static function emptyList(): void
+    {
+        self::$list = [];
+    }
 
     /**
      * Проверка существования функции
      * @param string $name название функции
      * @return bool
      */
-    public function exists(string $name): bool
+    public static function exists(string $name): bool
     {
-        return array_key_exists($name, $this->list);
+        return array_key_exists($name, self::$list);
     }
 
     /**
@@ -26,11 +36,11 @@ class FunctionList
      * @param string $name название функции
      * @throws CodeParseException
      */
-    public function append(callable $function, string $name): void
+    public static function append(callable $function, string $name): void
     {
-        if($this->exists($name) === false)
+        if(self::exists($name) === false)
         {
-            $this->list[$name] = $function;
+            self::$list[$name] = $function;
         } else {
             throw new CodeParseException($name. ' :: function already defined');
         }
@@ -43,20 +53,27 @@ class FunctionList
      * @return callable функция
      * @throws CodeParseException
      */
-    public function get(string $name): callable
+    public static function get(string $name): callable
     {
-        if($this->exists($name))
+        if(self::exists($name))
         {
-            return $this->list[$name];
+            return self::$list[$name];
         }
         throw new CodeParseException($name. ' :: function does not defined');
     }
 
     /**
-     * @return callable[] ассоциативный массив вида: название => функция
+     * Запуск указанной функции
+     * @param string $name название функции
+     * @param array $parameters параметры функции
+     * @return mixed
+     * @throws CodeParseException
      */
-    public function getList(): array
+    public static function call(string $name, array $parameters)
     {
-        return $this->list;
+        return call_user_func_array(
+            self::get($name),
+            $parameters
+        );
     }
 }

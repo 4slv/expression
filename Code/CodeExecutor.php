@@ -2,6 +2,7 @@
 
 namespace Slov\Expression\Code;
 
+use Slov\Expression\Functions\FunctionList;
 use Slov\Expression\Functions\FunctionListBuilder;
 
 /** Запуск псевдокода */
@@ -16,9 +17,17 @@ class CodeExecutor
     /** @var array ассоциативный массив вида: название переменной => значение переменной */
     protected $variableList;
 
-    public function __construct()
+    /** @var FunctionList список пользовательских функций */
+    protected $userFunctionList;
+
+    /**
+     * @param FunctionList|null $userFunctionList список пользовательских функци2
+     * @throws CodeParseException
+     */
+    public function __construct(FunctionList $userFunctionList = null)
     {
         $this->variableList = [];
+        $this->userFunctionList = $userFunctionList ?? new FunctionList();
         $this->initFunctionList();
     }
 
@@ -58,10 +67,16 @@ class CodeExecutor
         return $this;
     }
 
+    /**
+     * Инициализация списка функций
+     * @throws CodeParseException
+     */
     protected function initFunctionList(): void
     {
         $functionListBuilder = new FunctionListBuilder();
-        $functionListBuilder->build();
+        $functionListBuilder
+            ->setUserFunctionList($this->userFunctionList)
+            ->build();
     }
 
     /**

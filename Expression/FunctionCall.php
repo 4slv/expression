@@ -6,7 +6,7 @@ use Slov\Expression\Bracket\BracketParserAccessor;
 use Slov\Expression\Bracket\BracketType;
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeParseException;
-use Slov\Expression\Functions\FunctionList;
+use Slov\Expression\Functions\StaticFunctionList;
 use Slov\Expression\Type\TypeName;
 use Slov\Expression\Type\TypeRegExp;
 
@@ -195,7 +195,7 @@ class FunctionCall extends ExpressionPart
         }
 
         $replace = [
-            '%callMethod%' => FunctionList::class. '::call',
+            '%callMethod%' =>  StaticFunctionList::class. '::call',
             '%functionName%' => $this->getFunctionName(),
             '%parametersList%' => implode(', ', $parametersPhpList)
         ];

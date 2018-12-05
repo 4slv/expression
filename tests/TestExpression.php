@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeExecutor;
 use Slov\Expression\Code\CodeParseException;
+use Slov\Expression\Functions\FunctionList;
 use Slov\Money\Money;
 use DateInterval;
 use DateTime;
@@ -295,6 +296,8 @@ class TestExpression extends TestCase
                 '$result = money(int(200000$) * 0.03822 * ((1 + 0.03822) ** 8) / ((1 + 0.03822) ** 8 - 1));',
                 Money::create(2948761)
             ],
+
+            ['$result = \'abc\';', 'abc']
         ];
     }
 
@@ -307,14 +310,90 @@ class TestExpression extends TestCase
     public function testExpressions($expressionText, $expectedResult)
     {
         $codeContext = new CodeContext();
-        $codeBlock = new CodeExecutor();
+        $codeExecutor = new CodeExecutor();
         $variableName = '$result';
-        $actualResult = $codeBlock
+        $actualResult = $codeExecutor
             ->setCode($expressionText)
             ->setCodeContext($codeContext)
             ->execute()
             ->getVariableByName($variableName);
 
         $this->assertEquals($expectedResult, $actualResult);
+    }
+
+
+    public function testExpressionFunction()
+    {
+        $monthsInYear = 12;
+        $rateToPercentFactor = 100;
+
+        /**
+         * Рассчёт ануитетного платежа
+         * @param float $yearPercent годовая ставка
+         * @param Money $creditAmount сумма займа в копейках
+         * @param int $creditMonths число месяцев в кредите
+         * @return Money
+         */
+        $annuityPayment = function($yearPercent, $creditAmount, $creditMonths) use ($monthsInYear, $rateToPercentFactor)
+        {
+
+            $ratePerMonth = $yearPercent / $monthsInYear / $rateToPercentFactor;
+            $months = $creditMonths;
+            $creditAmountFactor = (($ratePerMonth * (1 + $ratePerMonth) ** $months) / ((1 + $ratePerMonth) ** $months - 1));
+
+            return $creditAmount->mul($creditAmountFactor);
+        };
+
+        $expressionText = '
+            $yearPercent = 12.25;
+            $creditAmount = 350000000$;
+            $creditMonths = 180;
+            $result = (money) annuityPayment($yearPercent, $creditAmount, $creditMonths);
+            ';
+        $functionList = new FunctionList();
+        $functionList->append($annuityPayment, 'annuityPayment');
+        $codeContext = new CodeContext();
+        $codeExecutor = new CodeExecutor($functionList);
+        $variableName = '$result';
+        $actualResult = $codeExecutor
+            ->setCode($expressionText)
+            ->setCodeContext($codeContext)
+            ->execute()
+            ->getVariableByName($variableName);
+
+        $this->assertEquals(Money::create(425704547), $actualResult);
+    }
+
+    public function testExpressionFunctionsOrder()
+    {
+        /**
+         * @param string $leftString левая строка
+         * @param string $rightString правая строка
+         * @return string
+         */
+        $concat = function ($leftString, $rightString) {
+            return $leftString. $rightString;
+        };
+
+        $expressionText = '$result = 
+            (string) concat(
+                (string) concat(
+                    (string) concat(\'a\', \'b\'),
+                    (string) concat(\'c\', \'d\')
+                ),
+                \'e\'
+            );';
+        $functionList = new FunctionList();
+        $functionList->append($concat, 'concat');
+        $codeContext = new CodeContext();
+        $codeExecutor = new CodeExecutor($functionList);
+        $variableName = '$result';
+        $actualResult = $codeExecutor
+            ->setCode($expressionText)
+            ->setCodeContext($codeContext)
+            ->execute()
+            ->getVariableByName($variableName);
+
+        $this->assertEquals('abcde', $actualResult);
     }
 }

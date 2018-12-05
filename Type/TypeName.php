@@ -14,6 +14,7 @@ class TypeName extends Enum
     const DATE_TIME = 'dateTime';
     const DATE_INTERVAL = 'dateInterval';
     const NULL = 'null';
+    const STRING = 'string';
 
     /**
      * @return bool тип является цифровым
@@ -84,6 +85,14 @@ class TypeName extends Enum
     public function isNull()
     {
         return $this->getValue() === self::NULL;
+    }
+
+    /**
+     * @return bool true - тип string
+     */
+    public function isString()
+    {
+        return $this->getValue() === self::STRING;
     }
 }
 

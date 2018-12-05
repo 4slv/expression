@@ -82,6 +82,14 @@ class TypeFactory
     }
 
     /**
+     * @return StringType
+     */
+    public function createString()
+    {
+        return new StringType();
+    }
+
+    /**
      * @param TypeName $typeName название типа
      * @return Type тип
      * @throws CodeParseException
@@ -104,6 +112,8 @@ class TypeFactory
                 return $this->createDateInterval();
             case TypeName::NULL:
                 return $this->createNull();
+            case TypeName::STRING:
+                return $this->createString();
             default:
                 throw new CodeParseException($typeName->getValue(). ' :: type creation impossible');
         }
