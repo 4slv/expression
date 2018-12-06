@@ -364,17 +364,18 @@ class TestExpression extends TestCase
         $this->assertEquals(Money::create(425704547), $actualResult);
     }
 
+    /**
+     * Конкатинирование строк
+     * @param string $leftString левая строка
+     * @param string $rightString правая строка
+     * @return string
+     */
+    public function concat($leftString, $rightString) {
+        return $leftString. $rightString;
+    }
+
     public function testExpressionFunctionsOrder()
     {
-        /**
-         * @param string $leftString левая строка
-         * @param string $rightString правая строка
-         * @return string
-         */
-        $concat = function ($leftString, $rightString) {
-            return $leftString. $rightString;
-        };
-
         $expressionText = '$result = 
             (string) concat(
                 (string) concat(
@@ -384,7 +385,7 @@ class TestExpression extends TestCase
                 \'e\'
             );';
         $functionList = new FunctionList();
-        $functionList->append($concat, 'concat');
+        $functionList->append([$this, 'concat'], 'concat');
         $codeContext = new CodeContext();
         $codeExecutor = new CodeExecutor($functionList);
         $variableName = '$result';
@@ -417,5 +418,28 @@ class TestExpression extends TestCase
             ->getVariableByName($variableName);
 
         $this->assertEquals(100, $actualResult);
+    }
+
+    public function testForeachWithFunction()
+    {
+        $expressionText = '
+            $result = \'\';
+            for($i = 0; $i < 10; $i = $i + 1)
+            {
+                $result = (string) concat($result, $i);
+            }
+        ';
+        $functionList = new FunctionList();
+        $functionList->append([$this, 'concat'], 'concat');
+        $codeContext = new CodeContext();
+        $codeExecutor = new CodeExecutor($functionList);
+        $variableName = '$result';
+        $actualResult = $codeExecutor
+            ->setCode($expressionText)
+            ->setCodeContext($codeContext)
+            ->execute()
+            ->getVariableByName($variableName);
+
+        $this->assertEquals('0123456789', $actualResult);
     }
 }

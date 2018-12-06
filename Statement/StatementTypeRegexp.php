@@ -10,7 +10,7 @@ class StatementTypeRegexp extends Enum
 {
     const SIMPLE_STATEMENT = '/[^;]+;/msi';
 
-    const IF_STATEMENT = '/(if\([^\{\}]+\))\{.+\}/msi';
+    const IF_STATEMENT = '/(if\([^\{\}]+\)\s*)\{.*\}/msi';
 
-    const FOR_STATEMENT = '/(for\([^\{\}]+\))\{.+\}/msi';
+    const FOR_STATEMENT = '/(for\([^\{\}]+\)\s*)\{.*\}/msi';
 }
