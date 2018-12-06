@@ -1,0 +1,17 @@
+if(2 > 1){
+    (int) func();
+}
+
+### Error ###
+(int) func() :: function 'func' does not defined
+===
+(int) func()
+
+===
+
+    (int) func();
+
+===
+if(2 > 1){
+    (int) func();
+}

@@ -117,6 +117,13 @@ class FunctionCall extends ExpressionPart
                 );
             }
 
+            if(TypeName::has($functionName) === false && StaticFunctionList::exists($functionName) === false)
+            {
+                throw new CodeParseException(
+                    $this->getCode(). " :: function '$functionName' does not defined"
+                );
+            }
+
             $returnType = TypeName::has($functionName)
                 ? $functionName
                 : $returnType;

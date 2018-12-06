@@ -47,10 +47,10 @@ class TestCodeErrors extends TestCase
                 "\n### Error ###\n",
                 file_get_contents(__DIR__. '/errorCases/isNotCorrectStatementError.txt')
             ),
-            [
-                'if(2 > 1){ (int) func(); }',
-                'func :: function does not defined'
-            ]
+            explode(
+            "\n### Error ###\n",
+                file_get_contents(__DIR__. '/errorCases/functionDoesNotExists.txt')
+            )
         ];
     }
 }
