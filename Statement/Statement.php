@@ -16,7 +16,11 @@ abstract class Statement extends CodePart
 
     public function parse(CodeContext $codeContext)
     {
-        $this->initStatement($codeContext);
+        try {
+            $this->initStatement($codeContext);
+        } catch (CodeParseException $exception) {
+            $this->showErrorPath($exception);
+        }
         return parent::parse($codeContext);
     }
 

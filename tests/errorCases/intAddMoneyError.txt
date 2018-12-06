@@ -1,0 +1,32 @@
+$result = 1;
+for($i = 1; $i < 10; $i = $i + 1)
+{
+    if($i < 5)
+    {
+        $result = 1 + 1$;
+    }
+}
+
+### Error ###
+1 + 1$ :: type definition failed
+===
+1 + 1$
+
+===
+
+        $result = 1 + 1$;
+
+===
+if($i < 5)
+    {
+        $result = 1 + 1$;
+    }
+
+===
+for($i = 1; $i < 10; $i = $i + 1)
+{
+    if($i < 5)
+    {
+        $result = 1 + 1$;
+    }
+}

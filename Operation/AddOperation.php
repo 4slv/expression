@@ -16,7 +16,7 @@ class AddOperation extends DigitOperation
     {
         if(
             $this->getLeftOperandTypeName()->isMoney()
-            ||
+            &&
             $this->getRightOperandTypeName()->isMoney()
         ){
             return $this->getTypeNameFactory()->createMoney();
@@ -45,7 +45,7 @@ class AddOperation extends DigitOperation
     {
         if(
             $this->getLeftOperandTypeName()->isMoney()
-            ||
+            &&
             $this->getRightOperandTypeName()->isMoney()
         ){
             return $this

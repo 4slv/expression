@@ -21,7 +21,7 @@ abstract class DigitOperation extends Operation
 
         if(
             $this->getLeftOperandTypeName()->isDigit()
-            ||
+            &&
             $this->getRightOperandTypeName()->isDigit()
         ){
             return $this->getTypeNameFactory()->createFloat();

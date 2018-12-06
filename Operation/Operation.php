@@ -136,7 +136,7 @@ class Operation extends ExpressionPart
      */
     protected function typeDefinitionFailed()
     {
-        throw new CodeParseException($this->getOperation()->getCode(). ' :: type definition failed');
+        throw new CodeParseException($this->getCode(). ' :: type definition failed');
     }
 
     public function toPhp(CodeContext $codeContext): string
@@ -149,7 +149,7 @@ class Operation extends ExpressionPart
      */
     protected function codeToPhpFailed()
     {
-        throw new CodeParseException($this->getOperation()->getCode(). ' :: code to php failed');
+        throw new CodeParseException($this->getCode(). ' :: code to php failed');
     }
 
     /**

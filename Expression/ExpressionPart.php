@@ -28,15 +28,19 @@ abstract class ExpressionPart extends CodePart
      * @throws CodeParseException */
     public function parse(CodeContext $codeContext)
     {
-        $typeName = $this->typeDefinition($codeContext);
-        $this->setTypeName($typeName);
-        /** @var CodePartList $contextList */
-        $contextList = $this->getContextList($codeContext);
-        $label = $contextList->append($this, $this->defineLabel());
-        $this->setLabel($label);
-        $php = $this->toOriginalPhp($codeContext);
-        $this->setPhp($php);
-        return $this;
+        try{
+            $typeName = $this->typeDefinition($codeContext);
+            $this->setTypeName($typeName);
+            /** @var CodePartList $contextList */
+            $contextList = $this->getContextList($codeContext);
+            $label = $contextList->append($this, $this->defineLabel());
+            $this->setLabel($label);
+            $php = $this->toOriginalPhp($codeContext);
+            $this->setPhp($php);
+            return $this;
+        } catch (CodeParseException $exception) {
+            $this->showErrorPath($exception);
+        }
     }
 
     /** @return null|string метка элемента */

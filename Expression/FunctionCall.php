@@ -83,7 +83,11 @@ class FunctionCall extends ExpressionPart
 
     public function parse(CodeContext $codeContext)
     {
-        $this->parseFunction($codeContext);
+        try{
+            $this->parseFunction($codeContext);
+        } catch (CodeParseException $exception) {
+            $this->showErrorPath($exception);
+        }
         return parent::parse($codeContext);
     }
 

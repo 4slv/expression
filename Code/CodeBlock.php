@@ -76,6 +76,10 @@ class CodeBlock extends CodePart
                 $replaceOnce
             );
         }
+
+        if(strlen(trim($code)) > 0){
+            throw new CodeParseException($code. ' :: code is not correct statement');
+        };
     }
 
     public function toPhp(CodeContext $codeContext): string

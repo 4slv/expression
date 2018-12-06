@@ -442,4 +442,45 @@ class TestExpression extends TestCase
 
         $this->assertEquals('0123456789', $actualResult);
     }
+
+    public function testForeachWithIf()
+    {
+        $expressionText = '
+            $result = \'\';
+            for($i = 0; $i < 10; $i = $i + 1)
+            {
+                if($i % 2 > 0)
+                {
+                    $result = (string) concat($result, $i);
+                }
+            }
+        ';
+        $functionList = new FunctionList();
+        $functionList->append([$this, 'concat'], 'concat');
+        $codeContext = new CodeContext();
+        $codeExecutor = new CodeExecutor($functionList);
+        $variableName = '$result';
+        $actualResult = $codeExecutor
+            ->setCode($expressionText)
+            ->setCodeContext($codeContext)
+            ->execute()
+            ->getVariableByName($variableName);
+
+        $this->assertEquals('13579', $actualResult);
+    }
+
+    public function testForeachEmptyBody()
+    {
+        $expressionText = 'for($result = 0; $result < 10; $result = $result + 1){}';
+        $codeContext = new CodeContext();
+        $codeExecutor = new CodeExecutor();
+        $variableName = '$result';
+        $actualResult = $codeExecutor
+            ->setCode($expressionText)
+            ->setCodeContext($codeContext)
+            ->execute()
+            ->getVariableByName($variableName);
+
+        $this->assertEquals(10, $actualResult);
+    }
 }

@@ -32,16 +32,24 @@ abstract class CodePart implements CodeParserInterface, CodeToPhp
             $php = $this->toPhp($codeContext);
             $this->setPhp($php);
         } catch (CodeParseException $exception) {
-            throw new CodeParseException(
-                "\n".
-                $exception->getMessage().
-                "\n===\n".
-                $this->getCode().
-                "\n"
-            );
+            $this->showErrorPath($exception);
         }
-
         return $this;
+    }
+
+    /**
+     * Отображение пути ошибки разбора
+     * @param CodeParseException $exception исключение
+     * @throws CodeParseException
+     */
+    protected function showErrorPath(CodeParseException $exception)
+    {
+        throw new CodeParseException(
+            $exception->getMessage().
+            "\n===\n".
+            $this->getCode().
+            "\n"
+        );
     }
 
     abstract protected function getContextList(CodeContext $codeContext);
