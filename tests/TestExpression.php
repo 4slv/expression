@@ -20,6 +20,9 @@ class TestExpression extends TestCase
         $ratePerMonth = 12.25 / 12 / 100;
         $creditMonths = 12 * 15;
         return [
+            # коментарии
+            ['$result = 2 + 1; /* многострочный
+                комментарий */', 3],
             # операции с целыми числами
             ['$result = 2 + 1;', 3],
             ['$result = 2 - 1;', 1],

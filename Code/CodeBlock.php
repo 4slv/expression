@@ -60,7 +60,7 @@ class CodeBlock extends CodePart
      */
     protected function parseStatementList(CodeContext $codeContext): void
     {
-        $code = $this->getCode();
+        $code = $this->getCodeWithoutComments();
         while($statement = $this->getFirstStatementResolver()->resolve($code))
         {
             $statementLabel = $statement
@@ -80,6 +80,14 @@ class CodeBlock extends CodePart
         if(strlen(trim($code)) > 0){
             throw new CodeParseException($code. ' :: code is not correct statement');
         };
+    }
+
+    /**
+     * @return string псевдо код без комментариев
+     */
+    protected function getCodeWithoutComments()
+    {
+        return preg_replace('#/\\*(.*?)\\*/#msi', '', $this->getCode());
     }
 
     public function toPhp(CodeContext $codeContext): string
