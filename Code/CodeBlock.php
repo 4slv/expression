@@ -101,7 +101,6 @@ class CodeBlock extends CodePart
                 ->getPhp();
         }
 
-
         return implode("\n", $statementPhpList);
     }
 

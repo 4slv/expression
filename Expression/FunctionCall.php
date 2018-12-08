@@ -103,17 +103,11 @@ class FunctionCall extends ExpressionPart
             $returnType = $match[3];
             $functionName = $match[4];
 
+
             if($functionName !== $returnType && TypeName::has($returnType) && TypeName::has($functionName))
             {
                 throw new CodeParseException(
                     $this->getCode(). " :: type '$returnType' does not match function name '$functionName'"
-                );
-            }
-
-            if(TypeName::has($functionName) === false && strlen($returnType) === 0)
-            {
-                throw new CodeParseException(
-                    $this->getCode(). " :: function '$functionName' has no return type"
                 );
             }
 
@@ -124,6 +118,11 @@ class FunctionCall extends ExpressionPart
                 );
             }
 
+
+            $returnType =
+                TypeName::has($functionName) === false && strlen($returnType) === 0
+                ? TypeName::NULL
+                : $returnType;
             $returnType = TypeName::has($functionName)
                 ? $functionName
                 : $returnType;

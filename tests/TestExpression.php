@@ -486,4 +486,24 @@ class TestExpression extends TestCase
 
         $this->assertEquals(10, $actualResult);
     }
+
+    public function testExpressionFunctionsWithoutReturnType()
+    {
+        $funcWithoutReturn = function () {};
+
+        $expressionText = '$result = func();';
+
+        $functionList = new FunctionList();
+        $functionList->append($funcWithoutReturn, 'func');
+        $codeContext = new CodeContext();
+        $codeExecutor = new CodeExecutor($functionList);
+        $variableName = '$result';
+        $actualResult = $codeExecutor
+            ->setCode($expressionText)
+            ->setCodeContext($codeContext)
+            ->execute()
+            ->getVariableByName($variableName);
+
+        $this->assertEquals(null, $actualResult);
+    }
 }
