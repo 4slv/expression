@@ -88,11 +88,11 @@ class CodeExecutor
         return $this->variableList[$variableName] ?? null;
     }
 
-    /** Выполнить псевдо код
-     * @return $this
+    /**
+     * @return string php-код
      * @throws CodeParseException
      */
-    public function execute()
+    public function toPhp()
     {
         $codeBlock = $this
             ->createCodeBlock()
@@ -102,9 +102,17 @@ class CodeExecutor
         $returnVariableList = $this
             ->getReturnVariableListCode();
 
-        $code = $codeBlock. "\n". $returnVariableList;
+        return $codeBlock. "\n". $returnVariableList;
+    }
 
-        $variableList = eval($code);
+    /**
+     * Выполнить псевдо код
+     * @return $this
+     * @throws CodeParseException
+     */
+    public function execute()
+    {
+        $variableList = eval($this->toPhp());
         $this->setVariableList($variableList);
         return $this;
     }
