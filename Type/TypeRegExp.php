@@ -28,7 +28,11 @@ class TypeRegExp extends Enum
     {
         foreach(self::getConstants() as $typeKey => $typeRegExp)
         {
-            if(preg_match('/^'. $typeRegExp. '$/i', $typeStringValue))
+            if(
+                preg_match('/^'. $typeRegExp. '$/i', $typeStringValue)
+                &&
+                defined(TypeName::class. '::'. $typeKey)
+            )
             {
                 $typeName = constant(TypeName::class. '::'. $typeKey);
                 return TypeName::byValue($typeName);
