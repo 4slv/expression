@@ -35,10 +35,12 @@ class MultiplyOperation extends DigitOperation
     {
         if(
             $this->getLeftOperandTypeName()->isMoney() && $this->getRightOperandTypeName()->isDigit()
-            ||
-            $this->getLeftOperandTypeName()->isDigit() && $this->getRightOperandTypeName()->isMoney()
         ){
             return $this->getOperationToPhpTemplate()->objectMethod($this, self::MONEY_OPERATION);
+        }
+        if($this->getLeftOperandTypeName()->isDigit() && $this->getRightOperandTypeName()->isMoney())
+        {
+            return $this->getOperationToPhpTemplate()->objectMethodReverse($this, self::MONEY_OPERATION);
         }
         return parent::toPhp($codeContext);
     }
