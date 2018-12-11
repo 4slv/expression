@@ -21,7 +21,7 @@ class SubtractionOperation extends DigitOperation
             ||
             $this->getRightOperandTypeName()->isMoney()
         ){
-            return $this->getTypeNameFactory()->createFloat();
+            return $this->getTypeNameFactory()->createMoney();
         }
 
         if(
