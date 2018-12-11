@@ -39,7 +39,7 @@ class IfElseOperation extends Operation
             return $successType;
         }
 
-        $operationCode = $this->getOperation()->getCodeTrim();
+        $operationCode = $this->getCodeTrim();
         throw new CodeParseException(
             $operationCode. ' :: success and failed return types are not equal'
         );
