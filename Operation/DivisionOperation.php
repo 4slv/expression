@@ -29,12 +29,6 @@ class DivisionOperation extends Operation
             return $this->getTypeNameFactory()->createFloat();
         }
 
-        var_dump(
-            $this->getCode(),
-            $this->getLeftOperand()->getCode(),
-            $this->getRightOperand()->getCode()
-        );
-
         return $this->typeDefinitionFailed();
     }
 
