@@ -71,6 +71,48 @@ class OperationToPhpTemplate
         );
     }
 
+    /**
+     * Получение php кода вызова метода клонированного объекта из операции
+     * @param Operation $operation операция
+     * @param string $methodName название вызываемого метода
+     * @return string
+     */
+    public function cloneObjectMethod(Operation $operation, string $methodName): string
+    {
+        $replace = [
+            '%operandLeft%' => $operation->getLeftOperand()->getPhp(),
+            '%methodName%' => $methodName,
+            '%operandRight%' => $operation->getRightOperand()->getPhp()
+        ];
+
+        return str_replace(
+            array_keys($replace),
+            array_values($replace),
+            '(clone %operandLeft%)->%methodName%(%operandRight%)'
+        );
+    }
+
+    /**
+     * Получение php кода вызова метода объекта из операции (с инверсией операндов)
+     * @param Operation $operation операция
+     * @param string $methodName название вызываемого метода
+     * @return string
+     */
+    public function cloneObjectMethodReverse(Operation $operation, string $methodName): string
+    {
+        $replace = [
+            '%operandLeft%' => $operation->getLeftOperand()->getPhp(),
+            '%methodName%' => $methodName,
+            '%operandRight%' => $operation->getRightOperand()->getPhp()
+        ];
+
+        return str_replace(
+            array_keys($replace),
+            array_values($replace),
+            '(clone %operandRight%)->%methodName%(%operandLeft%)'
+        );
+    }
+
     public function intervalMethod(Operation $operation, string $methodName): string
     {
         $replace = [

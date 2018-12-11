@@ -60,7 +60,7 @@ class AddOperation extends DigitOperation
         ){
             return $this
                 ->getOperationToPhpTemplate()
-                ->objectMethod($this, self::DATE_INTERVAL_OPERATION);
+                ->cloneObjectMethod($this, self::DATE_INTERVAL_OPERATION);
         }
 
         if(
@@ -70,7 +70,7 @@ class AddOperation extends DigitOperation
         ){
             return $this
                 ->getOperationToPhpTemplate()
-                ->objectMethodReverse($this, self::DATE_INTERVAL_OPERATION);
+                ->cloneObjectMethodReverse($this, self::DATE_INTERVAL_OPERATION);
         }
 
         return parent::toPhp($codeContext);

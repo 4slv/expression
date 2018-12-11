@@ -78,7 +78,7 @@ class SubtractionOperation extends DigitOperation
         ){
             return $this
                 ->getOperationToPhpTemplate()
-                ->objectMethodReverse($this, self::DATETIME_OPERATION);
+                ->cloneObjectMethodReverse($this, self::DATETIME_OPERATION);
         }
 
         if(
@@ -88,7 +88,7 @@ class SubtractionOperation extends DigitOperation
         ){
             return $this
                 ->getOperationToPhpTemplate()
-                ->objectMethod($this, self::DATE_INTERVAL_OPERATION);
+                ->cloneObjectMethod($this, self::DATE_INTERVAL_OPERATION);
         }
 
         return parent::toPhp($codeContext);
