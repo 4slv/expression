@@ -290,6 +290,8 @@ class TestExpression extends TestCase
 
             // функция money
             ['$result = money(100);', Money::create(100)],
+            // функция int
+            ['$result = int(1$01);', 101],
 
             // проверка приоритета выполнения операций
             ['$result = 7 - 2 * 3;', 1],
