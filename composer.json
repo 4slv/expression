@@ -9,8 +9,14 @@
       "email": "a.dobrynin@4slovo.ru"
     }
   ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@gitlab.4slovo.ru:4slovo/money.git"
+    }
+  ],
   "require": {
-    "4slovo/money": "v1.0.2",
+    "4slovo/money": "v1.0.3",
     "marc-mabe/php-enum": "v3.0.1"
   },
   "require-dev": {
