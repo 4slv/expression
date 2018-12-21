@@ -10,6 +10,6 @@ class NullType extends Type
 {
     public function toPhp(CodeContext $codeContext): string
     {
-        return '';
+        return 'null';
     }
 }

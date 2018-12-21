@@ -302,7 +302,13 @@ class TestExpression extends TestCase
                 Money::create(2948761)
             ],
 
-            ['$result = \'abc\';', 'abc']
+            ['$result = \'abc\';', 'abc'],
+
+            ['$result = (boolean) isNull(1);', false],
+            ['$result = (boolean) isNull(null);', true],
+
+            ['$result = (boolean) isNotNull(1);', true],
+            ['$result = (boolean) isNotNull(null);', false],
         ];
     }
 

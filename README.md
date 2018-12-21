@@ -139,6 +139,26 @@ dateInterval | dateInterval | boolean | 2 day == 3 day | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 == 2018.06.19 15:06:00 | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 == 2018.06.19 15:06:01 | false
 
+### Не равно
+**Знак** |  **Класс операции**
+--- | ---
+ `!=` | EqualOperation
+
+#### Допустимые операции с типами
+**Тип левого операнда** | **Тип правого операнда** | **Тип результата** | **Пример** | **Результат**
+ --- | --- | --- | --- | ---
+int |  int |  boolean | 1 != 1 | false
+int |  int |  boolean | 1 != 2 | true
+float | float | boolean | 1.1 != 1.1 | false
+float | float | boolean | 1.1 != 1.2 | true
+money | money | boolean | 100$ != 100$ | false
+money | money | boolean | 100$ != 200$ | true
+dateInterval | dateInterval | boolean | 2 day != 2 day | false
+dateInterval | dateInterval | boolean | 2 day != 3 day | true
+dateTime | dateTime | boolean | 2018.06.19 15:06:00 != 2018.06.19 15:06:00 | false
+dateTime | dateTime | boolean | 2018.06.19 15:06:00 != 2018.06.19 15:06:01 | true
+
+
 ### Больше
 **Знак** |  **Класс операции**
 --- | ---
@@ -296,6 +316,28 @@ float |  float | float | (float) max(3.1, 1.2, 2.3) == 3.1
 money | money | money | (money) max(3$, 1$, 2$) == $3
 dateTime | dateTime | dateTime | (dateTime) max(2018.01.01, 2019.01.01, 2015.01.01) == 2019.01.01
 dateInterval | dateInterval | dateInterval | (dateInterval) max(3 days, 1 day, 2 days) == 3 days
+
+### isNull - определение является ли значение нулевым
+#### Допустимые операции с типами
+**Тип параметра** | **Тип результата** | **Пример**
+--- | --- | ---
+null | boolean | (boolean) isNull(null) == true
+int |  boolean | (boolean) isNull(3) == false
+float |  boolean | (boolean) isNull(3.1) == false
+money | boolean | (boolean) isNull(3$) == false
+dateTime | boolean | (boolean) isNull(2018.01.01) == false
+dateInterval | boolean | (boolean) isNull(3 days) == false
+
+### isNotNull - определение является ли значение не нулевым
+#### Допустимые операции с типами
+**Тип параметра** | **Тип результата** | **Пример**
+--- | --- | ---
+null | boolean | (boolean) isNull(null) == false
+int |  boolean | (boolean) isNull(3) == true
+float |  boolean | (boolean) isNull(3.1) == true
+money | boolean | (boolean) isNull(3$) == true
+dateTime | boolean | (boolean) isNull(2018.01.01) == true
+dateInterval | boolean | (boolean) isNull(3 days) == true
 
 ### Присваивание
 **Пример** | **Результат**

@@ -182,6 +182,7 @@ class FunctionCall extends ExpressionPart
                     ->getLabel();
             }
         }
+
         $this->setParameterLabelList($parameterLabelList);
     }
 

@@ -164,4 +164,22 @@ class InlineFunctions
         }
         return max($list);
     }
+
+    /**
+     * @param mixed $element проверяемый параметр
+     * @return bool true, если значение $element равно null
+     */
+    public static function isNull($element)
+    {
+        return is_null($element);
+    }
+
+    /**
+     * @param mixed $element проверяемый параметр
+     * @return bool false, если значение $element равно null
+     */
+    public static function isNotNull($element)
+    {
+        return isset($element);
+    }
 }
