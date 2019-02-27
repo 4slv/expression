@@ -23,6 +23,9 @@ class TestExpression extends TestCase
             # коментарии
             ['$result = 2 + 1; /* многострочный
                 комментарий */', 3],
+            # операции со строками
+            ['$result = \'test\';', 'test'],
+            ['$result = \'test\' == \'test\';', true],
             # операции с целыми числами
             ['$result = 2 + 1;', 3],
             ['$result = 2 - 1;', 1],
