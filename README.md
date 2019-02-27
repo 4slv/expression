@@ -138,6 +138,8 @@ dateInterval | dateInterval | boolean | 2 day == 2 day | true
 dateInterval | dateInterval | boolean | 2 day == 3 day | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 == 2018.06.19 15:06:00 | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 == 2018.06.19 15:06:01 | false
+string | string | boolean | 'a' == 'a' | true
+string | string | boolean | 'a' == 'b' | false
 
 ### Не равно
 **Знак** |  **Класс операции**
@@ -157,7 +159,8 @@ dateInterval | dateInterval | boolean | 2 day != 2 day | false
 dateInterval | dateInterval | boolean | 2 day != 3 day | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 != 2018.06.19 15:06:00 | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 != 2018.06.19 15:06:01 | true
-
+string | string | boolean | 'a' != 'a' | false
+string | string | boolean | 'a' != 'b' | true
 
 ### Больше
 **Знак** |  **Класс операции**
@@ -182,6 +185,9 @@ dateInterval | dateInterval | boolean | 6 day > 7 day | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 > 2018.06.19 15:05:59 | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 > 2018.06.19 15:06:00 | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 > 2018.06.19 15:06:01 | false
+string | string | boolean | 'a' > 'a' | false
+string | string | boolean | 'a' > 'b' | false
+string | string | boolean | 'b' > 'a' | true
 
 ### Меньше
 **Знак** |  **Класс операции**
@@ -206,6 +212,9 @@ dateInterval | dateInterval | boolean | 6 day < 5 day | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 < 2018.06.19 15:06:01 | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 < 2018.06.19 15:06:00 | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 < 2018.06.19 15:05:59 | false
+string | string | boolean | 'a' < 'a' | false
+string | string | boolean | 'a' < 'b' | true
+string | string | boolean | 'b' < 'a' | false
 
 ### Больше или равно
 **Знак** |  **Класс операции**
@@ -230,6 +239,9 @@ dateInterval | dateInterval | boolean | 6 day >= 7 day | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 >= 2018.06.19 15:05:59 | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 >= 2018.06.19 15:06:00 | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 >= 2018.06.19 15:06:01 | false
+string | string | boolean | 'a' >= 'a' | true
+string | string | boolean | 'a' >= 'b' | false
+string | string | boolean | 'b' >= 'a' | true
 
 ### Меньше или равно
 **Знак** |  **Класс операции**
@@ -254,6 +266,9 @@ dateInterval | dateInterval | boolean | 6 day <= 5 day | false
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 <= 2018.06.19 15:06:01 | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 <= 2018.06.19 15:06:00 | true
 dateTime | dateTime | boolean | 2018.06.19 15:06:00 <= 2018.06.19 15:05:59 | false
+string | string | boolean | 'a' <= 'a' | true
+string | string | boolean | 'a' <= 'b' | true
+string | string | boolean | 'b' <= 'a' | false
 
 ## Встроенные функции
 
