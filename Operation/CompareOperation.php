@@ -40,6 +40,12 @@ abstract class CompareOperation extends Operation
                 &&
                 $this->getRightOperandTypeName()->isDateInterval()
             )
+            ||
+            (
+                $this->getLeftOperandTypeName()->isString()
+                &&
+                $this->getRightOperandTypeName()->isString()
+            )
         ){
             return $this->getTypeNameFactory()->createBoolean();
         }
@@ -59,6 +65,12 @@ abstract class CompareOperation extends Operation
                 $this->getLeftOperandTypeName()->isDateTime()
                 &&
                 $this->getRightOperandTypeName()->isDateTime()
+            )
+            ||
+            (
+                $this->getLeftOperandTypeName()->isString()
+                &&
+                $this->getRightOperandTypeName()->isString()
             )
         ){
             return $this
