@@ -196,7 +196,7 @@ class InlineFunctions
     }
 
     /** Получение значения массива по ключу
-     * @param ArrayStructure $array массив
+     * @param ArrayStructure $array структура массив
      * @param int|string $key ключ массива
      * @return mixed
      * @throws CodeRunException
@@ -213,12 +213,85 @@ class InlineFunctions
     }
 
     /** Записать значение в массив по ключу
-     * @param ArrayStructure $array массив
+     * @param ArrayStructure $array структура массив
      * @param int|string $key ключ массива
      * @param int|string $value элемент массива
      */
     public static function setArrayValue(ArrayStructure $array, $key, $value)
     {
         $array->set($key, $value);
+    }
+
+    /** Проверка существования ключа в массиве
+     * @param int|string $key искомый ключ
+     * @param ArrayStructure $array структура массив
+     * @return bool true - ключ присутствует в массиве, false - нет
+     */
+    public static function arrayKeyExists($key, ArrayStructure $array)
+    {
+        return $array->exists($key);
+    }
+
+    /** Сброс указателя массива на первый элемент
+     * @param ArrayStructure $array структура массив
+     * @return mixed первый элемент массива
+     */
+    public static function reset(ArrayStructure $array)
+    {
+        return $array->reset();
+    }
+
+    /** Сброс указателя массива на последний элемент
+     * @param ArrayStructure $array структура массив
+     * @return mixed последний элемент массива
+     */
+    public static function end(ArrayStructure $array)
+    {
+        return $array->end();
+    }
+
+    /** Передвинуть указатель массива вперёд
+     * @param ArrayStructure $array структура массив
+     * @return mixed следующий элмент массива
+     */
+    public static function next(ArrayStructure $array)
+    {
+        return $array->next();
+    }
+
+    /** Передвинуть указатель массива назад
+     * @param ArrayStructure $array структура массив
+     * @return mixed предыдущий элемент массива
+     */
+    public static function prev(ArrayStructure $array)
+    {
+        return $array->prev();
+    }
+
+    /**
+     * @param ArrayStructure $array структура массив
+     * @return int|string|null ключ элемента на котором находится указатель массива
+     */
+    public static function key(ArrayStructure $array)
+    {
+        return $array->key();
+    }
+
+    /**
+     * Вывести значение $value с помощью функции print_r
+     * @param mixed $value значение
+     */
+    public static function printR($value)
+    {
+        print_r($value);
+    }
+
+    /**
+     * Вывести значение $value с помощью функции var_dump
+     * @param mixed $value значение
+     */
+    public static function varDump($value)
+    {
+        var_dump($value);
     }
 }

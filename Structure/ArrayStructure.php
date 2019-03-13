@@ -2,7 +2,7 @@
 
 namespace Slov\Expression\Structure;
 
-/** Массив */
+/** Структура массив */
 class ArrayStructure
 {
     /** @var array массив */
@@ -37,8 +37,52 @@ class ArrayStructure
      * @param int|string $key ключ массива
      * @return bool
      */
-    public function exists($key)
+    public function exists($key): bool
     {
         return array_key_exists($key, $this->array);
+    }
+
+    /**
+     * Сброс указателя массива на первый элемент
+     * @return mixed первый элемент массива
+     */
+    public function reset()
+    {
+        return reset($this->array);
+    }
+
+    /**
+     * Сброс указателя массива на последний элемент
+     * @return mixed последний элемент массива
+     */
+    public function end()
+    {
+        return reset($this->array);
+    }
+
+    /**
+     * Передвинуть указатель массива вперёд
+     * @return mixed следующий элмент массива
+     */
+    public function next()
+    {
+        return next($this->array);
+    }
+
+    /**
+     * Передвинуть указатель массива назад
+     * @return mixed предыдущий элемент массива
+     */
+    public function prev()
+    {
+        return prev($this->array);
+    }
+
+    /**
+     * @return mixed ключ элемента на котором находится указатель массива
+     */
+    public function key()
+    {
+        return key($this->array);
     }
 }
