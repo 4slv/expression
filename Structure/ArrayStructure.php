@@ -85,4 +85,12 @@ class ArrayStructure
     {
         return key($this->array);
     }
+
+    /**
+     * @return int размер массива
+     */
+    public function count()
+    {
+        return count($this->array);
+    }
 }

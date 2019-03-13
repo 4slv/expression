@@ -364,7 +364,6 @@ dateInterval | boolean | (boolean) isNull(3 days) == true
 --- | --- | ---
 произвольный тип | null | varDump(1); // выведет int(1)
 
-
 ## Встроенные функции для работы с массивами
 
 ### array - создание массива
@@ -411,6 +410,11 @@ array | произвольный тип (значение) | $list = array(1, 2,
 **Тип параметра 1** | **Тип результата** | **Пример**
 --- | --- | ---
 array | int или string (или null если указатель находится вне массива) |  $list = array(1, 2, 3, 4); <br> $firstElementKey = key($list);<br> // $firstElementKey = 0
+
+### size - размер массива
+**Тип параметра 1** | **Тип результата** | **Пример**
+--- | --- | ---
+array | int | $list = array(1, 2, 3);<br> $listSize = (int) count($list);<br> // $listSize = 3
 
 ### Присваивание
 **Пример** | **Результат**

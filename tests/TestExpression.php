@@ -320,7 +320,8 @@ class TestExpression extends TestCase
             ['$array = array(1, 2, 3); setArrayValue($array, 2, 5); $result = getArrayValue($array, 2);', 5],
 
             ['$array = array(1, 2, 3); for($element = (int) reset($array); isNotNull(key($array)); $element = (int) next($array) ){ $result = $element; }', 3],
-            ['$array = array(1, 2, 3); for($element = (int) end($array); isNotNull(key($array)); $element = (int) prev($array) ){ $result = $element; }', 1]
+            ['$array = array(1, 2, 3); for($element = (int) end($array); isNotNull(key($array)); $element = (int) prev($array) ){ $result = $element; }', 1],
+            ['$array = array(1, 2, 3); $result = count($array);', 3]
         ];
     }
 

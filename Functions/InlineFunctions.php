@@ -278,6 +278,15 @@ class InlineFunctions
     }
 
     /**
+     * @param ArrayStructure $array структура массив
+     * @return int размер массива
+     */
+    public static function count(ArrayStructure $array)
+    {
+        return $array->count();
+    }
+
+    /**
      * Вывести значение $value с помощью функции print_r
      * @param mixed $value значение
      */
