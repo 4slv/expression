@@ -8,6 +8,7 @@ use Slov\Expression\Code\CodeContext;
 use Slov\Expression\Code\CodeExecutor;
 use Slov\Expression\Code\CodeParseException;
 use Slov\Expression\Functions\FunctionList;
+use Slov\Expression\Structure\ArrayStructure;
 use Slov\Money\Money;
 use DateInterval;
 use DateTime;
@@ -312,6 +313,11 @@ class TestExpression extends TestCase
 
             ['$result = (boolean) isNotNull(1);', true],
             ['$result = (boolean) isNotNull(null);', false],
+
+            // Функции для работы с массивами
+            ['$result = array(1, 2, 3);', new ArrayStructure([1, 2, 3])],
+            ['$result = (int) getArrayValue(array(1, 2, 3), 0);', 1],
+            ['$array = array(1, 2, 3); setArrayValue($array, 2, 5); $result = getArrayValue($array, 2);', 5],
         ];
     }
 

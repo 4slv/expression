@@ -5,6 +5,7 @@ namespace Slov\Expression\Functions;
 use DateInterval;
 use DateTime;
 use Slov\Expression\Code\CodeRunException;
+use Slov\Expression\Structure\ArrayStructure;
 use Slov\Money\Money;
 
 /** Встроенные функции */
@@ -181,5 +182,43 @@ class InlineFunctions
     public static function isNotNull($element)
     {
         return isset($element);
+    }
+
+    /**
+     * @param mixed $element, ... неограниченное кол-во элементов
+     * @return ArrayStructure массив
+     */
+    public static function array($element)
+    {
+        /** @var mixed[] $list список элементов */
+        $list = func_get_args();
+        return new ArrayStructure($list);
+    }
+
+    /** Получение значения массива по ключу
+     * @param ArrayStructure $array массив
+     * @param int|string $key ключ массива
+     * @return mixed
+     * @throws CodeRunException
+     */
+    public static function getArrayValue(ArrayStructure $array, $key)
+    {
+        if($array->exists($key) === false)
+        {
+            throw new CodeRunException(
+                "function getArrayValue :: key $key not exists in array"
+            );
+        }
+        return $array->get($key);
+    }
+
+    /** Записать значение в массив по ключу
+     * @param ArrayStructure $array массив
+     * @param int|string $key ключ массива
+     * @param int|string $value элемент массива
+     */
+    public static function setArrayValue(ArrayStructure $array, $key, $value)
+    {
+        $array->set($key, $value);
     }
 }

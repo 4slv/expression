@@ -15,6 +15,7 @@ class TypeName extends Enum
     const DATE_INTERVAL = 'dateInterval';
     const NULL = 'null';
     const STRING = 'string';
+    const ARRAY = 'array';
 
     /**
      * @return bool тип является цифровым
@@ -93,6 +94,14 @@ class TypeName extends Enum
     public function isString()
     {
         return $this->getValue() === self::STRING;
+    }
+
+    /**
+     * @return bool true - тип array
+     */
+    public function isArray()
+    {
+        return $this->getValue() === self::ARRAY;
     }
 }
 

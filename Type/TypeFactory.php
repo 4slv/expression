@@ -90,6 +90,14 @@ class TypeFactory
     }
 
     /**
+     * @return ArrayType
+     */
+    public function createArrayType()
+    {
+        return new ArrayType();
+    }
+
+    /**
      * @param TypeName $typeName название типа
      * @return Type тип
      * @throws CodeParseException
@@ -114,6 +122,8 @@ class TypeFactory
                 return $this->createNull();
             case TypeName::STRING:
                 return $this->createString();
+            case TypeName::ARRAY:
+                return $this->createArrayType();
             default:
                 throw new CodeParseException($typeName->getValue(). ' :: type creation impossible');
         }
