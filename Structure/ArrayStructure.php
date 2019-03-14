@@ -33,6 +33,14 @@ class ArrayStructure
         $this->array[$key] = $value;
     }
 
+    /**
+     * @return array массив
+     */
+    public function getArray(): array
+    {
+        return $this->array;
+    }
+
     /** Проверка существования ключа в массиве
      * @param int|string $key ключ массива
      * @return bool
