@@ -35,7 +35,7 @@ class ExpressionWithBrackets extends Expression
      */
     protected function parseFunctions(CodeContext $codeContext): string
     {
-        $expressionCode = $this->getCode();
+        $expressionCode = $this->getCodeTrim();
 
         while (preg_match('/'. TypeRegExp::FUNCTION.'/msi', $expressionCode, $match))
         {
