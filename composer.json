@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "4slovo/money": "v1.0.3",
+    "4slovo/money": "v1.0.4",
     "marc-mabe/php-enum": "v3.0.1"
   },
   "require-dev": {
