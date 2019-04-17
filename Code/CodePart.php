@@ -9,6 +9,7 @@ abstract class CodePart implements CodeParserInterface, CodeToPhp
     use PhpAccessor;
     use LabelAccessor;
     use CodePartFactory;
+    use StringReplacer;
 
     /**
      * @throws CodeParseException

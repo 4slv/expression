@@ -68,12 +68,10 @@ class CodeBlock extends CodePart
                 ->getLabel();
             $this->append($statementLabel);
 
-            $replaceOnce = 1;
-            $code = str_replace(
+            $code = $this->stringReplaceOnce(
                 $statement->getCode(),
                 '',
-                $code,
-                $replaceOnce
+                $code
             );
         }
 

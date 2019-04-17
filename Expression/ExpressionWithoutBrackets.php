@@ -34,12 +34,10 @@ class ExpressionWithoutBrackets extends Expression
                 ->getFirstExpressionPartResolver()
                 ->resolve($codeContext, $expressionCode);
 
-            $replaceTimes = 1;
-            $expressionCode = str_replace(
+            $expressionCode = $this->stringReplaceOnce(
                 $expressionPart->getCode(),
                 $expressionPart->getLabel(),
-                $expressionCode,
-                $replaceTimes
+                $expressionCode
             );
         }
         return $expressionPart;

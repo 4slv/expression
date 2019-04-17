@@ -51,13 +51,11 @@ class ExpressionWithBrackets extends Expression
                 ->setCode($functionCallCode)
                 ->parse($codeContext)
                 ->getLabel();
-            $count = 1;
 
-            $expressionCode = str_replace(
+            $expressionCode = $this->stringReplaceOnce(
                 $functionCallCode,
                 $functionCallLabel,
-                $expressionCode,
-                $count
+                $expressionCode
             );
         }
         return $expressionCode;
@@ -74,13 +72,11 @@ class ExpressionWithBrackets extends Expression
         while ($codeContext->checkLabelIsExpressionPart($expressionCode) === false){
             $expressionPart = $expressionWithoutBracketsFinder
                 ->find($codeContext, $expressionCode);
-            $replaceTimes = 1;
 
-            $expressionCode = str_replace(
+            $expressionCode = $this->stringReplaceOnce(
                 $expressionPart->getOriginalCode(),
                 $expressionPart->getLabel(),
-                $expressionCode,
-                $replaceTimes
+                $expressionCode
             );
         }
         return $expressionPart;
