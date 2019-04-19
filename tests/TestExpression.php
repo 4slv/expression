@@ -297,6 +297,21 @@ class TestExpression extends TestCase
             // функция int
             ['$result = int(1$01);', 101],
 
+            // функция floor
+            ['$result = floor(100.23);', 100],
+            ['$result = floor(1$23);', Money::create(100)],
+
+            // функция ceil
+            ['$result = ceil(100.23);', 101],
+            ['$result = ceil(1$23);', Money::create(200)],
+
+            // функция round
+            ['$result = round(100.23);', 100],
+            ['$result = round(100.73);', 101],
+            ['$result = round(1$23);', Money::create(100)],
+            ['$result = round(1$73);', Money::create(200)],
+
+
             // проверка приоритета выполнения операций
             ['$result = 7 - 2 * 3;', 1],
             ['$result = 7 - 2 - 3;', 2],

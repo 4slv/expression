@@ -287,6 +287,78 @@ class InlineFunctions
     }
 
     /**
+     * Округление до ближайшего меньшего целого (для денег до мажорных единиц)
+     * @param float|Money $value
+     * @return int|Money
+     */
+    public static function floor($value)
+    {
+        if(is_object($value) && $value instanceof Money)
+        {
+            $majorCurrencyAmount = $value->getAmount() / Money::getMajorCurrencyParts();
+            return Money::create(
+                floor($majorCurrencyAmount)
+                *
+                Money::getMajorCurrencyParts()
+            );
+        }
+
+        if(is_float($value) || is_int($value)){
+            return floor($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Округление до ближайшего большего целого (для денег до мажорных единиц)
+     * @param float|Money $value
+     * @return int|Money
+     */
+    public static function ceil($value)
+    {
+        if(is_object($value) && $value instanceof Money)
+        {
+            $majorCurrencyAmount = $value->getAmount() / Money::getMajorCurrencyParts();
+            return Money::create(
+                ceil($majorCurrencyAmount)
+                *
+                Money::getMajorCurrencyParts()
+            );
+        }
+
+        if(is_float($value) || is_int($value)){
+            return ceil($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Округление по математическим правилам (для денег до мажорных единиц)
+     * @param float|Money $value
+     * @return int|Money
+     */
+    public static function round($value)
+    {
+        if(is_object($value) && $value instanceof Money)
+        {
+            $majorCurrencyAmount = $value->getAmount() / Money::getMajorCurrencyParts();
+            return Money::create(
+                round($majorCurrencyAmount)
+                *
+                Money::getMajorCurrencyParts()
+            );
+        }
+
+        if(is_float($value) || is_int($value)){
+            return round($value);
+        }
+
+        return $value;
+    }
+
+    /**
      * Вывести значение $value с помощью функции print_r
      * @param mixed $value значение
      */
