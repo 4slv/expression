@@ -359,6 +359,65 @@ class InlineFunctions
     }
 
     /**
+     * Сортировка элементы массива в порядке возрастания
+     * @param ArrayStructure $arrayStructure структура массива
+     * @return ArrayStructure структура массива с отсортированными элементами
+     */
+    public static function sort(ArrayStructure $arrayStructure)
+    {
+        $array = $arrayStructure->getArray();
+        sort($array);
+        return new ArrayStructure($array);
+    }
+
+    /**
+     * Сортировка элементы массива в порядке убвыания
+     * @param ArrayStructure $arrayStructure структура массива
+     * @return ArrayStructure структура массива с отсортированными элементами
+     */
+    public static function rsort(ArrayStructure $arrayStructure)
+    {
+        $array = $arrayStructure->getArray();
+        rsort($array);
+        return new ArrayStructure($array);
+    }
+
+    /**
+     * Сортировка ключей массива в порядке возрастания
+     * @param ArrayStructure $arrayStructure структура массива
+     * @return ArrayStructure структура массива с отсортированными ключами
+     */
+    public static function asort(ArrayStructure $arrayStructure)
+    {
+        $array = $arrayStructure->getArray();
+        asort($array);
+        return new ArrayStructure($array);
+    }
+
+    /**
+     * Сортировка ключей массива в порядке убвыания
+     * @param ArrayStructure $arrayStructure структура массива
+     * @return ArrayStructure структура массива с отсортированными ключами
+     */
+    public static function arsort(ArrayStructure $arrayStructure)
+    {
+        $array = $arrayStructure->getArray();
+        arsort($array);
+        return new ArrayStructure($array);
+    }
+
+    /**
+     * Получение ключей массива
+     * @param ArrayStructure $arrayStructure структура массива
+     * @return ArrayStructure ключи массива
+     */
+    public static function arrayKeys(ArrayStructure $arrayStructure)
+    {
+        $array = $arrayStructure->getArray();
+        return new ArrayStructure(array_keys($array));
+    }
+
+    /**
      * Вывести значение $value с помощью функции print_r
      * @param mixed $value значение
      */

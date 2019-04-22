@@ -311,6 +311,15 @@ class TestExpression extends TestCase
             ['$result = round(1$23);', Money::create(100)],
             ['$result = round(1$73);', Money::create(200)],
 
+            // функция arrayKeys
+            ['$result = (array) arrayKeys(sort(array(1, 3, 2)));', new ArrayStructure([0, 1, 2])],
+
+            // функции сортировки
+            ['$result = (array) sort(array(1, 3, 2));', new ArrayStructure([1, 2, 3])],
+            ['$result = (array) rsort(array(1, 3, 2));', new ArrayStructure([3, 2, 1])],
+            ['$result = (array) arrayKeys(asort(array(1, 3, 2)));', new ArrayStructure([0, 2, 1])],
+            ['$result = (array) arrayKeys(arsort(array(1, 3, 2)));', new ArrayStructure([1, 2, 0])],
+
 
             // проверка приоритета выполнения операций
             ['$result = 7 - 2 * 3;', 1],
