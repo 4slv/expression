@@ -188,7 +188,7 @@ class InlineFunctions
      * @param mixed $element, ... неограниченное кол-во элементов
      * @return ArrayStructure массив
      */
-    public static function array($element)
+    public static function array($element = null)
     {
         /** @var mixed[] $list список элементов */
         $list = func_get_args();
