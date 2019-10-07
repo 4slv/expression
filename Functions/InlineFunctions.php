@@ -22,6 +22,17 @@ class InlineFunctions
         $returnDate->setTime(0,0,0,0);
         return $returnDate;
     }
+    
+    /**
+     * Преобразование к строке
+     * @param DateTime $dateTime дата со временем
+     * @param string $format формат возвращаемой даты
+     * @return false|string
+     */
+    public static function dateFormat($dateTime, $format)
+    {
+        return date_format($dateTime, $format);
+    }
 
     /**
      * Определение числа дней в году
