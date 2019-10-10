@@ -20,7 +20,7 @@ abstract class StatementCodeParser
      * @return string псевдокод инструкции
      * @throws CodeParseException
      */
-    abstract function parse(string $code): string;
+    abstract public function parse(string $code): string;
 
     /**
      * @param string $code псевдокод

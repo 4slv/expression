@@ -84,7 +84,7 @@ class OperationInfo
             {
                 return false;
             }
-            return $thisOperationPosition > $operationPosition;
+            return $thisOperationPosition < $operationPosition;
         }
         return $thisOperationPriority > $operationPriority;
     }

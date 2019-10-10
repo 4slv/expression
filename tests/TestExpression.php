@@ -21,9 +21,12 @@ class TestExpression extends TestCase
         $ratePerMonth = 12.25 / 12 / 100;
         $creditMonths = 12 * 15;
         return [
+
+
             # коментарии
             ['$result = 2 + 1; /* многострочный
                 комментарий */', 3],
+
             # операции со строками
             ['$result = \'test\';', 'test'],
             ['$result = \'test\' == \'test\';', true],
@@ -89,6 +92,7 @@ class TestExpression extends TestCase
             ],
             ['$result = (int) daysInYear(2018.03.21);', 365],
             ['$result = (int) daysInYear(2020.03.21);', 366],
+            ['$result = (int) days(2020.01.31 + 1 day - 2020.01.01);', 31],
             # выражение с несколькими операциями
             ['$result = 33 - 2 * 4 ** 2;', 1],
             # выражения со скобками
